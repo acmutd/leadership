@@ -1,31 +1,44 @@
-import Head from 'next/head'
+import Link from "next/link";
+import { Fragment } from "react";
+import CssBaseline from "@material-ui/core/CssBaseline";
+import Container from "@material-ui/core/Container";
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
+import { Button } from '@material-ui/core';
 
-import { getProfileData } from '../../fetchData/getProfileData'
+import { getProfileData } from "../../fetchData/getProfileData";
 
 export default function SSRPage({ data }) {
-  const { username, profile } = data
 
   return (
-    <div className="container">
-      <Head>
-        <title>Next.js w/ Firebase Client-Side</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
-      <main>
-        <h1 className="title">Next.js w/ Firebase Server-Side</h1>
-        <h2>{username}</h2>
-        <p>{profile.message}</p>
-      </main>
-    </div>
-  )
+    <Fragment>
+      <CssBaseline />
+      <Container maxWidth="lg">
+        <h1>{data.name}</h1>
+        {data.end === "Sat Jun 19 2021" ? <h5>{data.start} to Present</h5> : <h5>{data.start} to {data.end}</h5>}
+        <h3>Roles</h3>
+        {data.roles.map((role, index) => { return <p>{index+1}. {role}</p>})}
+        {/* <p>
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+          eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
+          minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+          aliquip ex ea commodo consequat. Duis aute irure dolor in
+          reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
+          pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
+          culpa qui officia deserunt mollit anim id est laborum.
+        </p> */}
+        <Link href={`/`} passHref>
+              <Button size="small"><ArrowBackIcon /> Return Home</Button>
+            </Link>
+      </Container>
+    </Fragment>
+  );
 }
 
 export const getServerSideProps = async ({ params }) => {
-  const { username } = params
-  const profile = await getProfileData(username)
+  const { username } = params;
+  const profile = await getProfileData(username);
   if (!profile) {
-    return { notFound: true }
+    return { notFound: true };
   }
-  return { props: { data: { username, profile } } }
-}
+  return { props: { data: profile } };
+};

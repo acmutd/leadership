@@ -1,13 +1,12 @@
 import admin from '../firebase/nodeApp'
 
-export const getProfileData = async (username) => {
+export const getProfileData = async (documentName) => {
   const db = admin.firestore()
-  const profileCollection = db.collection('profile')
-  const profileDoc = await profileCollection.doc(username).get()
+  const doc = await db.collection('officer').doc(documentName).get();
 
-  if (!profileDoc.exists) {
+  if (!doc.exists) {
     return null
   }
-
-  return profileDoc.data()
+  const data = doc.data();
+  return { name: data.name, roles: data.role_list, start: data.start.toDate().toDateString(), end: data.end.toDate().toDateString() }
 }
