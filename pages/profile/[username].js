@@ -1,4 +1,5 @@
 import Link from "next/link";
+import dynamic from "next/dynamic";
 import { Fragment } from "react";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Container from "@material-ui/core/Container";
@@ -9,6 +10,8 @@ import { getProfileData } from "../../fetchData/getProfileData";
 
 export default function SSRPage({ data }) {
 
+  const CustomComponent = dynamic(() => import(`../../components/${data.name.replace(/\s/g,'')}`));
+
   return (
     <Fragment>
       <CssBaseline />
@@ -17,6 +20,7 @@ export default function SSRPage({ data }) {
         {data.end === "Sat Jun 19 2021" ? <h5>{data.start} to Present</h5> : <h5>{data.start} to {data.end}</h5>}
         <h3>Roles</h3>
         {data.roles.map((role, index) => { return <p>{index+1}. {role}</p>})}
+        <CustomComponent />
         {/* <p>
           Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
           eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
