@@ -10,8 +10,12 @@ import { getProfileData } from "../../fetchData/getProfileData";
 
 export default function SSRPage({ data }) {
 
-  const CustomComponent = dynamic(() => import(`../../components/${data.name.replace(/\s/g,'')}`));
-
+  let CustomComponent
+  try {
+    CustomComponent = dynamic(() => import(`../../components/${data.name.replace(/\s/g, '')}`))
+  } catch (e) {
+    CustomComponent = `div`
+  }
   return (
     <Fragment>
       <CssBaseline />
