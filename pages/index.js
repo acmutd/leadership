@@ -1,15 +1,16 @@
 import Link from "next/link";
 import { useUser } from "../context/userContext";
 import { Fragment } from "react";
-import CssBaseline from "@material-ui/core/CssBaseline";
 import Container from "@material-ui/core/Container";
 import {
   Grid,
   Card,
   CardContent,
   CardActions,
+  Typography,
   Button,
 } from "@material-ui/core";
+import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 import { getAllOfficers } from "../fetchData/getAllOfficers";
 import { useTheme } from "next-themes";
 
@@ -25,11 +26,15 @@ export default function Home({ officerList }) {
       <Grid container item xs={12} md={6} lg={3} key={index}>
         <Card raised style={{ width: 300, marginTop: 12 }}>
           <CardContent>
-            <h1>{name}</h1>
+            <Typography variant="h5" component="div">
+              {name.length < 20 ? name : name.split(" ")[0]}
+            </Typography>
           </CardContent>
           <CardActions>
             <Link href={`/profile/${id}`} passHref>
-              <Button color="inherit" variant="text" size="small">Learn More</Button>
+              <Button color="inherit" size="small">
+                Learn More <ArrowForwardIcon />
+              </Button>
             </Link>
           </CardActions>
         </Card>
@@ -39,15 +44,27 @@ export default function Home({ officerList }) {
 
   return (
     <Fragment>
-      <CssBaseline />
       <Container maxWidth="lg">
-        <h1>ACM Leadership through the Ages</h1>
-        {/* <div>
-          The current theme is: {theme}
-          <button onClick={() => setTheme("light")}>Light Mode</button>
-          <button onClick={() => setTheme("dark")}>Dark Mode</button>
-        </div> */}
-        <Grid container>{Grids}</Grid>
+        <Typography
+          style={{ margin: 12, color: "black" }}
+          variant="h3"
+          component="div"
+        >
+          ACM Leadership through the Ages
+        </Typography>
+        <Fragment>
+          <Button onClick={() => setTheme("light")} size="small">
+            <Typography style={{ color: "black" }} variant="text" component="div">
+              Light Mode
+            </Typography>
+          </Button>
+          <Button onClick={() => setTheme("dark")} size="small">
+            <Typography style={{ color: "black" }} variant="text" component="div">
+              Dark Mode
+            </Typography>
+          </Button>
+        </Fragment>
+        <Grid style={{ margin: 12 }} container>{Grids}</Grid>
       </Container>
     </Fragment>
   );

@@ -5,7 +5,7 @@
   :root {
     --fg: #000;
     --bg: #fff;
-    --accent: gray;
+    --accent: #fff;
   }
   
   [data-theme='dark'] {
@@ -24,28 +24,28 @@ body {
   min-height: 100vh;
   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
-  background: var(--bg);
+  background: var(--accent);
   color: var(--fg);
   display: flex;
   align-items: center;
   justify-content: center;
   text-align: center;
 }
-/* 
-h1 {
+
+.MuiTypography-root {
     color: var(--fg);
+} 
+
+.MuiButton-label {
+  color: var(--fg);
 }
 
 .MuiCard-root {
     background-color: var(--bg);
 }
 
-.MuiButton-textInherit {
-    background-color: var(--fg);
-}
-
 .MuiPaper-root {
-    background-color: var(--bg);
+  background-color: var(--bg);
 }
 
 .MuiCardContent-root {
@@ -54,4 +54,4 @@ h1 {
 
 .MuiCardActions-root {
     background-color: var(--bg);
-} */
+}
