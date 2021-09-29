@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { useUser } from "../context/userContext";
-import { Fragment } from "react";
+import { Fragment, useState, useEffect } from "react";
 import Container from "@material-ui/core/Container";
 import {
   Grid,
@@ -9,8 +9,9 @@ import {
   CardActions,
   Typography,
   Button,
+  TextField,
 } from "@material-ui/core";
-import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
+import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
 import { getAllOfficers } from "../fetchData/getAllOfficers";
 import { useTheme } from "next-themes";
 
@@ -18,10 +19,20 @@ export default function Home({ officerList }) {
   // Our custom hook to get context values // not used
   const { loadingUser, user } = useUser();
   const { theme, setTheme } = useTheme();
+  const [filteredArray, setFilteredArray] = useState(officerList);
 
-  officerList.sort((a, b) => (a.name > b.name ? 1 : b.name > a.name ? -1 : 0));
+  // Filters array based on search bar input
+  const onchange = (event) => {
+    const searchString = event.target.value.toLowerCase();
+    setFilteredArray(officerList.filter(item => item.name.toLowerCase().includes(searchString)));
+  }
 
-  const Grids = officerList.map(({ id, name }, index) => {
+  // Sorts the array in ascending order by first time
+  useEffect(() => {
+    setFilteredArray(officerList.sort((a, b) => (a.name > b.name ? 1 : b.name > a.name ? -1 : 0)));
+  }, []);
+
+  const Grids = filteredArray.map(({ id, name }, index) => {
     return (
       <Grid container item xs={12} md={6} lg={3} key={index}>
         <Card raised style={{ width: 300, marginTop: 12 }}>
@@ -51,20 +62,31 @@ export default function Home({ officerList }) {
           component="div"
         >
           ACM Leadership through the Ages
+          <TextField style={{ marginLeft: 12 }} onChange={onchange} id="filled-basic" label="Search" variant="outlined" />
         </Typography>
         <Fragment>
           <Button onClick={() => setTheme("light")} size="small">
-            <Typography style={{ color: "black" }} variant="text" component="div">
+            <Typography
+              style={{ color: "black" }}
+              variant="text"
+              component="div"
+            >
               Light Mode
             </Typography>
           </Button>
           <Button onClick={() => setTheme("dark")} size="small">
-            <Typography style={{ color: "black" }} variant="text" component="div">
+            <Typography
+              style={{ color: "black" }}
+              variant="text"
+              component="div"
+            >
               Dark Mode
             </Typography>
           </Button>
         </Fragment>
-        <Grid style={{ margin: 12 }} container>{Grids}</Grid>
+        <Grid style={{ margin: 12 }} container>
+          {Grids}
+        </Grid>
       </Container>
     </Fragment>
   );
