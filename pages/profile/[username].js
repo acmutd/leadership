@@ -1,14 +1,17 @@
 import Link from "next/link";
 import dynamic from "next/dynamic";
 import { Fragment } from "react";
-import CssBaseline from "@material-ui/core/CssBaseline";
+import { getSession } from 'next-auth/client'
+import AccessDenied from '../../components/AccessDenied';
 import Container from "@material-ui/core/Container";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import { Button, Typography } from "@material-ui/core";
 
 import { getProfileData } from "../../fetchData/getProfileData";
 
-export default function SSRPage({ data }) {
+export default function SSRPage({ data, session }) {
+  if (!session) { return  <AccessDenied/> };
+
   let CustomComponent;
   try {
     CustomComponent = dynamic(() =>
@@ -24,11 +27,11 @@ export default function SSRPage({ data }) {
           {data.name}
         </Typography>
         {data.end === "Sat Jun 19 2021" ? (
-          <Typography variant="text" component="div">
+          <Typography variant="inherit" component="div">
             {data.start} to Present
           </Typography>
         ) : (
-          <Typography variant="text" component="div">
+          <Typography variant="inherit" component="div">
             {data.start} to {data.end}
           </Typography>
         )}
@@ -37,7 +40,7 @@ export default function SSRPage({ data }) {
         </Typography>
         {data.roles.map((role, index) => {
           return (
-            <Typography style={{ margin: 6 }} variant="text" component="div">
+            <Typography style={{ margin: 6 }} variant="inherit" component="div" key={index}>
               {index + 1}. {role}
             </Typography>
           );
@@ -53,11 +56,13 @@ export default function SSRPage({ data }) {
   );
 }
 
-export const getServerSideProps = async ({ params }) => {
-  const { username } = params;
+export const getServerSideProps = async (context) => {
+  const { username } = context.params;
+  const session = await getSession(context)
+
   const profile = await getProfileData(username);
   if (!profile) {
     return { notFound: true };
   }
-  return { props: { data: profile } };
+  return { props: { data: profile, session } };
 };
