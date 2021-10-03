@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { useRouter } from 'next/router';
+import { useRouter } from "next/router";
 import { useUser } from "../context/userContext";
 import { Fragment, useState, useEffect } from "react";
 import Container from "@material-ui/core/Container";
@@ -11,25 +11,23 @@ import {
   Typography,
   Button,
   TextField,
-  // Autocomplete,
 } from "@material-ui/core";
 import Autocomplete from "@mui/material/Autocomplete";
 import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
 import { getOfficers } from "../fetchData/getOfficers";
 import { useTheme } from "next-themes";
+import NavBar from "../components/NavBar";
 
 export default function Home({ officerList, roleList }) {
-  // Our custom hook to get context values // not used
-  const { loadingUser, user } = useUser();
   const { theme, setTheme } = useTheme();
   const [filteredArray, setFilteredArray] = useState(officerList);
+  const [officerNames, setOfficerNames] = useState([]);
   const [roleArray, setRoleArray] = useState(roleList);
-  const [reload, setReload] = useState(true);
   const router = useRouter();
 
   // Filters array based on search bar input
   const onchange = (event) => {
-    const searchString = event.target.value.toLowerCase();
+    const searchString = event.toLowerCase();
     setFilteredArray(
       officerList.filter((item) =>
         item.name.toLowerCase().includes(searchString)
@@ -49,6 +47,7 @@ export default function Home({ officerList, roleList }) {
         a.name > b.name ? 1 : b.name > a.name ? -1 : 0
       )
     );
+    setOfficerNames(filteredArray.map(({id, name}, index) => name.length < 16 ? name : name.split(" ")[0]));
   }, []);
 
   const Grids = filteredArray.map(({ id, name }, index) => {
@@ -75,51 +74,15 @@ export default function Home({ officerList, roleList }) {
   return (
     <Fragment>
       <Container maxWidth="lg">
-        <Typography
-          style={{ margin: 12, color: "black" }}
-          variant="h3"
-          component="div"
-        >
-          ACM Leadership through the Ages
-          <TextField
-            style={{ marginLeft: 12 }}
-            onChange={onchange}
-            id="filled-basic"
-            label="Search"
-            variant="outlined"
-          />
-        </Typography>
-        <Autocomplete
-            disablePortal
-            id="combo-box"
-            options={roleArray}
-            sx={{ width: 400 }}
-            renderInput={(params) => <TextField {...params} label="Role" />}
-            onChange={(event, newValue) => {
-              onrolechange(newValue);
-            }}
-          />
-        <Fragment>
-          <Button onClick={() => setTheme("light")} size="small">
-            <Typography
-              style={{ color: "black" }}
-              variant="inherit"
-              component="div"
-            >
-              Light Mode
-            </Typography>
-          </Button>
-          <Button onClick={() => setTheme("dark")} size="small">
-            <Typography
-              style={{ color: "black" }}
-              variant="inherit"
-              component="div"
-            >
-              Dark Mode
-            </Typography>
-          </Button>
-        </Fragment>
-        <Grid style={{ margin: 12 }} container>
+        <NavBar
+          filter={true}
+          roleArray={roleArray}
+          onRoleChange={onrolechange}
+          search={true}
+          officerArray={officerNames}
+          onSearchChange={onchange}
+        />
+        <Grid style={{ paddingTop: 60 }} container>
           {Grids}
         </Grid>
       </Container>

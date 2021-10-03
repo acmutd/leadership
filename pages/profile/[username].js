@@ -6,6 +6,7 @@ import AccessDenied from '../../components/AccessDenied';
 import Container from "@material-ui/core/Container";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import { Button, Typography } from "@material-ui/core";
+import NavBar from '../../components/NavBar';
 
 import { getProfileData } from "../../fetchData/getProfileData";
 
@@ -22,7 +23,12 @@ export default function SSRPage({ data, session }) {
   }
   return (
     <Fragment>
+      <NavBar />
       <Container maxWidth="lg">
+      <NavBar />
+      {/* <Typography style={{ margin: 12 }} variant="inherit" component="div">
+          {session.user.name} {session.user.email} {session.user.image}
+        </Typography> */}
         <Typography style={{ margin: 12 }} variant="h3" component="div">
           {data.name}
         </Typography>
