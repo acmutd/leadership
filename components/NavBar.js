@@ -71,6 +71,7 @@ export default function NavBar({
           ) : (
             <div></div>
           )}
+
         </Toolbar>
       </AppBar>
     </Fragment>

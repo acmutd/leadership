@@ -1,17 +1,17 @@
 import Link from "next/link";
 import dynamic from "next/dynamic";
 import { Fragment } from "react";
-import { getSession } from 'next-auth/client'
-import AccessDenied from '../../components/AccessDenied';
+import { getSession } from "next-auth/client";
+import AccessDenied from "../../components/AccessDenied";
 import Container from "@material-ui/core/Container";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
-import { Button, Typography } from "@material-ui/core";
-import NavBar from '../../components/NavBar';
-
+import { Button, Typography, TextField } from "@material-ui/core";
+import NavBar from "../../components/NavBar";
+import axios from "axios";
 import { getProfileData } from "../../fetchData/getProfileData";
 
 export default function SSRPage({ data, session }) {
-  if (!session) { return  <AccessDenied/> };
+  // if (!session) { return  <AccessDenied/> };
 
   let CustomComponent;
   try {
@@ -21,12 +21,23 @@ export default function SSRPage({ data, session }) {
   } catch (e) {
     CustomComponent = `div`;
   }
+
+  const sendAccolade = async () => {
+    const payload = {
+      sender_name: session.user.name,
+      sender_email: session.user.email,
+      to: "harsha.srikara@acmutd.co",
+      receiver_name: data.name,
+    };
+    await axios.post("http://localhost:3000" + "/api/email", payload, {});
+  };
+
   return (
     <Fragment>
       <NavBar />
       <Container maxWidth="lg">
-      <NavBar />
-      {/* <Typography style={{ margin: 12 }} variant="inherit" component="div">
+        <NavBar />
+        {/* <Typography style={{ margin: 12 }} variant="inherit" component="div">
           {session.user.name} {session.user.email} {session.user.image}
         </Typography> */}
         <Typography style={{ margin: 12 }} variant="h3" component="div">
@@ -46,7 +57,12 @@ export default function SSRPage({ data, session }) {
         </Typography>
         {data.roles.map((role, index) => {
           return (
-            <Typography style={{ margin: 6 }} variant="inherit" component="div" key={index}>
+            <Typography
+              style={{ margin: 6 }}
+              variant="inherit"
+              component="div"
+              key={index}
+            >
               {index + 1}. {role}
             </Typography>
           );
@@ -57,6 +73,18 @@ export default function SSRPage({ data, session }) {
             <ArrowBackIcon /> Return Home
           </Button>
         </Link>
+        {session ? (
+          <Fragment>
+            <Button onClick={sendAccolade} size="small">
+              <Typography variant="inherit" component="div">
+                Send Accolade
+              </Typography>
+            </Button>
+            <TextField multiline minRows={4} maxRows={6} />{" "}
+          </Fragment>
+        ) : (
+          <div></div>
+        )}
       </Container>
     </Fragment>
   );
@@ -64,7 +92,7 @@ export default function SSRPage({ data, session }) {
 
 export const getServerSideProps = async (context) => {
   const { username } = context.params;
-  const session = await getSession(context)
+  const session = await getSession(context);
 
   const profile = await getProfileData(username);
   if (!profile) {
