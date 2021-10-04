@@ -47,7 +47,11 @@ export default function Home({ officerList, roleList }) {
         a.name > b.name ? 1 : b.name > a.name ? -1 : 0
       )
     );
-    setOfficerNames(filteredArray.map(({id, name}, index) => name.length < 16 ? name : name.split(" ")[0]));
+    setOfficerNames(
+      filteredArray.map(({ id, name }, index) =>
+        name.length < 16 ? name : name.split(" ")[0]
+      )
+    );
   }, []);
 
   const Grids = filteredArray.map(({ id, name }, index) => {

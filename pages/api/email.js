@@ -1,3 +1,4 @@
+import { withSentry } from "@sentry/nextjs";
 import axios from "axios";
 import Cors from "cors";
 
@@ -19,8 +20,7 @@ function runMiddleware(req, res, fn) {
     });
   });
 }
-
-export default async function handler(req, res) {
+async function handler(req, res) {
   if (req.method !== "POST") {
     res.status(400).json({ message: "Invalid API method specified" });
   }
@@ -57,13 +57,15 @@ export default async function handler(req, res) {
       {}
     );
     await axios.post(
-        process.env.ACM_CORE_BASE_URL + "/challenge/send-email",
-        sender_data,
-        {}
-      );
+      process.env.ACM_CORE_BASE_URL + "/challenge/send-email",
+      sender_data,
+      {}
+    );
     // console.log("Success, reached here");
     res.status(200).json({ message: "success" });
   } catch (e) {
     res.status(500).json({ message: "failure", error: e });
   }
 }
+
+export default withSentry(handler);

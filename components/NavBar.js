@@ -26,7 +26,13 @@ export default function NavBar({
           <IconButton edge="start" aria-label="menu">
             <MenuIcon />
           </IconButton>
-          <Typography onClick={() => {window.location.href = "http://localhost:3000"}} style={{ marginRight: 24 }} variant="h6">
+          <Typography
+            onClick={() => {
+              window.location.href = "http://localhost:3000";
+            }}
+            style={{ marginRight: 24 }}
+            variant="h6"
+          >
             ACM Leadership
           </Typography>
           <Fragment>
@@ -71,7 +77,6 @@ export default function NavBar({
           ) : (
             <div></div>
           )}
-
         </Toolbar>
       </AppBar>
     </Fragment>
