@@ -1,17 +1,33 @@
-import Link from "next/link";
 import dynamic from "next/dynamic";
-import { Fragment } from "react";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import { Fragment, useState } from "react";
 import { getSession } from "next-auth/client";
 import AccessDenied from "../../components/AccessDenied";
 import Container from "@material-ui/core/Container";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
-import { Button, Typography, TextField } from "@material-ui/core";
+import {
+  Button,
+  Typography,
+  TextField,
+  Card,
+  CardContent,
+} from "@material-ui/core";
 import NavBar from "../../components/NavBar";
 import axios from "axios";
 import { getProfileData } from "../../fetchData/getProfileData";
 
 export default function SSRPage({ data, session }) {
   // if (!session) { return  <AccessDenied/> };
+  const [accolade, setAccolade] = useState("hello world");
+  const [isCurrentOfficer, setIsCurrentOfficer] = useState(
+    data.end === "Sat Jun 19 2021" ? true : false
+  );
+  const router = useRouter();
+
+  const onChange = (event) => {
+    setAccolade(event.target.value);
+  };
 
   let CustomComponent;
   try {
@@ -26,65 +42,125 @@ export default function SSRPage({ data, session }) {
     const payload = {
       sender_name: session.user.name,
       sender_email: session.user.email,
-      to: "harsha.srikara@acmutd.co",
+      to: data.acm_email,
       receiver_name: data.name,
+      accolade: accolade,
+      user_id: data.id,
     };
-    await axios.post("http://localhost:3000" + "/api/email", payload, {});
+    await axios.post(router.basePath + "/api/email", payload, {});
+    await axios.post(router.basePath + "/api/slack", payload, {});
+    await axios.post(router.basePath + "/api/accolade", payload, {});
+    router.reload();
   };
 
   return (
     <Fragment>
-      <NavBar />
       <Container maxWidth="lg">
-        <NavBar />
-        {/* <Typography style={{ margin: 12 }} variant="inherit" component="div">
-          {session.user.name} {session.user.email} {session.user.image}
-        </Typography> */}
-        <Typography style={{ margin: 12 }} variant="h3" component="div">
-          {data.name}
-        </Typography>
-        {data.end === "Sat Jun 19 2021" ? (
-          <Typography variant="inherit" component="div">
-            {data.start} to Present
+        <NavBar session={session} />
+        <div style={{ paddingTop: 90 }}>
+          <Typography style={{ margin: 12 }} variant="h3" component="div">
+            {data.name}
           </Typography>
-        ) : (
-          <Typography variant="inherit" component="div">
-            {data.start} to {data.end}
-          </Typography>
-        )}
-        <Typography style={{ margin: 12 }} variant="h5" component="div">
-          Roles
-        </Typography>
-        {data.roles.map((role, index) => {
-          return (
-            <Typography
-              style={{ margin: 6 }}
-              variant="inherit"
-              component="div"
-              key={index}
-            >
-              {index + 1}. {role}
+          {isCurrentOfficer ? (
+            <Typography variant="inherit" component="div">
+              {data.start} to Present
             </Typography>
-          );
-        })}
-        <CustomComponent />
-        <Link href={`/`} passHref>
-          <Button style={{ margin: 12 }} size="small">
-            <ArrowBackIcon /> Return Home
-          </Button>
-        </Link>
-        {session ? (
-          <Fragment>
-            <Button onClick={sendAccolade} size="small">
-              <Typography variant="inherit" component="div">
-                Send Accolade
+          ) : (
+            <Typography variant="inherit" component="div">
+              {data.start} to {data.end}
+            </Typography>
+          )}
+          <hr />
+          <Card
+            raised
+            style={{
+              margin: 12,
+              minWidth: 300,
+              maxWidth: 400,
+              marginLeft: "auto",
+              marginRight: "auto",
+            }}
+          >
+            <CardContent>
+              <Typography variant="h5" component="div">
+                Roles
               </Typography>
+              <hr style={{ maxWidth: 200 }} />
+              {data.roles.map((role, index) => {
+                return (
+                  <Typography
+                    variant="inherit"
+                    component="div"
+                    key={index}
+                    style={{ marginTop: 8 }}
+                  >
+                    {index + 1}. {role}
+                  </Typography>
+                );
+              })}
+            </CardContent>
+          </Card>
+          <Card
+            raised
+            style={{
+              margin: 12,
+              minWidth: 300,
+              maxWidth: 400,
+              marginLeft: "auto",
+              marginRight: "auto",
+            }}
+          >
+            <CardContent>
+              <Typography style={{ margin: 12 }} variant="h5" component="div">
+                Accolades
+              </Typography>
+              <hr style={{ maxWidth: 200 }} />
+              {data.accolades.map((accolade, index) => {
+                return (
+                  <Typography
+                    style={{
+                      marginTop: 8,
+                      maxWidth: 300,
+                      marginLeft: "auto",
+                      marginRight: "auto",
+                    }}
+                    variant="inherit"
+                    component="div"
+                    key={index}
+                  >
+                    {index + 1}. {accolade}
+                  </Typography>
+                );
+              })}
+            </CardContent>
+          </Card>
+          <CustomComponent />
+          {session && isCurrentOfficer ? (
+            <Fragment>
+              {/* <hr style={{ marginTop: 24 }} /> */}
+              <TextField
+                multiline
+                minRows={8}
+                maxRows={12}
+                onChange={onChange}
+                variant="filled"
+                style={{ minWidth: "360px", marginTop: 12 }}
+              />
+              <Typography variant="inherit" component="div">
+                <Button onClick={sendAccolade} size="small">
+                  Send Accolade
+                </Button>
+              </Typography>
+            </Fragment>
+          ) : (
+            <div></div>
+          )}
+          <Link href={`/`} passHref>
+            <Button style={{ margin: 12 }} size="small">
+              <ArrowBackIcon /> Return Home
             </Button>
-            <TextField multiline minRows={4} maxRows={6} />{" "}
-          </Fragment>
-        ) : (
-          <div></div>
-        )}
+          </Link>
+        </div>
       </Container>
     </Fragment>
   );

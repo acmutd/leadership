@@ -1,4 +1,5 @@
 import React, { Fragment } from "react";
+import Link from "next/link";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
@@ -8,8 +9,10 @@ import MenuIcon from "@material-ui/icons/Menu";
 import { useTheme } from "next-themes";
 import Autocomplete from "@mui/material/Autocomplete";
 import TextField from "@material-ui/core/TextField";
+import { signIn, signOut } from "next-auth/client";
 
 export default function NavBar({
+  session,
   filter = false,
   roleArray,
   onRoleChange,
@@ -26,9 +29,13 @@ export default function NavBar({
           <IconButton edge="start" aria-label="menu">
             <MenuIcon />
           </IconButton>
-          <Typography onClick={() => {window.location.href = "http://localhost:3000"}} style={{ marginRight: 24 }} variant="h6">
-            ACM Leadership
-          </Typography>
+          <Link href={`/`} passHref>
+            <Typography style={{ marginRight: 24 }} variant="h6">
+              <Button color="inherit">
+                ACM Leadership
+              </Button>
+            </Typography>
+          </Link>
           <Fragment>
             <Button onClick={() => setTheme("light")} size="small">
               <Typography variant="inherit" component="div">
@@ -71,7 +78,19 @@ export default function NavBar({
           ) : (
             <div></div>
           )}
-
+          {!session ? (
+            <Button onClick={() => signIn("google")} size="small">
+              <Typography variant="inherit" component="div">
+                Sign In
+              </Typography>
+            </Button>
+          ) : (
+            <Button onClick={() => signOut()} size="small">
+              <Typography variant="inherit" component="div">
+                Sign Out
+              </Typography>
+            </Button>
+          )}
         </Toolbar>
       </AppBar>
     </Fragment>
