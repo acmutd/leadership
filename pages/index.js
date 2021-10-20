@@ -1,8 +1,8 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useUser } from "../context/userContext";
 import { Fragment, useState, useEffect } from "react";
 import Container from "@material-ui/core/Container";
+import { getSession } from "next-auth/client";
 import {
   Grid,
   Card,
@@ -10,16 +10,13 @@ import {
   CardActions,
   Typography,
   Button,
-  TextField,
 } from "@material-ui/core";
-import Autocomplete from "@mui/material/Autocomplete";
 import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
 import { getOfficers } from "../fetchData/getOfficers";
 import { useTheme } from "next-themes";
 import NavBar from "../components/NavBar";
 
-export default function Home({ officerList, roleList }) {
-  const { theme, setTheme } = useTheme();
+export default function Home({ officerList, roleList, session }) {
   const [filteredArray, setFilteredArray] = useState(officerList);
   const [officerNames, setOfficerNames] = useState([]);
   const [roleArray, setRoleArray] = useState(roleList);
@@ -75,6 +72,7 @@ export default function Home({ officerList, roleList }) {
     <Fragment>
       <Container maxWidth="lg">
         <NavBar
+          session={session}
           filter={true}
           roleArray={roleArray}
           onRoleChange={onrolechange}
@@ -82,7 +80,7 @@ export default function Home({ officerList, roleList }) {
           officerArray={officerNames}
           onSearchChange={onchange}
         />
-        <Grid style={{ paddingTop: 60 }} container>
+        <Grid style={{ paddingTop: 90 }} container>
           {Grids}
         </Grid>
       </Container>
@@ -90,14 +88,16 @@ export default function Home({ officerList, roleList }) {
   );
 }
 
-export async function getServerSideProps({ query }) {
-  const { officers, role_list } = await getOfficers(query.q);
+export async function getServerSideProps(context) {
+  const { officers, role_list } = await getOfficers(context.query.q);
+  const session = await getSession(context);
+
   if (!officers || !role_list) {
     return {
       notFound: true,
     };
   }
   return {
-    props: { officerList: officers, roleList: role_list }, // will be passed to the page component as props
+    props: { officerList: officers, roleList: role_list, session }, // will be passed to the page component as props
   };
 }

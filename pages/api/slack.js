@@ -37,43 +37,39 @@ export default async function handler(req, res) {
   // Run the middleware
   await runMiddleware(req, res, cors);
 
-  const receiver_data = {
-    from: req.body.sender_email,
-    from_name: req.body.sender_name,
-    to: req.body.to,
-    template_id: process.env.TEMPLATE_ID_RECEIVER,
-    dynamicSubstitutions: {
-      sender_name: req.body.sender_name,
-      receiver_name: req.body.receiver_name,
-    },
+  const body = {
+    blocks: [
+      {
+        type: "section",
+        text: {
+          type: "mrkdwn",
+          text: `Shoutout to *${req.body.receiver_name}*! You just got an accolade from *${req.body.sender_name}*! :tada: \n\n> ${req.body.accolade}`,
+        },
+      },
+      {
+        type: "section",
+        text: {
+          type: "mrkdwn",
+          text: "Check out all the accolades on your leadership page! :sparkles:",
+        },
+        accessory: {
+          type: "button",
+          text: {
+            type: "plain_text",
+            text: "Leadership",
+            emoji: true,
+          },
+          value: "click_me_123",
+          url: `https://leadership.acmutd.co/profile/${req.body.user_id}`,
+          action_id: "button-action",
+        },
+      },
+    ],
   };
 
-  const sender_data = {
-    from: "development@acmutd.co",
-    from_name: "ACM Development",
-    to: req.body.sender_email,
-    template_id: process.env.TEMPLATE_ID_SENDER,
-    dynamicSubstitutions: {
-      sender_name: req.body.sender_name,
-      receiver_name: req.body.receiver_name,
-    },
-  };
-
-  const url = process.env.ACM_CORE_BASE_URL + "/challenge/send-email";
-
-  console.log(receiver_data);
-  console.log(sender_data);
+  const url = process.env.ACM_SLACK_SHOUTOUT_CHANNEL;
   try {
-    await axios.post(
-      url,
-      receiver_data,
-      {}
-    );
-    await axios.post(
-        url,
-        sender_data,
-        {}
-      );
+    await axios.post(url, body, {});
     res.status(200).json({ message: "success" });
   } catch (e) {
     res.status(500).json({ message: "failure", error: e });
