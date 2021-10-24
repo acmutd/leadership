@@ -19,7 +19,7 @@ import { getProfileData } from "../../fetchData/getProfileData";
 
 export default function SSRPage({ data, session }) {
   // if (!session) { return  <AccessDenied/> };
-  const [accolade, setAccolade] = useState("hello world");
+  const [accolade, setAccolade] = useState("You're the best! Thanks for being awesome!");
   const [isCurrentOfficer, setIsCurrentOfficer] = useState(
     data.end === "Sat Jun 19 2021" ? true : false
   );
