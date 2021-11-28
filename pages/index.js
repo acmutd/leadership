@@ -13,13 +13,25 @@ import {
 } from "@material-ui/core";
 import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
 import { getOfficers } from "../fetchData/getOfficers";
-import { useTheme } from "next-themes";
 import NavBar from "../components/NavBar";
 
+/**
+ * 
+ * @param {Object} officerList list of officers from the database. All officers if no query is present, else subset
+ * @param {string[]} roleList list of all roles, used for role query search bar auto-fill
+ * @param {Object} session contains whether the user is signed in or not
+ */
 export default function Home({ officerList, roleList, session }) {
+
+  // contains subset of officer objects based on name that is typed in the search bar
   const [filteredArray, setFilteredArray] = useState(officerList);
+
+  // contains the list of all names only that is used to populate the search bar auto-fill
   const [officerNames, setOfficerNames] = useState([]);
+
+  // contains the list of all roles that is used to populate the role query bar auto-fill
   const [roleArray, setRoleArray] = useState(roleList);
+
   const router = useRouter();
 
   // Filters array based on search bar input
@@ -37,20 +49,24 @@ export default function Home({ officerList, roleList, session }) {
     router.reload();
   };
 
-  // Sorts the array in ascending order by first time
+  // Sorts the array in ascending order by first name
   useEffect(() => {
     setFilteredArray(
       officerList.sort((a, b) =>
         a.name > b.name ? 1 : b.name > a.name ? -1 : 0
       )
     );
-    setOfficerNames(filteredArray.map(({id, name}, index) => name.length < 16 ? name : name.split(" ")[0]));
+    setOfficerNames(
+      filteredArray.map(({ id, name }, index) =>
+        name.length < 16 ? name : name.split(" ")[0]
+      )
+    );
   }, []);
 
   const Grids = filteredArray.map(({ id, name }, index) => {
     return (
       <Grid container item xs={12} md={6} lg={3} key={index}>
-        <Card raised style={{ width: 300, marginTop: 12 }}>
+        <Card raised style={{ width: 300, minWidth: 250, margin: 8 }}>
           <CardContent>
             <Typography variant="h5" component="div">
               {name.length < 20 ? name : name.split(" ")[0]}
@@ -80,7 +96,7 @@ export default function Home({ officerList, roleList, session }) {
           officerArray={officerNames}
           onSearchChange={onchange}
         />
-        <Grid style={{ paddingTop: 90 }} container>
+        <Grid style={{ paddingTop: 90, paddingBottom: 24 }} container>
           {Grids}
         </Grid>
       </Container>
