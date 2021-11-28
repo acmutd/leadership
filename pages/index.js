@@ -65,8 +65,8 @@ export default function Home({ officerList, roleList, session }) {
 
   const Grids = filteredArray.map(({ id, name }, index) => {
     return (
-      <Grid container item xs={12} md={6} lg={3} key={index}>
-        <Card raised style={{ width: 300, minWidth: 250, margin: 8 }}>
+      <Grid item xs={12} sm={6} md={4} lg={3} key={index} align="center" style={{ margin: 8 }}>
+        <Card raised style={{ width: 300, minWidth: 250 }}>
           <CardContent>
             <Typography variant="h5" component="div">
               {name.length < 20 ? name : name.split(" ")[0]}
@@ -96,7 +96,7 @@ export default function Home({ officerList, roleList, session }) {
           officerArray={officerNames}
           onSearchChange={onchange}
         />
-        <Grid style={{ paddingTop: 90, paddingBottom: 24 }} container>
+        <Grid style={{ paddingTop: 90, paddingBottom: 24 }} container justify="center">
           {Grids}
         </Grid>
       </Container>

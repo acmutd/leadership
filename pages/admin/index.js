@@ -15,6 +15,11 @@ import {
 import Autocomplete from "@mui/material/Autocomplete";
 import { getOfficers } from "../../fetchData/getOfficers";
 import NavBar from "../../components/NavBar";
+import CreateOfficerCard from "../../components/CreateOfficerCard";
+import CreateRoleCard from "../../components/CreateRoleCard";
+import UpdateOfficerCard from "../../components/UpdateOfficerCard";
+import ExitOfficerCard from "../../components/ExitOfficerCard";
+import AddOfficerRole from "../../components/AddOfficerRole";
 import axios from "axios";
 
 export default function Admin({ officerList, roleList, historian, session }) {
@@ -25,92 +30,16 @@ export default function Admin({ officerList, roleList, historian, session }) {
     return <AccessDenied />;
   }
 
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [acm_email, setACM_Email] = useState("");
-  const [role, setRole] = useState("");
-  const [linkedin, setLinkedin] = useState("");
-
-  const CreateOfficer = async () => {
-    console.log({ name, email, acm_email, role, linkedin });
-    await axios.post(router.basePath + "/api/admin/createOfficer", {
-      name: name,
-      email: email,
-      acm_email: acm_email,
-      role: role,
-      linkedin: linkedin,
-    });
-  };
-
   return (
     <Fragment>
       <Container maxWidth="lg">
         <NavBar session={session} />
-        <Grid style={{ paddingTop: 90, paddingBottom: 24 }} container>
-          <Grid container item xs={12} md={6} lg={3}>
-            <Card raised style={{ width: 300, minWidth: 600, margin: 8 }}>
-              <CardContent>
-                <Typography variant="h3" component="div">
-                  Add new officer
-                </Typography>
-
-                <TextField
-                  style={{ margin: 24 }}
-                  id="standard-basic"
-                  label="Officer Name"
-                  variant="standard"
-                  onChange={(e) => setName(e.target.value)}
-                  required
-                />
-                <TextField
-                  style={{ margin: 24 }}
-                  id="standard-basic"
-                  label="Officer Linkedin"
-                  variant="standard"
-                  onChange={(e) => setLinkedin(e.target.value)}
-                  required
-                />
-                <TextField
-                  style={{ margin: 24 }}
-                  id="standard-basic"
-                  label="Personal Email"
-                  variant="standard"
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                />
-                <TextField
-                  style={{ margin: 24 }}
-                  id="standard-basic"
-                  label="ACM Email"
-                  onChange={(e) => setACM_Email(e.target.value)}
-                  variant="standard"
-                  required
-                />
-                <Autocomplete
-                  disablePortal
-                  style={{ padding: 24 }}
-                  id="combo-box"
-                  options={roleList}
-                  renderInput={(params) => (
-                    <TextField {...params} label="Role" />
-                  )}
-                  onInputChange={(event, newValue) => {
-                    setRole(newValue);
-                  }}
-                />
-              </CardContent>
-
-              <CardActions>
-                <Button
-                  color="inherit"
-                  size="small"
-                  onClick={() => CreateOfficer()}
-                >
-                  Submit
-                </Button>
-              </CardActions>
-            </Card>
-          </Grid>
+        <Grid style={{ paddingTop: 90, paddingBottom: 24 }} container justify="center">
+          <CreateOfficerCard roleList={roleList}/>
+          <UpdateOfficerCard officerArray={officerList}/>
+          <CreateRoleCard />
+          <ExitOfficerCard officerArray={officerList}/>
+          <AddOfficerRole officerArray={officerList} roleList={roleList}/>
         </Grid>
       </Container>
     </Fragment>
