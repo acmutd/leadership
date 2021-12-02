@@ -32,7 +32,7 @@ export default function Admin({ officerList, roleList, historian, session }) {
           <CreateRoleCard />
           <ExitOfficerCard officerArray={officerList} />
           <AddOfficerRoleCard officerArray={officerList} roleList={roleList} />
-          <AddHistorianCard officerArray={officerList} />
+          <AddHistorianCard officerArray={officerList} historian={historian}/>
           
         </Grid>
       </Container>
