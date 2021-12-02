@@ -10,6 +10,8 @@ import {
   Button,
 } from "@material-ui/core";
 import Autocomplete from "@mui/material/Autocomplete";
+import CheckIcon from '@mui/icons-material/Check';
+import LoopIcon from '@mui/icons-material/Loop';
 import axios from "axios";
 
 export default function CreateOfficerCard({ roleList }) {

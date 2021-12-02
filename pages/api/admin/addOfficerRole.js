@@ -30,8 +30,9 @@ export default async function handler(req, res) {
     // update last role to have ended
     const old_role = roles[roles.length - 1];
     const old_role_docs = await db.collection("officer").doc(officer.id).collection("roles").where("title", "==", old_role).get();
-    const old_role_doc = old_role_docs[0];
-    old_role_doc.ref.update({
+    const old_role_doc = old_role_docs.docs[0];
+
+    await old_role_doc.ref.update({
       end: firestore.FieldValue.serverTimestamp(),
     });
 
