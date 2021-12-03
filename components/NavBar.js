@@ -30,11 +30,11 @@ export default function NavBar({
             <MenuIcon />
           </IconButton>
           <Link href={`/`} passHref>
-            <Typography style={{ marginRight: 24 }} variant="h6">
-              <Button color="inherit">
+            <Button size="small" style={{ marginRight: 24 }}>
+              <Typography variant="inherit" component="div">
                 ACM Leadership
-              </Button>
-            </Typography>
+              </Typography>
+            </Button>
           </Link>
           <Fragment>
             <Button onClick={() => setTheme("light")} size="small">
@@ -91,6 +91,13 @@ export default function NavBar({
               </Typography>
             </Button>
           )}
+          <Link href={`/admin`} passHref>
+            <Button size="small">
+              <Typography variant="inherit" component="div">
+                Admin
+              </Typography>
+            </Button>
+          </Link>
         </Toolbar>
       </AppBar>
     </Fragment>
