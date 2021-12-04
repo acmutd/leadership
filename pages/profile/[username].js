@@ -1,10 +1,11 @@
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { Fragment, useState } from "react";
+import { Fragment, useState, useEffect } from "react";
 import { getSession } from "next-auth/client";
 import AccessDenied from "../../components/AccessDenied";
 import Container from "@material-ui/core/Container";
+import Image from "next/image";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import {
   Button,
@@ -12,17 +13,24 @@ import {
   TextField,
   Card,
   CardContent,
+  CardMedia,
 } from "@material-ui/core";
 import NavBar from "../../components/NavBar";
 import axios from "axios";
 import { getProfileData } from "../../fetchData/getProfileData";
+import fetchProfileImage from "../../fetchData/fetchProfileImage";
 
 export default function SSRPage({ data, session }) {
   // if (!session) { return  <AccessDenied/> };
-  const [accolade, setAccolade] = useState("You're the best! Thanks for being awesome!");
+  const [accolade, setAccolade] = useState(
+    "You're the best! Thanks for being awesome!"
+  );
   const [isCurrentOfficer, setIsCurrentOfficer] = useState(
     data.end === "Sat Jun 19 2021" ? true : false
   );
+  const [imageLink, setImageLink] = useState("");
+  const [imageLoaded, setImageLoaded] = useState(false);
+
   const router = useRouter();
 
   const onChange = (event) => {
@@ -32,11 +40,18 @@ export default function SSRPage({ data, session }) {
   let CustomComponent;
   try {
     CustomComponent = dynamic(() =>
-      import(`../../components/${data.name.replace(/\s/g, "")}`)
+      import(`../../components/personalization/${data.name.replace(/\s/g, "")}`)
     );
   } catch (e) {
     CustomComponent = `div`;
   }
+
+  useEffect(() => {
+    (async () => {
+      setImageLink(await fetchProfileImage(data.id));
+      setImageLoaded(true);
+    })();
+  });
 
   const sendAccolade = async () => {
     const payload = {
@@ -82,6 +97,13 @@ export default function SSRPage({ data, session }) {
             }}
           >
             <CardContent>
+              <CardMedia
+                component="img"
+                height="365"
+                image={imageLink}
+                alt={`${data.name}'s profile picture`}
+                style={{ marginBottom: 16 }}
+              />
               <Typography variant="h5" component="div">
                 Roles
               </Typography>
