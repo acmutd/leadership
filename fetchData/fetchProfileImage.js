@@ -16,3 +16,18 @@ export default async function fetchProfileImage(userId) {
 
   return url;
 }
+
+/**
+ * Upload the file to google cloud storage
+ * @param {string} userId document id for the user profile
+ * @param {File} file profile image file
+ */
+export async function uploadProfileImage(userId, file) {
+  const profileImage = storage.child("leadership/profile/" + userId + ".jpg");
+
+  try {
+    await profileImage.put(file);
+  } catch (error) {
+    console.log(error);
+  }
+}

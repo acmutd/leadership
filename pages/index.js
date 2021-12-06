@@ -10,6 +10,7 @@ import {
   CardActions,
   Typography,
   Button,
+  Box,
 } from "@material-ui/core";
 import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
 import { getOfficers } from "../fetchData/getOfficers";

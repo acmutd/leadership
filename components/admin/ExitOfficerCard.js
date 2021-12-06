@@ -25,7 +25,16 @@ export default function ExitOfficerCard({ officerArray }) {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
 
+  // validation
+  const [error, setError] = useState(false);
+
   const ExitOfficer = async () => {
+    setError(false);
+    if (name === "") {
+      setError(true);
+      return;
+    }
+
     setLoading(true);
     const result = await axios.post(router.basePath + "/api/admin/exitOfficer", {
       name: name,
@@ -68,6 +77,19 @@ export default function ExitOfficerCard({ officerArray }) {
           </Button>
           { loading ? <LoopIcon /> : <div></div> }
           { success ? <CheckIcon /> : <div></div> }
+
+          {error ? (
+            <Typography
+              variant="text"
+              color="secondary"
+              component="div"
+              style={{ marginBottom: 4 }}
+            >
+              Required fields must be filled out
+            </Typography>
+          ) : (
+            <div></div>
+          )}
         </CardActions>
       </Card>
     </Grid>

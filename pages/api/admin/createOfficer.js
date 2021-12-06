@@ -48,7 +48,7 @@ export default async function handler(req, res) {
         }),
       });
 
-    res.status(200).json({ message: "success" });
+    res.status(200).json({ message: "success", id: document_id });
   } catch (e) {
     res.status(500).json({ message: "failure", error: e.message });
   }
