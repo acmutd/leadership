@@ -31,7 +31,7 @@ export default async function handler(req, res) {
       linkedin: req.body.linkedin,
     });
 
-    res.status(200).json({ message: "success" });
+    res.status(200).json({ message: "success", id: officer.id });
   } catch (e) {
     res.status(500).json({ message: "failure", error: e.message });
   }

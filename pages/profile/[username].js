@@ -1,9 +1,8 @@
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { Fragment, useState } from "react";
+import { Fragment, useState, useEffect } from "react";
 import { getSession } from "next-auth/client";
-import AccessDenied from "../../components/AccessDenied";
 import Container from "@material-ui/core/Container";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import {
@@ -12,17 +11,25 @@ import {
   TextField,
   Card,
   CardContent,
+  CardMedia,
 } from "@material-ui/core";
 import NavBar from "../../components/NavBar";
 import axios from "axios";
 import { getProfileData } from "../../fetchData/getProfileData";
+import AccoladeCard from "../../components/AccoladeCard";
+import fetchProfileImage from "../../fetchData/fetchProfileImage";
 
 export default function SSRPage({ data, session }) {
   // if (!session) { return  <AccessDenied/> };
-  const [accolade, setAccolade] = useState("You're the best! Thanks for being awesome!");
+  const [accolade, setAccolade] = useState(
+    "You're the best! Thanks for being awesome!"
+  );
   const [isCurrentOfficer, setIsCurrentOfficer] = useState(
     data.end === "Sat Jun 19 2021" ? true : false
   );
+  const [imageLink, setImageLink] = useState("");
+  const [imageLoaded, setImageLoaded] = useState(false);
+
   const router = useRouter();
 
   const onChange = (event) => {
@@ -32,11 +39,18 @@ export default function SSRPage({ data, session }) {
   let CustomComponent;
   try {
     CustomComponent = dynamic(() =>
-      import(`../../components/${data.name.replace(/\s/g, "")}`)
+      import(`../../components/personalization/${data.name.replace(/\s/g, "")}`)
     );
   } catch (e) {
     CustomComponent = `div`;
   }
+
+  useEffect(() => {
+    (async () => {
+      setImageLink(await fetchProfileImage(data.id));
+      setImageLoaded(true);
+    })();
+  });
 
   const sendAccolade = async () => {
     const payload = {
@@ -82,6 +96,13 @@ export default function SSRPage({ data, session }) {
             }}
           >
             <CardContent>
+              <CardMedia
+                component="img"
+                height="365"
+                image={imageLink}
+                alt={`${data.name}'s profile picture`}
+                style={{ marginBottom: 16 }}
+              />
               <Typography variant="h5" component="div">
                 Roles
               </Typography>
@@ -100,58 +121,43 @@ export default function SSRPage({ data, session }) {
               })}
             </CardContent>
           </Card>
-          <Card
-            raised
-            style={{
-              margin: 12,
-              minWidth: 300,
-              maxWidth: 400,
-              marginLeft: "auto",
-              marginRight: "auto",
-            }}
-          >
-            <CardContent>
-              <Typography style={{ margin: 12 }} variant="h5" component="div">
-                Accolades
-              </Typography>
-              <hr style={{ maxWidth: 200 }} />
-              {data.accolades.map((accolade, index) => {
-                return (
-                  <Typography
-                    style={{
-                      marginTop: 8,
-                      maxWidth: 300,
-                      marginLeft: "auto",
-                      marginRight: "auto",
-                    }}
-                    variant="inherit"
-                    component="div"
-                    key={index}
-                  >
-                    {index + 1}. {accolade}
-                  </Typography>
-                );
-              })}
-            </CardContent>
-          </Card>
+          {data.accolades.length > 0 ? (
+            <AccoladeCard accolades={data.accolades} />
+          ) : (
+            <div></div>
+          )}
           <CustomComponent />
           {session && isCurrentOfficer ? (
-            <Fragment>
-              {/* <hr style={{ marginTop: 24 }} /> */}
-              <TextField
-                multiline
-                minRows={8}
-                maxRows={12}
-                onChange={onChange}
-                variant="filled"
-                style={{ minWidth: "360px", marginTop: 12 }}
-              />
-              <Typography variant="inherit" component="div">
-                <Button onClick={sendAccolade} size="small">
-                  Send Accolade
-                </Button>
-              </Typography>
-            </Fragment>
+            <Card
+              raised
+              style={{
+                margin: 12,
+                minWidth: 300,
+                maxWidth: 400,
+                marginLeft: "auto",
+                marginRight: "auto",
+              }}
+            >
+              <CardContent>
+                <Typography variant="h5" component="div">
+                  Shoutout {data.name}!
+                </Typography>
+                <hr style={{ maxWidth: 200 }} />
+                <TextField
+                  multiline
+                  minRows={8}
+                  maxRows={12}
+                  onChange={onChange}
+                  variant="filled"
+                  style={{ minWidth: "360px", marginTop: 12 }}
+                />
+                <Typography variant="inherit" component="div">
+                  <Button onClick={sendAccolade} size="small">
+                    Send Accolade
+                  </Button>
+                </Typography>
+              </CardContent>
+            </Card>
           ) : (
             <div></div>
           )}

@@ -10,6 +10,7 @@ import {
   CardActions,
   Typography,
   Button,
+  Box,
 } from "@material-ui/core";
 import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
 import { getOfficers } from "../fetchData/getOfficers";
@@ -45,8 +46,10 @@ export default function Home({ officerList, roleList, session }) {
   };
 
   const onrolechange = (role) => {
-    router.replace(router.basePath + "?q=" + role);
-    router.reload();
+    window.location.href = router.basePath + "?q=" + role;
+    // commented section works locally but not on vercel
+    // router.replace(router.basePath + "?q=" + role);
+    // router.reload();
   };
 
   // Sorts the array in ascending order by first name

@@ -26,7 +26,16 @@ export default function AddHistorianCard({ officerArray, historian }) {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
 
+  // validation
+  const [error, setError] = useState(false);
+
   const AddHistorian = async () => {
+    setError(false);
+    if (name === "") {
+      setError(true);
+      return;
+    }
+    
     setLoading(true);
     const result = await axios.post(
       router.basePath + "/api/admin/addHistorian",
@@ -121,6 +130,18 @@ export default function AddHistorianCard({ officerArray, historian }) {
           >
             {viewHistorian ? "Hide Historians" : "View Historians"}
           </Button>
+          {error ? (
+            <Typography
+              variant="text"
+              color="secondary"
+              component="div"
+              style={{ marginBottom: 4 }}
+            >
+              Required fields must be filled out
+            </Typography>
+          ) : (
+            <div></div>
+          )}
         </CardActions>
       </Card>
     </Grid>
