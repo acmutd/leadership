@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { useState, useCallback } from "react";
+import { useState } from "react";
 import Dropzone from "react-dropzone";
 import {
   Grid,
@@ -50,7 +50,6 @@ export default function CreateOfficerCard({ roleList }) {
         linkedin: linkedin,
       }
     );
-    console.log(result.data);
     await uploadProfileImage(result.data.id, file);
     setLoading(false);
     if (result.data.message === "success") {
@@ -124,7 +123,7 @@ export default function CreateOfficerCard({ roleList }) {
                 <div {...getRootProps()}>
                   <input {...getInputProps()} />
                   <Typography variant="h6" component="div">
-                    Add profile picture
+                    Add profile picture*
                   </Typography>
                 </div>
               </section>
