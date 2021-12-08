@@ -1,0 +1,47 @@
+name: Refresh ICS
+
+on:
+  schedule:
+    # Run at 1:00am CST every day (offset 1 hour from birthday bot)
+    - cron: "0 7 * * *"
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    environment: Deployment
+
+    steps:
+      # Checkout master
+      - uses: actions/checkout@v2
+
+      # Setup node
+      - uses: actions/setup-node@v2
+        with:
+          node-version: "15"
+
+      # Install dependencies
+      - name: Install dependencies
+        run: |
+          npm install
+
+      # Run typescript compiler
+      - name: Compile Typescript
+        run: |
+          npm run anniversary-build
+      
+      # Run the anniversary script and send slack messages
+      - name: Run Anniversary Script
+        env:
+          SLACK_CHANNEL_ID: ${{ secrets.SLACK_CHANNEL_ID }}
+          FIREBASE_API_KEY: ${{ secrets.FIREBASE_API_KEY }}
+          FIREBASE_AUTH_DOMAIN: ${{ secrets.FIREBASE_AUTH_DOMAIN }}
+          FIREBASE_DATABASE_URL: ${{ secrets.FIREBASE_DATABASE_URL }}
+          FIREBASE_PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID }}
+          FIREBASE_STORAGE_BUCKET: ${{ secrets.FIREBASE_STORAGE_BUCKET }}
+          FIREBASE_MESSAGING_SENDER_ID: ${{ secrets.FIREBASE_MESSAGING_SENDER_ID }}
+          FIREBASE_APP_ID: ${{ secrets.FIREBASE_APP_ID }}
+        run: |
+          npm run anniversary-start
