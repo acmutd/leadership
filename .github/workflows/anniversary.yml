@@ -1,4 +1,4 @@
-name: Refresh ICS
+name: Anniversary
 
 on:
   schedule:
