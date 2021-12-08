@@ -1,6 +1,5 @@
 import admin from "../../../firebase/nodeApp";
 import { getSession } from "next-auth/client";
-import { firestore } from "firebase-admin";
 
 export default async function handler(req, res) {
   if (req.method !== "POST") {
