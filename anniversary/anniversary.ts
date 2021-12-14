@@ -7,13 +7,14 @@ interface anniversary {
   name: string;
   date: Date;
   end?: Date;
+  roles?: string[];
 }
 
 interface anniversary_count {
   name: string;
+  fun_facts: string[];
   count: number;
 }
-
 
 /**
  * Initialize firebase
@@ -52,6 +53,7 @@ const readAllDocuments = async (
       name: data.name,
       date: data.start.toDate(), // start date
       end: data.end.toDate(), // leave date to check if they are a current officer
+      roles: data.role_list,
     });
   });
 
@@ -73,6 +75,43 @@ const filterCurrentOfficers = (documents: anniversary[]): anniversary[] => {
 };
 
 /**
+ * Generates a list of fun facts about the officer given their list of roles
+ * TODO: Read in all documents from `/officer/<officer-id>/roles` subcollection and generate additional facts from there
+ * @param name of the officer
+ * @param role_list is the list of roles that they have had
+ * @returns an array containing fun facts about the officer
+ */
+const generateFunFacts = (name: string, role_list: string[]): string[] => {
+  const fun_facts: string[] = [];
+  if (role_list.length === 1) {
+    fun_facts.push(
+      `Did you know that ${name} has held ${role_list[0]} for over a year?`
+    );
+  }
+  if (role_list.length > 1) {
+    fun_facts.push(
+      `Did you know that ${name} joined as a ${
+        role_list[0]
+      } before becoming a ${role_list[role_list.length - 1]}?`
+    );
+  }
+  if (role_list.length > 2) {
+    fun_facts.push(`Did you know that ${name} switched roles more than twice?`);
+  }
+  if (role_list.length > 3) {
+    fun_facts.push(
+      `Did you know that ${name} used to be a ${
+        role_list[Math.floor(Math.random() * role_list.length - 2) + 1]
+      } at one point?`
+    );
+  }
+  if (role_list.length > 4) {
+    fun_facts.push(`Did you know that ${name} has had 5+ roles in acm?`);
+  }
+  return fun_facts;
+};
+
+/**
  * Check whether the current date & month match the start date and month
  * @param documents all current officer documents
  * @returns filtered list of officer documents that have an anniversary today
@@ -84,17 +123,18 @@ const filterAnniversaries = (documents: anniversary[]): anniversary_count[] => {
     .filter((document) => {
       if (
         today.getDate() === document.date.getDate() &&
-        today.getMonth() === document.date.getMonth()
+        today.getMonth() === document.date.getMonth() &&
+        today.getFullYear() !== document.date.getFullYear()
       ) {
         return true;
       }
       return false;
     })
     .map((document) => {
-      const diff = today.getFullYear() - document.date.getFullYear();
       return {
         name: document.name,
-        count: diff,
+        fun_facts: generateFunFacts(document.name, document.roles),
+        count: today.getFullYear() - document.date.getFullYear(),
       };
     });
 };
@@ -123,6 +163,17 @@ const postToSlack = async (
           text: {
             type: "mrkdwn",
             text: messages[Math.floor(Math.random() * 12)],
+          },
+        },
+        {
+          type: "section",
+          text: {
+            type: "mrkdwn",
+            text: `Fun Fact: ${
+              anniversary.fun_facts[
+                Math.floor(Math.random() * anniversary.fun_facts.length)
+              ]
+            } Check out more interesting facts at <https://leadership.acmutd.co|ACM Leadership>!`,
           },
         },
       ],
