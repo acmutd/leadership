@@ -11,7 +11,12 @@ export const config = {
 
 const cors = Cors();
 
-const apolloServer = new ApolloServer({ typeDefs, resolvers });
+const apolloServer = new ApolloServer({
+  typeDefs,
+  resolvers,
+  introspection: true,
+  plugins: [ApolloServerPluginLandingPageLocalDefault({ footer: false })],
+});
 
 const startServer = apolloServer.start();
 
