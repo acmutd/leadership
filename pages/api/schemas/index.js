@@ -25,7 +25,19 @@ export  const  typeDefs  =  gql`
         sender_name: String
     }
 
+    type Participant {
+        id: ID!
+        name: String!
+        email: [String!]
+        netid: String
+        classification: String
+        major: String
+        participation: [String]
+    }
+
     type  Query {
         getOfficers(query: String): [Officer]
         getOfficer(id: String, name: String): Officer!
+        getParticipants(query: String): [Participant]
+        getParticipant(id: String, name: String): Participant!
     }`

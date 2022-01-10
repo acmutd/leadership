@@ -1,9 +1,13 @@
-import axios from "axios";
 import { getOfficers } from "../../../fetchData/getOfficers";
+import { getParticipants } from "../../../fetchData/getParticipants";
 import {
   getProfileData,
   getProfileByName,
 } from "../../../fetchData/getProfileData";
+import {
+  getParticipantData,
+  getParticipantDataByName,
+} from "../../../fetchData/getParticipantData";
 
 export const resolvers = {
   Query: {
@@ -34,5 +38,32 @@ export const resolvers = {
         throw error;
       }
     },
+    getParticipants: async (_, { query }) => {
+      try {
+        const { participants } = await getParticipants(query);
+        return participants;
+      } catch (error) {
+        console.log(error);
+        throw error;
+      }
+    },
+    getParticipant: async (_, { id, name }) => {
+      try {
+        if (name) {
+          const participant = await getParticipantDataByName(name);
+          return participant;
+        }
+        else if (id) {
+          const participant = await getParticipantData(id);
+          return participant;
+        }
+        else {
+            throw new Error("Must provide either an id or a name");
+        }
+      } catch (error) {
+        console.log(error);
+        throw error;
+      }
+    }
   },
 };
