@@ -36,6 +36,13 @@ export default function NavBar({
               </Typography>
             </Button>
           </Link>
+          <Link href={`/participant`} passHref>
+            <Button size="small" style={{ marginRight: 24 }}>
+              <Typography variant="inherit" component="div">
+                Membership
+              </Typography>
+            </Button>
+          </Link>
           <Fragment>
             <Button onClick={() => setTheme("light")} size="small">
               <Typography variant="inherit" component="div">
