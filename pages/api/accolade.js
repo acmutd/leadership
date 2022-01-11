@@ -18,14 +18,14 @@ export default async function handler(req, res) {
   const db = admin.firestore();
 
   await db
-    .collection("officer")
+    .collection(req.body.collection)
     .doc(req.body.user_id)
     .update({
       accolades: firestore.FieldValue.arrayUnion(req.body.accolade),
     });
 
   await db
-    .collection("officer")
+    .collection(req.body.collection)
     .doc(req.body.user_id)
     .collection("accolades")
     .add({

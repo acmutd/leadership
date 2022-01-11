@@ -75,13 +75,13 @@ export default function Home({ participantList, roleList, session }) {
               {name.length < 20 ? name : name.split(" ")[0]}
             </Typography>
           </CardContent>
-          {/* <CardActions>
+          <CardActions>
             <Link href={`/participant/${id}`} passHref>
               <Button color="inherit" size="small">
                 Learn More <ArrowForwardIcon />
               </Button>
             </Link>
-          </CardActions> */}
+          </CardActions>
         </Card>
       </Grid>
     );

@@ -61,8 +61,6 @@ export default async function handler(req, res) {
 
   const url = process.env.ACM_CORE_BASE_URL + "/challenge/send-email";
 
-  console.log(receiver_data);
-  console.log(sender_data);
   try {
     await axios.post(
       url,

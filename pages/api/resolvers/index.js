@@ -3,6 +3,7 @@ import { getParticipants } from "../../../fetchData/getParticipants";
 import {
   getProfileData,
   getProfileByName,
+  getProfileByEmail
 } from "../../../fetchData/getProfileData";
 import {
   getParticipantData,
@@ -20,7 +21,7 @@ export const resolvers = {
         throw error;
       }
     },
-    getOfficer: async (_, { id, name }) => {
+    getOfficer: async (_, { id, name, email }) => {
       try {
         if (name) {
           const profile = await getProfileByName(name, true);
@@ -30,8 +31,12 @@ export const resolvers = {
           const profile = await getProfileData(id, true);
           return profile;
         }
+        else if (email) {
+          const profile = await getProfileByEmail(email, true);
+          return profile;
+        }
         else {
-            throw new Error("Must provide either an id or a name");
+            throw new Error("Must provide either an id, email or a name");
         }
       } catch (error) {
         console.log(error);
@@ -50,11 +55,11 @@ export const resolvers = {
     getParticipant: async (_, { id, name }) => {
       try {
         if (name) {
-          const participant = await getParticipantDataByName(name);
+          const participant = await getParticipantDataByName(name, true);
           return participant;
         }
         else if (id) {
-          const participant = await getParticipantData(id);
+          const participant = await getParticipantData(id, true);
           return participant;
         }
         else {

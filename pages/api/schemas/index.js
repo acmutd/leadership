@@ -33,11 +33,12 @@ export  const  typeDefs  =  gql`
         classification: String
         major: String
         participation: [String]
+        accolades: [Accolade]
     }
 
     type  Query {
         getOfficers(query: String): [Officer]
-        getOfficer(id: String, name: String): Officer!
+        getOfficer(id: String, name: String, email: String): Officer!
         getParticipants(query: String): [Participant]
         getParticipant(id: String, name: String): Participant!
     }`
