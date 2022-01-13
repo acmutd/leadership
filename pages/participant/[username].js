@@ -11,29 +11,43 @@ import {
   TextField,
   Card,
   CardContent,
-  CardMedia,
 } from "@material-ui/core";
 import NavBar from "../../components/NavBar";
 import axios from "axios";
-import { getProfileData } from "../../fetchData/getProfileData";
+import { getParticipantData } from "../../fetchData/getParticipantData";
 import AccoladeCard from "../../components/AccoladeCard";
-import fetchProfileImage from "../../fetchData/fetchProfileImage";
 
 export default function SSRPage({ data, session }) {
   // if (!session) { return  <AccessDenied/> };
   const [accolade, setAccolade] = useState(
     "You're the best! Thanks for being awesome!"
   );
-  const [isCurrentOfficer, setIsCurrentOfficer] = useState(
-    data.end === "Sat Jun 19 2021" ? true : false
-  );
-  const [imageLink, setImageLink] = useState("");
-  const [imageLoaded, setImageLoaded] = useState(false);
 
   const router = useRouter();
 
   const onChange = (event) => {
     setAccolade(event.target.value);
+  };
+
+  const getProgramParticipation = () => {
+    return data.participation
+      .filter((item, index) => {
+        if (item !== "TIP" && item !== "Projects" && item !== "Research") {
+          return true;
+        }
+        return false;
+      })
+      .map((item, index) => {
+        const division =
+          item.split(" ")[0] === "TIP"
+            ? "Technical Interview Prep"
+            : item.split(" ")[0];
+        return (
+          division +
+          " " +
+          item.split(" ")[1].replace("F", "Fall ").replace("S", "Spring ")
+        );
+      });
   };
 
   let CustomComponent;
@@ -45,23 +59,17 @@ export default function SSRPage({ data, session }) {
     CustomComponent = `div`;
   }
 
-  useEffect(() => {
-    (async () => {
-      setImageLink(await fetchProfileImage(data.id));
-      setImageLoaded(true);
-    })();
-  });
-
   const sendAccolade = async () => {
     const payload = {
       sender_name: session.user.name,
       sender_email: session.user.email,
-      to: data.acm_email,
+      to: session.user.email, // data.email[0]
       receiver_name: data.name,
       accolade: accolade,
       user_id: data.id,
-      collection: "officer",
+      collection: "participants",
     };
+
     await axios.post(router.basePath + "/api/email", payload, {});
     await axios.post(router.basePath + "/api/slack", payload, {});
     await axios.post(router.basePath + "/api/accolade", payload, {});
@@ -76,15 +84,6 @@ export default function SSRPage({ data, session }) {
           <Typography style={{ margin: 12 }} variant="h3" component="div">
             {data.name}
           </Typography>
-          {isCurrentOfficer ? (
-            <Typography variant="inherit" component="div">
-              {data.start} to Present
-            </Typography>
-          ) : (
-            <Typography variant="inherit" component="div">
-              {data.start} to {data.end}
-            </Typography>
-          )}
           <hr />
           <Card
             raised
@@ -97,18 +96,11 @@ export default function SSRPage({ data, session }) {
             }}
           >
             <CardContent>
-              <CardMedia
-                component="img"
-                height="365"
-                image={imageLink}
-                alt={`${data.name}'s profile picture`}
-                style={{ marginBottom: 16 }}
-              />
               <Typography variant="h5" component="div">
-                Roles
+                Participation
               </Typography>
               <hr style={{ maxWidth: 200 }} />
-              {data.roles.map((role, index) => {
+              {getProgramParticipation().map((role, index) => {
                 return (
                   <Typography
                     variant="inherit"
@@ -128,7 +120,7 @@ export default function SSRPage({ data, session }) {
             <div></div>
           )}
           <CustomComponent />
-          {session && isCurrentOfficer ? (
+          {session ? (
             <Card
               raised
               style={{
@@ -162,7 +154,7 @@ export default function SSRPage({ data, session }) {
           ) : (
             <div></div>
           )}
-          <Link href={`/`} passHref>
+          <Link href={`/participant`} passHref>
             <Button style={{ margin: 12 }} size="small">
               <ArrowBackIcon /> Return Home
             </Button>
@@ -177,7 +169,7 @@ export const getServerSideProps = async (context) => {
   const { username } = context.params;
   const session = await getSession(context);
 
-  const profile = await getProfileData(username);
+  const profile = await getParticipantData(username);
   if (!profile) {
     return { notFound: true };
   }

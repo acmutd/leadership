@@ -1,9 +1,19 @@
-import axios from "axios";
 import { getOfficers } from "../../../fetchData/getOfficers";
+import { getParticipants } from "../../../fetchData/getParticipants";
+import { getTeams } from "../../../fetchData/getTeams";
 import {
   getProfileData,
   getProfileByName,
+  getProfileByEmail
 } from "../../../fetchData/getProfileData";
+import {
+  getParticipantData,
+  getParticipantDataByName,
+} from "../../../fetchData/getParticipantData";
+import {
+  getTeamData,
+  getTeamDataByName,
+} from "../../../fetchData/getTeamData";
 
 export const resolvers = {
   Query: {
@@ -16,7 +26,7 @@ export const resolvers = {
         throw error;
       }
     },
-    getOfficer: async (_, { id, name }) => {
+    getOfficer: async (_, { id, name, email }) => {
       try {
         if (name) {
           const profile = await getProfileByName(name, true);
@@ -26,6 +36,37 @@ export const resolvers = {
           const profile = await getProfileData(id, true);
           return profile;
         }
+        else if (email) {
+          const profile = await getProfileByEmail(email, true);
+          return profile;
+        }
+        else {
+            throw new Error("Must provide either an id, email or a name");
+        }
+      } catch (error) {
+        console.log(error);
+        throw error;
+      }
+    },
+    getParticipants: async (_, { query }) => {
+      try {
+        const { participants } = await getParticipants(query);
+        return participants;
+      } catch (error) {
+        console.log(error);
+        throw error;
+      }
+    },
+    getParticipant: async (_, { id, name }) => {
+      try {
+        if (name) {
+          const participant = await getParticipantDataByName(name, true);
+          return participant;
+        }
+        else if (id) {
+          const participant = await getParticipantData(id, true);
+          return participant;
+        }
         else {
             throw new Error("Must provide either an id or a name");
         }
@@ -34,5 +75,32 @@ export const resolvers = {
         throw error;
       }
     },
+    getTeams: async (_, { query }) => {
+      try {
+        const { teams } = await getTeams(query);
+        return teams;
+      } catch (error) {
+        console.log(error);
+        throw error;
+      }
+    },
+    getTeam: async (_, { id, name }) => {
+      try {
+        if (name) {
+          const team = await getTeamDataByName(name, true);
+          return team;
+        }
+        else if (id) {
+          const team = await getTeamData(id, true);
+          return team;
+        }
+        else {
+            throw new Error("Must provide either an id or a name");
+        }
+      } catch (error) {
+        console.log(error);
+        throw error;
+      }
+    }
   },
 };

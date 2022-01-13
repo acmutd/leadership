@@ -50,17 +50,17 @@ export default async function handler(req, res) {
         type: "section",
         text: {
           type: "mrkdwn",
-          text: "Check out all the accolades on your leadership page! :sparkles:",
+          text: `Check out all the accolades on your ${req.body.collection === "officer" ? "leadership" : "profile"} page! :sparkles:`,
         },
         accessory: {
           type: "button",
           text: {
             type: "plain_text",
-            text: "Leadership",
+            text: req.body.collection === "officer" ? "View Leadership" : "View Profile",
             emoji: true,
           },
           value: "click_me_123",
-          url: `https://leadership.acmutd.co/profile/${req.body.user_id}`,
+          url: `https://leadership.acmutd.co/${req.body.collection === "officer" ? "profile" : "participant"}/${req.body.user_id}`,
           action_id: "button-action",
         },
       },

@@ -25,7 +25,31 @@ export  const  typeDefs  =  gql`
         sender_name: String
     }
 
+    type Participant {
+        id: ID!
+        name: String!
+        email: [String!]
+        netid: String
+        classification: String
+        major: String
+        participation: [String]
+        accolades: [Accolade]
+    }
+
+    type Team {
+        id: ID!
+        name: String!
+        participants: [Participant]
+        officer: Officer
+        director: [Officer]
+        tags: [String]
+    }
+
     type  Query {
         getOfficers(query: String): [Officer]
-        getOfficer(id: String, name: String): Officer!
+        getOfficer(id: String, name: String, email: String): Officer!
+        getParticipants(query: String): [Participant]
+        getParticipant(id: String, name: String): Participant!
+        getTeams(query: String): [Team]
+        getTeam(id: String, name: String): Team!
     }`

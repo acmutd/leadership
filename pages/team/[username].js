@@ -11,24 +11,17 @@ import {
   TextField,
   Card,
   CardContent,
-  CardMedia,
 } from "@material-ui/core";
 import NavBar from "../../components/NavBar";
 import axios from "axios";
-import { getProfileData } from "../../fetchData/getProfileData";
+import { getTeamData } from "../../fetchData/getTeamData";
 import AccoladeCard from "../../components/AccoladeCard";
-import fetchProfileImage from "../../fetchData/fetchProfileImage";
 
 export default function SSRPage({ data, session }) {
   // if (!session) { return  <AccessDenied/> };
   const [accolade, setAccolade] = useState(
     "You're the best! Thanks for being awesome!"
   );
-  const [isCurrentOfficer, setIsCurrentOfficer] = useState(
-    data.end === "Sat Jun 19 2021" ? true : false
-  );
-  const [imageLink, setImageLink] = useState("");
-  const [imageLoaded, setImageLoaded] = useState(false);
 
   const router = useRouter();
 
@@ -45,26 +38,44 @@ export default function SSRPage({ data, session }) {
     CustomComponent = `div`;
   }
 
-  useEffect(() => {
-    (async () => {
-      setImageLink(await fetchProfileImage(data.id));
-      setImageLoaded(true);
-    })();
-  });
+  const getDivisionAndSemester = () => {
+    return data.tags
+      .filter((item, index) => {
+        if (item.split(" ").length === 2) {
+          return true;
+        }
+        return false;
+      })
+      .map((item, index) => {
+        const division =
+          item.split(" ")[0] === "TIP"
+            ? "Technical Interview Prep"
+            : item.split(" ")[0];
+        return (
+          division +
+          " " +
+          item.split(" ")[1].replace("F", "Fall ").replace("S", "Spring ")
+        );
+      })[0];
+  };
 
   const sendAccolade = async () => {
-    const payload = {
-      sender_name: session.user.name,
-      sender_email: session.user.email,
-      to: data.acm_email,
-      receiver_name: data.name,
-      accolade: accolade,
-      user_id: data.id,
-      collection: "officer",
-    };
-    await axios.post(router.basePath + "/api/email", payload, {});
-    await axios.post(router.basePath + "/api/slack", payload, {});
-    await axios.post(router.basePath + "/api/accolade", payload, {});
+    for (let i = 0; i < data.participants.length; i++) {
+      const payload = {
+        sender_name: session.user.name,
+        sender_email: session.user.email,
+        to: session.user.email, // TODO: need to query db for email here,
+        receiver_name: data.participants[i].name,
+        accolade: accolade,
+        user_id: data.id,
+        collection: "teams",
+      };
+
+      await axios.post(router.basePath + "/api/email", payload, {});
+      await axios.post(router.basePath + "/api/slack", payload, {});
+      await axios.post(router.basePath + "/api/accolade", payload, {});
+    }
+
     router.reload();
   };
 
@@ -76,15 +87,9 @@ export default function SSRPage({ data, session }) {
           <Typography style={{ margin: 12 }} variant="h3" component="div">
             {data.name}
           </Typography>
-          {isCurrentOfficer ? (
-            <Typography variant="inherit" component="div">
-              {data.start} to Present
-            </Typography>
-          ) : (
-            <Typography variant="inherit" component="div">
-              {data.start} to {data.end}
-            </Typography>
-          )}
+          <Typography variant="inherit" component="div">
+            {getDivisionAndSemester()}
+          </Typography>
           <hr />
           <Card
             raised
@@ -97,18 +102,11 @@ export default function SSRPage({ data, session }) {
             }}
           >
             <CardContent>
-              <CardMedia
-                component="img"
-                height="365"
-                image={imageLink}
-                alt={`${data.name}'s profile picture`}
-                style={{ marginBottom: 16 }}
-              />
               <Typography variant="h5" component="div">
-                Roles
+                Team Members
               </Typography>
               <hr style={{ maxWidth: 200 }} />
-              {data.roles.map((role, index) => {
+              {data.participants.map((participant, index) => {
                 return (
                   <Typography
                     variant="inherit"
@@ -116,10 +114,25 @@ export default function SSRPage({ data, session }) {
                     key={index}
                     style={{ marginTop: 8 }}
                   >
-                    {index + 1}. {role}
+                    {index + 1}. {participant.name}
                   </Typography>
                 );
               })}
+              <Typography
+                variant="h5"
+                component="div"
+                style={{ marginTop: 20 }}
+              >
+                Officer
+              </Typography>
+              <hr style={{ maxWidth: 200 }} />
+              <Typography
+                variant="inherit"
+                component="div"
+                style={{ marginTop: 8 }}
+              >
+                {data.officer.name}
+              </Typography>
             </CardContent>
           </Card>
           {data.accolades.length > 0 ? (
@@ -128,7 +141,7 @@ export default function SSRPage({ data, session }) {
             <div></div>
           )}
           <CustomComponent />
-          {session && isCurrentOfficer ? (
+          {session ? (
             <Card
               raised
               style={{
@@ -162,7 +175,7 @@ export default function SSRPage({ data, session }) {
           ) : (
             <div></div>
           )}
-          <Link href={`/`} passHref>
+          <Link href={`/team`} passHref>
             <Button style={{ margin: 12 }} size="small">
               <ArrowBackIcon /> Return Home
             </Button>
@@ -177,7 +190,7 @@ export const getServerSideProps = async (context) => {
   const { username } = context.params;
   const session = await getSession(context);
 
-  const profile = await getProfileData(username);
+  const profile = await getTeamData(username);
   if (!profile) {
     return { notFound: true };
   }

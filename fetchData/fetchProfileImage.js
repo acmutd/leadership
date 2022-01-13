@@ -16,7 +16,7 @@ export default async function fetchProfileImage(userId) {
   try {
     url = await profileImage.getDownloadURL();
   } catch (error) {
-    url = "https://acmutd.co/brand/General/Assets/Logos/favicon.png";
+    url = "https://brand.acmutd.co/General/Assets/Logos/favicon.png";
   }
 
   return url;

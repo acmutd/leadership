@@ -13,21 +13,21 @@ import {
   Tooltip,
 } from "@material-ui/core";
 import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
-import { getOfficers } from "../fetchData/getOfficers";
-import NavBar from "../components/NavBar";
+import { getParticipants } from "../../fetchData/getParticipants";
+import NavBar from "../../components/NavBar";
 
 /**
  *
- * @param {Object} officerList list of officers from the database. All officers if no query is present, else subset
+ * @param {Object} participantList list of officers from the database. All officers if no query is present, else subset
  * @param {string[]} roleList list of all roles, used for role query search bar auto-fill
  * @param {Object} session contains whether the user is signed in or not
  */
-export default function Home({ officerList, roleList, session }) {
+export default function Home({ participantList, roleList, session }) {
   // contains subset of officer objects based on name that is typed in the search bar
-  const [filteredArray, setFilteredArray] = useState(officerList);
+  const [filteredArray, setFilteredArray] = useState(participantList);
 
   // contains the list of all names only that is used to populate the search bar auto-fill
-  const [officerNames, setOfficerNames] = useState([]);
+  const [participantNames, setParticipantNames] = useState([]);
 
   // contains the list of all roles that is used to populate the role query bar auto-fill
   const [roleArray, setRoleArray] = useState(roleList);
@@ -38,7 +38,7 @@ export default function Home({ officerList, roleList, session }) {
   const onchange = (event) => {
     const searchString = event.toLowerCase();
     setFilteredArray(
-      officerList.filter((item) =>
+      participantList.filter((item) =>
         item.name.toLowerCase().includes(searchString)
       )
     );
@@ -54,11 +54,11 @@ export default function Home({ officerList, roleList, session }) {
   // Sorts the array in ascending order by first name
   useEffect(() => {
     setFilteredArray(
-      officerList.sort((a, b) =>
+      participantList.sort((a, b) =>
         a.name > b.name ? 1 : b.name > a.name ? -1 : 0
       )
     );
-    setOfficerNames(
+    setParticipantNames(
       filteredArray.map(({ id, name }, index) =>
         name.length < 16 ? name : name.split(" ")[0]
       )
@@ -86,7 +86,7 @@ export default function Home({ officerList, roleList, session }) {
             </Tooltip>
           </CardContent>
           <CardActions>
-            <Link href={`/profile/${id}`} passHref>
+            <Link href={`/participant/${id}`} passHref>
               <Button color="inherit" size="small">
                 Learn More <ArrowForwardIcon />
               </Button>
@@ -106,7 +106,7 @@ export default function Home({ officerList, roleList, session }) {
           roleArray={roleArray}
           onRoleChange={onrolechange}
           search={true}
-          officerArray={officerNames}
+          officerArray={participantNames}
           onSearchChange={onchange}
         />
         <Grid
@@ -122,15 +122,15 @@ export default function Home({ officerList, roleList, session }) {
 }
 
 export async function getServerSideProps(context) {
-  const { officers, role_list } = await getOfficers(context.query.q);
+  const { participants, programs } = await getParticipants(context.query.q);
   const session = await getSession(context);
 
-  if (!officers || !role_list) {
+  if (!participants || !programs) {
     return {
       notFound: true,
     };
   }
   return {
-    props: { officerList: officers, roleList: role_list, session }, // will be passed to the page component as props
+    props: { participantList: participants, roleList: programs, session }, // will be passed to the page component as props
   };
 }
