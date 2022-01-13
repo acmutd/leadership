@@ -13,7 +13,7 @@ import {
   Tooltip,
 } from "@material-ui/core";
 import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
-import { getParticipants } from "../../fetchData/getParticipants";
+import { getTeams } from "../../fetchData/getTeams";
 import NavBar from "../../components/NavBar";
 
 /**
@@ -86,7 +86,7 @@ export default function Home({ participantList, roleList, session }) {
             </Tooltip>
           </CardContent>
           <CardActions>
-            <Link href={`/participant/${id}`} passHref>
+            <Link href={`/team/${id}`} passHref>
               <Button color="inherit" size="small">
                 Learn More <ArrowForwardIcon />
               </Button>
@@ -122,15 +122,15 @@ export default function Home({ participantList, roleList, session }) {
 }
 
 export async function getServerSideProps(context) {
-  const { participants, programs } = await getParticipants(context.query.q);
+  const { teams, programs } = await getTeams(context.query.q);
   const session = await getSession(context);
 
-  if (!participants || !programs) {
+  if (!teams || !programs) {
     return {
       notFound: true,
     };
   }
   return {
-    props: { participantList: participants, roleList: programs, session }, // will be passed to the page component as props
+    props: { participantList: teams, roleList: programs, session }, // will be passed to the page component as props
   };
 }

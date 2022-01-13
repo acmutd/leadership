@@ -14,7 +14,7 @@ import {
 } from "@material-ui/core";
 import NavBar from "../../components/NavBar";
 import axios from "axios";
-import { getParticipantData } from "../../fetchData/getParticipantData";
+import { getTeamData } from "../../fetchData/getTeamData";
 import AccoladeCard from "../../components/AccoladeCard";
 
 export default function SSRPage({ data, session }) {
@@ -29,10 +29,19 @@ export default function SSRPage({ data, session }) {
     setAccolade(event.target.value);
   };
 
-  const getProgramParticipation = () => {
-    return data.participation
+  let CustomComponent;
+  try {
+    CustomComponent = dynamic(() =>
+      import(`../../components/personalization/${data.name.replace(/\s/g, "")}`)
+    );
+  } catch (e) {
+    CustomComponent = `div`;
+  }
+
+  const getDivisionAndSemester = () => {
+    return data.tags
       .filter((item, index) => {
-        if (item !== "TIP" && item !== "Projects" && item !== "Research") {
+        if (item.split(" ").length === 2) {
           return true;
         }
         return false;
@@ -47,32 +56,26 @@ export default function SSRPage({ data, session }) {
           " " +
           item.split(" ")[1].replace("F", "Fall ").replace("S", "Spring ")
         );
-      });
+      })[0];
   };
 
-  let CustomComponent;
-  try {
-    CustomComponent = dynamic(() =>
-      import(`../../components/personalization/${data.name.replace(/\s/g, "")}`)
-    );
-  } catch (e) {
-    CustomComponent = `div`;
-  }
-
   const sendAccolade = async () => {
-    const payload = {
-      sender_name: session.user.name,
-      sender_email: session.user.email,
-      to: session.user.email, // data.email[0]
-      receiver_name: data.name,
-      accolade: accolade,
-      user_id: data.id,
-      collection: "participants",
-    };
+    for (let i = 0; i < data.participants.length; i++) {
+      const payload = {
+        sender_name: session.user.name,
+        sender_email: session.user.email,
+        to: session.user.email, // TODO: need to query db for email here,
+        receiver_name: data.participants[i].name,
+        accolade: accolade,
+        user_id: data.id,
+        collection: "teams",
+      };
 
-    await axios.post(router.basePath + "/api/email", payload, {});
-    await axios.post(router.basePath + "/api/slack", payload, {});
-    await axios.post(router.basePath + "/api/accolade", payload, {});
+      await axios.post(router.basePath + "/api/email", payload, {});
+      await axios.post(router.basePath + "/api/slack", payload, {});
+      await axios.post(router.basePath + "/api/accolade", payload, {});
+    }
+
     router.reload();
   };
 
@@ -83,6 +86,9 @@ export default function SSRPage({ data, session }) {
         <div style={{ paddingTop: 90 }}>
           <Typography style={{ margin: 12 }} variant="h3" component="div">
             {data.name}
+          </Typography>
+          <Typography variant="inherit" component="div">
+            {getDivisionAndSemester()}
           </Typography>
           <hr />
           <Card
@@ -97,10 +103,10 @@ export default function SSRPage({ data, session }) {
           >
             <CardContent>
               <Typography variant="h5" component="div">
-                Participation
+                Team Members
               </Typography>
               <hr style={{ maxWidth: 200 }} />
-              {getProgramParticipation().map((role, index) => {
+              {data.participants.map((participant, index) => {
                 return (
                   <Typography
                     variant="inherit"
@@ -108,10 +114,25 @@ export default function SSRPage({ data, session }) {
                     key={index}
                     style={{ marginTop: 8 }}
                   >
-                    {index + 1}. {role}
+                    {index + 1}. {participant.name}
                   </Typography>
                 );
               })}
+              <Typography
+                variant="h5"
+                component="div"
+                style={{ marginTop: 20 }}
+              >
+                Officer
+              </Typography>
+              <hr style={{ maxWidth: 200 }} />
+              <Typography
+                variant="inherit"
+                component="div"
+                style={{ marginTop: 8 }}
+              >
+                {data.officer.name}
+              </Typography>
             </CardContent>
           </Card>
           {data.accolades.length > 0 ? (
@@ -154,7 +175,7 @@ export default function SSRPage({ data, session }) {
           ) : (
             <div></div>
           )}
-          <Link href={`/participant`} passHref>
+          <Link href={`/team`} passHref>
             <Button style={{ margin: 12 }} size="small">
               <ArrowBackIcon /> Return Home
             </Button>
@@ -169,7 +190,7 @@ export const getServerSideProps = async (context) => {
   const { username } = context.params;
   const session = await getSession(context);
 
-  const profile = await getParticipantData(username);
+  const profile = await getTeamData(username);
   if (!profile) {
     return { notFound: true };
   }

@@ -10,20 +10,19 @@ import {
   CardActions,
   Typography,
   Button,
-  Box,
+  Tooltip,
 } from "@material-ui/core";
 import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
 import { getOfficers } from "../fetchData/getOfficers";
 import NavBar from "../components/NavBar";
 
 /**
- * 
+ *
  * @param {Object} officerList list of officers from the database. All officers if no query is present, else subset
  * @param {string[]} roleList list of all roles, used for role query search bar auto-fill
  * @param {Object} session contains whether the user is signed in or not
  */
 export default function Home({ officerList, roleList, session }) {
-
   // contains subset of officer objects based on name that is typed in the search bar
   const [filteredArray, setFilteredArray] = useState(officerList);
 
@@ -68,12 +67,23 @@ export default function Home({ officerList, roleList, session }) {
 
   const Grids = filteredArray.map(({ id, name }, index) => {
     return (
-      <Grid item xs={12} sm={6} md={4} lg={3} key={index} align="center" style={{ margin: 8 }}>
+      <Grid
+        item
+        xs={12}
+        sm={6}
+        md={4}
+        lg={3}
+        key={index}
+        align="center"
+        style={{ margin: 8 }}
+      >
         <Card raised style={{ width: 300, minWidth: 250 }}>
           <CardContent>
-            <Typography variant="h5" component="div">
-              {name.length < 20 ? name : name.split(" ")[0]}
-            </Typography>
+            <Tooltip title={name.length < 20 ? "" : name} placement="top">
+              <Typography variant="h5" component="div">
+                {name.length < 20 ? name : name.split(" ")[0]}
+              </Typography>
+            </Tooltip>
           </CardContent>
           <CardActions>
             <Link href={`/profile/${id}`} passHref>
@@ -99,7 +109,11 @@ export default function Home({ officerList, roleList, session }) {
           officerArray={officerNames}
           onSearchChange={onchange}
         />
-        <Grid style={{ paddingTop: 90, paddingBottom: 24 }} container justify="center">
+        <Grid
+          style={{ paddingTop: 90, paddingBottom: 24 }}
+          container
+          justify="center"
+        >
           {Grids}
         </Grid>
       </Container>

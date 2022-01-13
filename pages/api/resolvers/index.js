@@ -1,5 +1,6 @@
 import { getOfficers } from "../../../fetchData/getOfficers";
 import { getParticipants } from "../../../fetchData/getParticipants";
+import { getTeams } from "../../../fetchData/getTeams";
 import {
   getProfileData,
   getProfileByName,
@@ -9,6 +10,10 @@ import {
   getParticipantData,
   getParticipantDataByName,
 } from "../../../fetchData/getParticipantData";
+import {
+  getTeamData,
+  getTeamDataByName,
+} from "../../../fetchData/getTeamData";
 
 export const resolvers = {
   Query: {
@@ -61,6 +66,33 @@ export const resolvers = {
         else if (id) {
           const participant = await getParticipantData(id, true);
           return participant;
+        }
+        else {
+            throw new Error("Must provide either an id or a name");
+        }
+      } catch (error) {
+        console.log(error);
+        throw error;
+      }
+    },
+    getTeams: async (_, { query }) => {
+      try {
+        const { teams } = await getTeams(query);
+        return teams;
+      } catch (error) {
+        console.log(error);
+        throw error;
+      }
+    },
+    getTeam: async (_, { id, name }) => {
+      try {
+        if (name) {
+          const team = await getTeamDataByName(name, true);
+          return team;
+        }
+        else if (id) {
+          const team = await getTeamData(id, true);
+          return team;
         }
         else {
             throw new Error("Must provide either an id or a name");

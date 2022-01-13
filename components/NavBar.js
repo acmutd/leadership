@@ -43,6 +43,13 @@ export default function NavBar({
               </Typography>
             </Button>
           </Link>
+          <Link href={`/team`} passHref>
+            <Button size="small" style={{ marginRight: 24 }}>
+              <Typography variant="inherit" component="div">
+                Programs
+              </Typography>
+            </Button>
+          </Link>
           <Fragment>
             <Button onClick={() => setTheme("light")} size="small">
               <Typography variant="inherit" component="div">
@@ -58,7 +65,7 @@ export default function NavBar({
           {search ? (
             <Autocomplete
               disablePortal
-              style={{ marginLeft: 60 }}
+              style={{ marginLeft: 60, marginTop: -12 }}
               id="combo-box"
               options={officerArray}
               sx={{ width: 200 }}
@@ -73,7 +80,7 @@ export default function NavBar({
           {filter ? (
             <Autocomplete
               disablePortal
-              style={{ marginLeft: 60 }}
+              style={{ marginLeft: 60, marginTop: -12 }}
               id="combo-box"
               options={roleArray}
               sx={{ width: 400 }}
