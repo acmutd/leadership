@@ -5,6 +5,7 @@ export  const  typeDefs  =  gql`
         id: ID!
         name: String!
         acm_email: String
+        email: String
         linkedin: String
         roles: [Role]
         accolades: [Accolade]
@@ -34,6 +35,7 @@ export  const  typeDefs  =  gql`
         major: String
         participation: [String]
         accolades: [Accolade]
+        teams: [Team]
     }
 
     type Team {

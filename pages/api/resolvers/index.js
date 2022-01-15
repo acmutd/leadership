@@ -103,4 +103,92 @@ export const resolvers = {
       }
     }
   },
+  Team: {
+    id: ({ id }) => {
+      return id;
+    },
+    name: ({ name }) => {
+      return name;
+    },
+    participants: async ({ id }) => {
+      const team = await getTeamData(id);
+      return team.participants;
+    },
+    officer: async ({ id }) => {
+      const team = await getTeamData(id);
+      return team.officer;
+    },
+    director: async ({ id }) => {
+      const team = await getTeamData(id);
+      return team.director;
+    },
+    tags: async ({ id }) => {
+      const team = await getTeamData(id);
+      return team.tags;
+    }
+  },
+  Participant: {
+    id: ({ id }) => {
+      return id;
+    },
+    name: ({ name }) => {
+      return name;
+    },
+    email: async ({ id }) => {
+      const participant = await getParticipantData(id);
+      return participant.email;
+    },
+    netid: async ({ id }) => {
+      const participant = await getParticipantData(id);
+      return participant.netid;
+    },
+    classification: async ({ id }) => {
+      const participant = await getParticipantData(id);
+      return participant.classification;
+    },
+    major: async ({ id }) => {
+      const participant = await getParticipantData(id);
+      return participant.major;
+    },
+    participation: async ({ id }) => {
+      const participant = await getParticipantData(id);
+      return participant.participation;
+    },
+    accolades: async ({ id }) => {
+      const participant = await getParticipantData(id, true);
+      return participant.accolades;
+    },
+    teams: async ({ id }) => {
+      const participant = await getParticipantData(id);
+      return participant.teams;
+    }
+  },
+  Officer: {
+    id: ({ id }) => {
+      return id;
+    },
+    name: ({ name }) => {
+      return name;
+    },
+    acm_email: async ({ id }) => {
+      const officer = await getProfileData(id);
+      return officer.acm_email;
+    },
+    email: async ({ id }) => {
+      const officer = await getProfileData(id);
+      return officer.email;
+    },
+    linkedin: async ({ id }) => {
+      const officer = await getProfileData(id);
+      return officer.linkedin;
+    },
+    roles: async ({ id }) => {
+      const officer = await getProfileData(id, true);
+      return officer.roles;
+    },
+    accolades: async ({ id }) => {
+      const officer = await getProfileData(id, true);
+      return officer.accolades;
+    }
+  }
 };
