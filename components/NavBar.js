@@ -19,6 +19,7 @@ import PersonIcon from "@mui/icons-material/Person";
 import StarIcon from "@mui/icons-material/Star";
 import LightModeIcon from "@mui/icons-material/LightMode";
 import DarkModeIcon from "@mui/icons-material/DarkMode";
+import SettingsIcon from '@mui/icons-material/Settings';
 
 export default function NavBar({
   session,
@@ -55,7 +56,7 @@ export default function NavBar({
             </Button>
           </Link>
           <Link href={`/team`} passHref>
-            <Button size="small" style={{ marginRight: 24 }}>
+            <Button size="small">
               <GroupsIcon />
               <Typography variant="inherit" component="div">
                 Programs
@@ -79,10 +80,10 @@ export default function NavBar({
           {search ? (
             <Autocomplete
               disablePortal
-              style={{ marginLeft: 60, marginTop: -12 }}
+              style={{ marginLeft: 30, marginTop: -15 }}
               id="combo-box"
               options={officerArray}
-              sx={{ width: 200 }}
+              sx={{ width: 150 }}
               renderInput={(params) => <TextField {...params} label="Search" />}
               onInputChange={(event, newValue) => {
                 onSearchChange(newValue);
@@ -94,10 +95,10 @@ export default function NavBar({
           {filter ? (
             <Autocomplete
               disablePortal
-              style={{ marginLeft: 60, marginTop: -12 }}
+              style={{ marginLeft: 30, marginTop: -15, marginRight: 30 }}
               id="combo-box"
               options={roleArray}
-              sx={{ width: 400 }}
+              sx={{ width: 300 }}
               renderInput={(params) => <TextField {...params} label="Role" />}
               onChange={(event, newValue) => {
                 onRoleChange(newValue);
@@ -135,6 +136,14 @@ export default function NavBar({
               <ApiIcon />
               <Typography variant="inherit" component="div">
                 API
+              </Typography>
+            </Button>
+          </Link>
+          <Link href={`/me`} passHref>
+            <Button size="small" style={{ marginLeft: 8 }}>
+              <SettingsIcon />
+              <Typography variant="inherit" component="div">
+                Settings
               </Typography>
             </Button>
           </Link>
