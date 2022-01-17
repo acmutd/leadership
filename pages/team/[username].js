@@ -5,6 +5,7 @@ import { Fragment, useState, useEffect } from "react";
 import { getSession } from "next-auth/client";
 import Container from "@material-ui/core/Container";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
+import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
 import {
   Button,
   Typography,
@@ -108,14 +109,18 @@ export default function SSRPage({ data, session }) {
               <hr style={{ maxWidth: 200 }} />
               {data.participants.map((participant, index) => {
                 return (
-                  <Typography
-                    variant="inherit"
-                    component="div"
-                    key={index}
-                    style={{ marginTop: 8 }}
-                  >
-                    {index + 1}. {participant.name}
-                  </Typography>
+                  <Link href={`/participant/${participant.id}`} passHref>
+                    <a>
+                    <Typography
+                      variant="inherit"
+                      component="div"
+                      key={index}
+                      style={{ marginTop: 8 }}
+                    >
+                      {index + 1}. {participant.name}
+                    </Typography>
+                    </a>
+                  </Link>
                 );
               })}
               <Typography
@@ -126,13 +131,17 @@ export default function SSRPage({ data, session }) {
                 Officer
               </Typography>
               <hr style={{ maxWidth: 200 }} />
-              <Typography
-                variant="inherit"
-                component="div"
-                style={{ marginTop: 8 }}
-              >
-                {data.officer.name}
-              </Typography>
+              <Link href={`/profile/${data.officer.id}`} passHref>
+                <a>
+                <Typography
+                  variant="inherit"
+                  component="div"
+                  style={{ marginTop: 8 }}
+                >
+                  {data.officer.name}
+                </Typography>
+                </a>
+              </Link>
             </CardContent>
           </Card>
           {data.accolades.length > 0 ? (

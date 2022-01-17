@@ -19,12 +19,9 @@ const apolloServer = new ApolloServer({
   introspection: true,
   plugins: [ApolloServerPluginLandingPageLocalDefault({ footer: false })],
   context: ({ req }) => {
-    console.log(req.headers.authorization);
-
     const public_key = process.env.LEADERSHIP_RSA_PUBLIC_KEY.replace(/\\n/gm, '\n');
 
     const decoded_token = jwt.verify(req.headers.authorization.split(" ")[1], public_key, { iss: process.env.NEXTAUTH_URL })
-
     return {
       ...decoded_token,
     }
