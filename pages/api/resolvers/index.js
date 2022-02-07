@@ -30,15 +30,24 @@ export const resolvers = {
       try {
         if (name) {
           const profile = await getProfileByName(name, true);
-          return profile;
+          return {
+            ...profile,
+            email: null,
+          };
         }
         else if (id) {
           const profile = await getProfileData(id, true);
-          return profile;
+          return {
+            ...profile,
+            email: null,
+          };
         }
         else if (email) {
           const profile = await getProfileByEmail(email, true);
-          return profile;
+          return {
+            ...profile,
+            email: null,
+          };
         }
         else {
             throw new Error("Must provide either an id, email or a name");
@@ -61,11 +70,17 @@ export const resolvers = {
       try {
         if (name) {
           const participant = await getParticipantDataByName(name, true);
-          return participant;
+          return {
+            ...participant,
+            email: null,
+          };
         }
         else if (id) {
           const participant = await getParticipantData(id, true);
-          return participant;
+          return {
+            ...participant,
+            email: null,
+          };
         }
         else {
             throw new Error("Must provide either an id or a name");
@@ -136,7 +151,8 @@ export const resolvers = {
     },
     email: async ({ id }) => {
       const participant = await getParticipantData(id);
-      return participant.email;
+      return null;
+      // return participant.email;
     },
     netid: async ({ id }) => {
       const participant = await getParticipantData(id);
@@ -176,7 +192,8 @@ export const resolvers = {
     },
     email: async ({ id }) => {
       const officer = await getProfileData(id);
-      return officer.email;
+      return null;
+      // return officer.email;
     },
     linkedin: async ({ id }) => {
       const officer = await getProfileData(id);

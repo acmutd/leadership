@@ -1,20 +1,20 @@
 * {
-    box-sizing: border-box;
-  }
-  
-  :root {
-    --fg: #000;
-    --bg: #fff;
-    --accent: #fff;
-  }
-  
-  [data-theme='dark'] {
-    --fg: #fff;
-    --bg: #000;
-    --accent: gray;
-  }
+  box-sizing: border-box;
+}
 
-  html,
+:root {
+  --fg: #000;
+  --bg: #fff;
+  --accent: #fff;
+}
+
+[data-theme="dark"] {
+  --fg: #fff;
+  --bg: #000;
+  --accent: gray;
+}
+
+html,
 body {
   padding: 0;
   margin: 0;
@@ -31,17 +31,20 @@ body {
   justify-content: center;
   text-align: center;
 }
+a {
+  text-decoration: none;
+}
 
 .MuiTypography-root {
-    color: var(--fg);
-} 
+  color: var(--fg);
+}
 
 .MuiButton-label {
   color: var(--fg);
 }
 
 .MuiCard-root {
-    background-color: var(--bg);
+  background-color: var(--bg);
 }
 
 .MuiPaper-root {
@@ -49,11 +52,11 @@ body {
 }
 
 .MuiCardContent-root {
-    background-color: var(--bg);
+  background-color: var(--bg);
 }
 
 .MuiCardActions-root {
-    background-color: var(--bg);
+  background-color: var(--bg);
 }
 
 .MuiToolbar-root {

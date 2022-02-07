@@ -11,9 +11,11 @@ import {
   Typography,
   Button,
   Tooltip,
+  BottomNavigation,
 } from "@material-ui/core";
 import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
 import { getOfficers } from "../fetchData/getOfficers";
+import FavoriteIcon from '@mui/icons-material/Favorite';
 import NavBar from "../components/NavBar";
 
 /**
@@ -116,6 +118,11 @@ export default function Home({ officerList, roleList, session }) {
         >
           {Grids}
         </Grid>
+        <BottomNavigation showLabels>
+          <Typography variant="inherit" component="div">
+            Designed by <Link href="https://harshasrikara.dev" passHref>Harsha Srikara</Link>
+          </Typography>
+        </BottomNavigation>
       </Container>
     </Fragment>
   );
