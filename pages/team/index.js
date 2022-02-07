@@ -11,6 +11,7 @@ import {
   Typography,
   Button,
   Tooltip,
+  BottomNavigation
 } from "@material-ui/core";
 import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
 import { getTeams } from "../../fetchData/getTeams";
@@ -116,6 +117,11 @@ export default function Home({ participantList, roleList, session }) {
         >
           {Grids}
         </Grid>
+        <BottomNavigation showLabels>
+          <Typography variant="inherit" component="div">
+            Designed by <Link href="https://harshasrikara.dev" passHref>Harsha Srikara</Link>
+          </Typography>
+        </BottomNavigation>
       </Container>
     </Fragment>
   );

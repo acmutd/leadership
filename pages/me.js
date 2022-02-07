@@ -53,7 +53,7 @@ export default function SSRPage({ session }) {
               </Typography>
               <hr style={{ maxWidth: 200 }} />
 
-              <Typography variant="inherit" component="div">
+              <Typography variant="inherit" component="div" style={{ wordWrap: "break-word" }}>
                 <code>{accessToken}</code>
               </Typography>
               <hr style={{ maxWidth: 200 }} />
