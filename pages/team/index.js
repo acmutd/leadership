@@ -119,7 +119,7 @@ export default function Home({ participantList, roleList, session }) {
         </Grid>
         <BottomNavigation showLabels>
           <Typography variant="inherit" component="div">
-            Designed by <Link href="https://harshasrikara.dev" passHref>Harsha Srikara</Link>
+            Designed by <Link href="https://harshasrikara.dev" passHref>Harsha Srikara</Link>.
           </Typography>
         </BottomNavigation>
       </Container>

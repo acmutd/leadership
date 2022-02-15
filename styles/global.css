@@ -66,3 +66,7 @@ a {
 .MuiTypography-root {
   color: var(--fg);
 }
+
+.MuiBottomNavigation-root {
+  background-color: var(--accent) !important;
+}
