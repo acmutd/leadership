@@ -34,3 +34,5 @@ yarn-error.log*
 # vercel
 .vercel
 .sentryclirc
+acm-core-history.json
+vercel.json
