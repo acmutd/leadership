@@ -1,15 +1,13 @@
 import { useRouter } from "next/router";
 import { useState } from "react";
 import Dropzone from "react-dropzone";
-import {
-  Grid,
-  Card,
-  CardContent,
-  CardActions,
-  Typography,
-  TextField,
-  Button,
-} from "@material-ui/core";
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import CardActions from '@mui/material/CardActions';
+import Typography from '@mui/material/Typography';
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
+import Grid from '@mui/material/Grid';
 import Autocomplete from "@mui/material/Autocomplete";
 import CheckIcon from "@mui/icons-material/Check";
 import LoopIcon from "@mui/icons-material/Loop";

@@ -4,16 +4,12 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import { Fragment, useState, useEffect } from "react";
 import { getSession } from "next-auth/client";
-import Container from "@material-ui/core/Container";
-import ArrowBackIcon from "@material-ui/icons/ArrowBack";
-import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
-import {
-  Button,
-  Typography,
-  TextField,
-  Card,
-  CardContent,
-} from "@material-ui/core";
+import Container from '@mui/material/Container';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import Card from '@mui/material/Card';
+import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
+import CardContent from '@mui/material/CardContent';
 import NavBar from "../../components/NavBar";
 import axios from "axios";
 import { getTeamData } from "../../fetchData/getTeamData";

@@ -2,19 +2,17 @@ import Link from "next/link";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { Fragment, useState, useEffect } from "react";
-import Container from "@material-ui/core/Container";
+import Container from "@mui/material/Container";
 import { getSession } from "next-auth/client";
-import {
-  Grid,
-  Card,
-  CardContent,
-  CardActions,
-  Typography,
-  Button,
-  Tooltip,
-  BottomNavigation,
-} from "@material-ui/core";
-import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import CardActions from "@mui/material/CardActions";
+import Typography from "@mui/material/Typography";
+import Button from "@mui/material/Button";
+import Grid from "@mui/material/Grid";
+import Tooltip from "@mui/material/Tooltip";
+import BottomNavigation from "@mui/material/BottomNavigation";
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import { getOfficers } from "../../fetchData/getOfficers";
 import NavBar from "../../components/NavBar";
 
@@ -55,7 +53,7 @@ export default function Home({ officerList, roleList, session }) {
 
   const fetchQuery = () => {
     return router.query.q ? router.query.q : "";
-  }
+  };
 
   // Sorts the array in ascending order by first name
   useEffect(() => {
@@ -81,7 +79,7 @@ export default function Home({ officerList, roleList, session }) {
         lg={3}
         key={index}
         align="center"
-        style={{ margin: 8 }}
+        style={{ margin: 16 }}
       >
         <Card raised style={{ width: 300, minWidth: 250 }}>
           <CardContent>
@@ -94,7 +92,10 @@ export default function Home({ officerList, roleList, session }) {
           <CardActions>
             <Link href={`/profile/${id}`} passHref>
               <Button color="inherit" size="small">
-                Learn More <ArrowForwardIcon />
+                <Typography variant="inherit" component="div">
+                  Learn More
+                </Typography>
+                <ArrowForwardIcon />
               </Button>
             </Link>
           </CardActions>
@@ -106,8 +107,15 @@ export default function Home({ officerList, roleList, session }) {
   return (
     <Fragment>
       <Head>
-        <title>Leadership{fetchQuery() === "" ? "" : `: ${fetchQuery()}`} | ACM Leadership</title>
-        <meta property="og:title" content="Leadership | ACM Leadership" key="title" />
+        <title>
+          Leadership{fetchQuery() === "" ? "" : `: ${fetchQuery()}`} | ACM
+          Leadership
+        </title>
+        <meta
+          property="og:title"
+          content="Leadership | ACM Leadership"
+          key="title"
+        />
       </Head>
       <Container maxWidth="lg">
         <NavBar
@@ -128,7 +136,11 @@ export default function Home({ officerList, roleList, session }) {
         </Grid>
         <BottomNavigation showLabels>
           <Typography variant="inherit" component="div">
-            Designed by <Link href="https://harshasrikara.dev" passHref>Harsha Srikara</Link>.
+            Designed by{" "}
+            <Link href="https://harshasrikara.dev" passHref>
+              Harsha Srikara
+            </Link>
+            .
           </Typography>
         </BottomNavigation>
       </Container>

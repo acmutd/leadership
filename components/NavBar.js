@@ -1,14 +1,12 @@
 import React, { Fragment } from "react";
 import Link from "next/link";
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
-import Typography from "@material-ui/core/Typography";
-import Button from "@material-ui/core/Button";
-import IconButton from "@material-ui/core/IconButton";
-import MenuIcon from "@material-ui/icons/Menu";
+import AppBar from '@mui/material/AppBar';
+import Toolbar from '@mui/material/Toolbar';
+import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
 import { useTheme } from "next-themes";
 import Autocomplete from "@mui/material/Autocomplete";
-import TextField from "@material-ui/core/TextField";
+import TextField from '@mui/material/TextField';
 import { signIn, signOut } from "next-auth/client";
 import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
 import ApiIcon from "@mui/icons-material/Api";
@@ -19,7 +17,7 @@ import PersonIcon from "@mui/icons-material/Person";
 import StarIcon from "@mui/icons-material/Star";
 import LightModeIcon from "@mui/icons-material/LightMode";
 import DarkModeIcon from "@mui/icons-material/DarkMode";
-import SettingsIcon from '@mui/icons-material/Settings';
+import SettingsIcon from "@mui/icons-material/Settings";
 
 export default function NavBar({
   session,
@@ -66,15 +64,15 @@ export default function NavBar({
           <Fragment>
             <Button onClick={() => setTheme("light")} size="small">
               <LightModeIcon />
-              <Typography variant="inherit" component="div">
-                {/* Light */}
-              </Typography>
+              {/* <Typography variant="inherit" component="div">
+                Light
+              </Typography> */}
             </Button>
             <Button onClick={() => setTheme("dark")} size="small">
               <DarkModeIcon />
-              <Typography variant="inherit" component="div">
-                {/* Dark */}
-              </Typography>
+              {/* <Typography variant="inherit" component="div">
+                Dark
+              </Typography> */}
             </Button>
           </Fragment>
           {search ? (
@@ -84,7 +82,7 @@ export default function NavBar({
               id="combo-box"
               options={officerArray}
               sx={{ width: 150 }}
-              renderInput={(params) => <TextField {...params} label="Search" />}
+              renderInput={(params) => <TextField {...params} label="Search" variant="standard"/>}
               onInputChange={(event, newValue) => {
                 onSearchChange(newValue);
               }}
@@ -99,7 +97,7 @@ export default function NavBar({
               id="combo-box"
               options={roleArray}
               sx={{ width: 300 }}
-              renderInput={(params) => <TextField {...params} label="Role" />}
+              renderInput={(params) => <TextField {...params} label="Role" variant="standard" />}
               onChange={(event, newValue) => {
                 onRoleChange(newValue);
               }}
