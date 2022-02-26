@@ -1,5 +1,6 @@
 import dynamic from "next/dynamic";
 import Link from "next/link";
+import Head from "next/head";
 import { useRouter } from "next/router";
 import { Fragment, useState, useEffect } from "react";
 import { getSession } from "next-auth/client";
@@ -70,14 +71,20 @@ export default function SSRPage({ data, session }) {
       collection: "participants",
     };
 
-    await axios.post(router.basePath + "/api/email", payload, {});
-    await axios.post(router.basePath + "/api/slack", payload, {});
-    await axios.post(router.basePath + "/api/accolade", payload, {});
+    await Promise.all([
+      axios.post(router.basePath + "/api/email", payload, {}),
+      axios.post(router.basePath + "/api/slack", payload, {}),
+      axios.post(router.basePath + "/api/accolade", payload, {}),
+    ]);
     router.reload();
   };
 
   return (
     <Fragment>
+      <Head>
+        <title>Membership: {data.name} | ACM Leadership</title>
+        <meta property="og:title" content={`Membership: ${data.name} | ACM Leadership`} key="title" />
+      </Head>
       <Container maxWidth="lg">
         <NavBar session={session} />
         <div style={{ paddingTop: 90 }}>
@@ -120,7 +127,7 @@ export default function SSRPage({ data, session }) {
             <div></div>
           )}
           <CustomComponent />
-          {session ? (
+          {/* {session ? (
             <Card
               raised
               style={{
@@ -153,7 +160,7 @@ export default function SSRPage({ data, session }) {
             </Card>
           ) : (
             <div></div>
-          )}
+          )} */}
           <Link href={`/participant`} passHref>
             <Button style={{ margin: 12 }} size="small">
               <ArrowBackIcon /> Return Home

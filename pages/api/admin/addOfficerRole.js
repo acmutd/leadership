@@ -18,7 +18,7 @@ export default async function handler(req, res) {
   const db = admin.firestore();
 
   try {
-    // create root level document for officer
+    // fetch document for given officer
     const result = await db
       .collection("officer")
       .where("name", "==", req.body.name)
@@ -26,6 +26,12 @@ export default async function handler(req, res) {
 
     const officer = result.docs[0];
     const roles = officer.data().role_list;
+
+    // check if role is already in officer's role list
+    if (roles.includes(req.body.role)) {
+      res.status(201).json({ message: "success" });
+      return;
+    }
 
     // update last role to have ended
     const old_role = roles[roles.length - 1];

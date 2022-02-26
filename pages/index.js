@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Head from "next/head";
 import { useRouter } from "next/router";
 import { Fragment, useState, useEffect } from "react";
 import Container from "@material-ui/core/Container";
@@ -53,6 +54,10 @@ export default function Home({ officerList, roleList, session }) {
     // router.reload();
   };
 
+  const fetchQuery = () => {
+    return router.query.q ? router.query.q : "";
+  }
+
   // Sorts the array in ascending order by first name
   useEffect(() => {
     setFilteredArray(
@@ -101,6 +106,10 @@ export default function Home({ officerList, roleList, session }) {
 
   return (
     <Fragment>
+      <Head>
+        <title>Leadership{fetchQuery() === "" ? "" : `: ${fetchQuery()}`} | ACM Leadership</title>
+        <meta property="og:title" content="Leadership | ACM Leadership" key="title" />
+      </Head>
       <Container maxWidth="lg">
         <NavBar
           session={session}
