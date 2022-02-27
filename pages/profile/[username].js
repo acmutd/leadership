@@ -1,11 +1,11 @@
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import Button from '@mui/material/Button';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
-import Container from '@mui/material/Container';
-import TextField from '@mui/material/TextField';
-import Typography from '@mui/material/Typography';
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import Button from "@mui/material/Button";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import CardMedia from "@mui/material/CardMedia";
+import Container from "@mui/material/Container";
+import TextField from "@mui/material/TextField";
+import Typography from "@mui/material/Typography";
 import axios from "axios";
 import { getSession } from "next-auth/client";
 import dynamic from "next/dynamic";
@@ -73,7 +73,11 @@ export default function ProfilePage({ data, session }) {
     <Fragment>
       <Head>
         <title>Leadership: {data.name} | ACM Leadership</title>
-        <meta property="og:title" content={`Leadership: ${data.name} | ACM Leadership`} key="title" />
+        <meta
+          property="og:title"
+          content={`Leadership: ${data.name} | ACM Leadership`}
+          key="title"
+        />
       </Head>
       <Container maxWidth="lg">
         <NavBar session={session} />
@@ -155,13 +159,19 @@ export default function ProfilePage({ data, session }) {
                   maxRows={12}
                   onChange={onChange}
                   variant="filled"
-                  style={{ minWidth: "360px", marginTop: 12 }}
+                  style={{ minWidth: "360px", marginTop: 12, marginBottom: 12 }}
                 />
                 <Typography variant="inherit" component="div">
                   <Button onClick={sendAccolade} size="small">
                     Send Accolade
                   </Button>
                 </Typography>
+                <hr style={{ maxWidth: 200 }} />
+                <Link href={`/shoutout`} passHref>
+                  <Button size="small">
+                    Shoutout {data.name.split(" ")[0]} and others!
+                  </Button>
+                </Link>
               </CardContent>
             </Card>
           ) : (
