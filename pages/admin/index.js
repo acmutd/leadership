@@ -1,18 +1,19 @@
-import { Fragment } from "react";
+import Container from '@mui/material/Container';
+import Grid from '@mui/material/Grid';
 import { getSession } from "next-auth/client";
-import NavBar from "../../components/NavBar";
+import Head from "next/head";
+import { Fragment } from "react";
 import AccessDenied from "../../components/AccessDenied";
-import { Grid } from "@material-ui/core";
-import Container from "@material-ui/core/Container";
-import { getOfficers } from "../../fetchData/getOfficers";
+import AddHistorianCard from "../../components/admin/AddHistorianCard";
+import AddOfficerRoleCard from "../../components/admin/AddOfficerRoleCard";
 import CreateOfficerCard from "../../components/admin/CreateOfficerCard";
 import CreateRoleCard from "../../components/admin/CreateRoleCard";
-import UpdateOfficerCard from "../../components/admin/UpdateOfficerCard";
 import ExitOfficerCard from "../../components/admin/ExitOfficerCard";
-import AddOfficerRoleCard from "../../components/admin/AddOfficerRoleCard";
-import AddHistorianCard from "../../components/admin/AddHistorianCard";
+import UpdateOfficerCard from "../../components/admin/UpdateOfficerCard";
+import NavBar from "../../components/NavBar";
+import { getOfficers } from "../../fetchData/getOfficers";
 
-export default function Admin({ officerList, roleList, historian, session }) {
+export default function AdminPage({ officerList, roleList, historian, session }) {
   // pretty simple check for historian permission, refer to issue #12345 for improvement scheme
   if (!session || !historian.includes(session.user.email)) {
     return <AccessDenied />;
@@ -20,6 +21,10 @@ export default function Admin({ officerList, roleList, historian, session }) {
 
   return (
     <Fragment>
+      <Head>
+        <title>Admin | ACM Leadership</title>
+        <meta property="og:title" content="Admin | ACM Leadership" key="title" />
+      </Head>
       <Container maxWidth="lg">
         <NavBar session={session} />
         <Grid

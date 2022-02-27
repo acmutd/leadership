@@ -1,5 +1,5 @@
-import { getSession } from "next-auth/client";
 import jwt from "jsonwebtoken";
+import { getSession } from "next-auth/client";
 import admin from "../../../firebase/nodeApp";
 
 export default async function handler(req, res) {

@@ -1,19 +1,18 @@
+import CheckIcon from "@mui/icons-material/Check";
+import LoopIcon from "@mui/icons-material/Loop";
+import Autocomplete from "@mui/material/Autocomplete";
+import Button from "@mui/material/Button";
+import Card from "@mui/material/Card";
+import CardActions from "@mui/material/CardActions";
+import CardContent from "@mui/material/CardContent";
+import CardMedia from "@mui/material/CardMedia";
+import Grid from "@mui/material/Grid";
+import TextField from "@mui/material/TextField";
+import Typography from "@mui/material/Typography";
+import axios from "axios";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import Dropzone from "react-dropzone";
-import {
-  Grid,
-  Card,
-  CardContent,
-  CardActions,
-  Typography,
-  TextField,
-  Button,
-} from "@material-ui/core";
-import Autocomplete from "@mui/material/Autocomplete";
-import CheckIcon from "@mui/icons-material/Check";
-import LoopIcon from "@mui/icons-material/Loop";
-import axios from "axios";
 import { uploadProfileImage } from "../../fetchData/fetchProfileImage";
 
 export default function CreateOfficerCard({ roleList }) {
@@ -35,7 +34,13 @@ export default function CreateOfficerCard({ roleList }) {
 
   const CreateOfficer = async () => {
     setError(false);
-    if (name === "" || email === "" || acm_email === "" || role === "" || linkedin === "" || file === null) {
+    if (
+      name === "" ||
+      email === "" ||
+      acm_email === "" ||
+      role === "" ||
+      linkedin === ""
+    ) {
       setError(true);
       return;
     }
@@ -50,7 +55,9 @@ export default function CreateOfficerCard({ roleList }) {
         linkedin: linkedin,
       }
     );
-    await uploadProfileImage(result.data.id, file);
+    if (file !== null) {
+      await uploadProfileImage(result.data.id, file);
+    }
     setLoading(false);
     if (result.data.message === "success") {
       setSuccess(true);
@@ -58,13 +65,19 @@ export default function CreateOfficerCard({ roleList }) {
   };
 
   const onDrop = (acceptedFiles) => {
-    console.log(acceptedFiles);
     setFile(acceptedFiles[0]);
+  };
+
+  const fileAsURL = () => {
+    if (file === null) {
+      return null;
+    }
+    return URL.createObjectURL(file);
   };
 
   return (
     <Grid item md={12} lg={6} align="center">
-      <Card raised style={{ width: 300, minWidth: 600, margin: 8 }}>
+      <Card raised style={{ width: 300, minWidth: 500, margin: 8 }}>
         <CardContent>
           <Typography variant="h3" component="div">
             Add new officer
@@ -117,14 +130,29 @@ export default function CreateOfficerCard({ roleList }) {
               setRole(newValue);
             }}
           />
+          {file !== null && (
+            <CardMedia
+              component="img"
+              height="365"
+              image={fileAsURL()}
+              alt={`${name}'s profile picture`}
+              style={{ marginBottom: 8 }}
+            />
+          )}
           <Dropzone onDrop={(acceptedFiles) => onDrop(acceptedFiles)}>
             {({ getRootProps, getInputProps }) => (
               <section>
                 <div {...getRootProps()}>
                   <input {...getInputProps()} />
-                  <Typography variant="h6" component="div">
-                    Add profile picture*
-                  </Typography>
+                  <Button
+                    color="inherit"
+                    size="small"
+                    style={{ textTransform: "none" }}
+                  >
+                    <Typography variant="h6" component="div">
+                      Add profile picture
+                    </Typography>
+                  </Button>
                 </div>
               </section>
             )}

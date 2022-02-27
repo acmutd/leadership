@@ -1,18 +1,17 @@
+import Button from '@mui/material/Button';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import Container from '@mui/material/Container';
+import Typography from '@mui/material/Typography';
+import axios from "axios";
+import { getSession } from "next-auth/client";
+import Head from "next/head";
 import { useRouter } from "next/router";
 import { Fragment, useState } from "react";
-import { getSession } from "next-auth/client";
-import Container from "@material-ui/core/Container";
 import AccessDenied from "../components/AccessDenied";
-import {
-  Button,
-  Typography,
-  Card,
-  CardContent,
-} from "@material-ui/core";
 import NavBar from "../components/NavBar";
-import axios from "axios";
 
-export default function SSRPage({ session }) {
+export default function SettingsPage({ session }) {
   if (!session) {
     return <AccessDenied />;
   }
@@ -27,6 +26,10 @@ export default function SSRPage({ session }) {
 
   return (
     <Fragment>
+      <Head>
+        <title>Settings | ACM Leadership</title>
+        <meta property="og:title" content="Settings | ACM Leadership" key="title" />
+      </Head>
       <Container maxWidth="lg">
         <NavBar session={session} />
         <div style={{ paddingTop: 90 }}>

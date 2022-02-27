@@ -1,8 +1,6 @@
-import {
-    Typography,
-    Card,
-    CardContent,
-  } from "@material-ui/core";
+import Typography from "@mui/material/Typography";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
 
 export default function AccessDenied({ accolades }) {
   return (

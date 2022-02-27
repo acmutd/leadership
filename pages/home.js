@@ -1,22 +1,24 @@
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import Button from '@mui/material/Button';
+import Card from '@mui/material/Card';
+import CardActions from '@mui/material/CardActions';
+import CardContent from '@mui/material/CardContent';
+import Container from "@mui/material/Container";
+import Grid from '@mui/material/Grid';
+import Typography from '@mui/material/Typography';
+import { getSession } from "next-auth/client";
+import Head from "next/head";
 import Link from "next/link";
 import { Fragment } from "react";
-import { getSession } from "next-auth/client";
-import Container from "@material-ui/core/Container";
-import {
-  Grid,
-  Card,
-  CardContent,
-  CardActions,
-  Typography,
-  Button,
-  BottomNavigation,
-} from "@material-ui/core";
-import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
 import NavBar from "../components/NavBar";
 
 export default function Home({ session }) {
   return (
     <Fragment>
+      <Head>
+        <title>Home | ACM Leadership</title>
+        <meta property="og:title" content="Home | ACM Leadership" key="title" />
+      </Head>
       <Container maxWidth="lg">
         <NavBar session={session} />
         <Grid

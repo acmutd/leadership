@@ -1,24 +1,21 @@
-import dynamic from "next/dynamic";
-import Link from "next/link";
-import Head from "next/head";
-import { useRouter } from "next/router";
-import { Fragment, useState, useEffect } from "react";
-import { getSession } from "next-auth/client";
-import Container from "@material-ui/core/Container";
-import ArrowBackIcon from "@material-ui/icons/ArrowBack";
-import {
-  Button,
-  Typography,
-  TextField,
-  Card,
-  CardContent,
-} from "@material-ui/core";
-import NavBar from "../../components/NavBar";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import Button from "@mui/material/Button";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import Container from "@mui/material/Container";
+import Typography from "@mui/material/Typography";
 import axios from "axios";
-import { getParticipantData } from "../../fetchData/getParticipantData";
+import { getSession } from "next-auth/client";
+import dynamic from "next/dynamic";
+import Head from "next/head";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import { Fragment, useState } from "react";
 import AccoladeCard from "../../components/AccoladeCard";
+import NavBar from "../../components/NavBar";
+import { getParticipantData } from "../../fetchData/getParticipantData";
 
-export default function SSRPage({ data, session }) {
+export default function MemberPage({ data, session }) {
   // if (!session) { return  <AccessDenied/> };
   const [accolade, setAccolade] = useState(
     "You're the best! Thanks for being awesome!"
@@ -83,51 +80,54 @@ export default function SSRPage({ data, session }) {
     <Fragment>
       <Head>
         <title>Membership: {data.name} | ACM Leadership</title>
-        <meta property="og:title" content={`Membership: ${data.name} | ACM Leadership`} key="title" />
+        <meta
+          property="og:title"
+          content={`Membership: ${data.name} | ACM Leadership`}
+          key="title"
+        />
       </Head>
       <Container maxWidth="lg">
         <NavBar session={session} />
-        <div style={{ paddingTop: 90 }}>
-          <Typography style={{ margin: 12 }} variant="h3" component="div">
-            {data.name}
-          </Typography>
-          <hr />
-          <Card
-            raised
-            style={{
-              margin: 12,
-              minWidth: 300,
-              maxWidth: 400,
-              marginLeft: "auto",
-              marginRight: "auto",
-            }}
-          >
-            <CardContent>
-              <Typography variant="h5" component="div">
-                Participation
-              </Typography>
-              <hr style={{ maxWidth: 200 }} />
-              {getProgramParticipation().map((role, index) => {
-                return (
-                  <Typography
-                    variant="inherit"
-                    component="div"
-                    key={index}
-                    style={{ marginTop: 8 }}
-                  >
-                    {index + 1}. {role}
-                  </Typography>
-                );
-              })}
-            </CardContent>
-          </Card>
-          {data.accolades.length > 0 ? (
-            <AccoladeCard accolades={data.accolades} />
-          ) : (
-            <div></div>
-          )}
-          <CustomComponent />
-          {/* {session ? (
+        <Typography style={{ margin: 12 }} variant="h3" component="div">
+          {data.name}
+        </Typography>
+        <hr />
+        <Card
+          raised
+          style={{
+            margin: 12,
+            minWidth: 300,
+            maxWidth: 400,
+            marginLeft: "auto",
+            marginRight: "auto",
+          }}
+        >
+          <CardContent>
+            <Typography variant="h5" component="div">
+              Participation
+            </Typography>
+            <hr style={{ maxWidth: 200 }} />
+            {getProgramParticipation().map((role, index) => {
+              return (
+                <Typography
+                  variant="inherit"
+                  component="div"
+                  key={index}
+                  style={{ marginTop: 8 }}
+                >
+                  {index + 1}. {role}
+                </Typography>
+              );
+            })}
+          </CardContent>
+        </Card>
+        {data.accolades.length > 0 ? (
+          <AccoladeCard accolades={data.accolades} />
+        ) : (
+          <div></div>
+        )}
+        <CustomComponent />
+        {/* {session ? (
             <Card
               raised
               style={{
@@ -161,12 +161,11 @@ export default function SSRPage({ data, session }) {
           ) : (
             <div></div>
           )} */}
-          <Link href={`/participant`} passHref>
-            <Button style={{ margin: 12 }} size="small">
-              <ArrowBackIcon /> Return Home
-            </Button>
-          </Link>
-        </div>
+        <Link href={`/participant`} passHref>
+          <Button style={{ margin: 12 }} size="small">
+            <ArrowBackIcon /> Return Home
+          </Button>
+        </Link>
       </Container>
     </Fragment>
   );
