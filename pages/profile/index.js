@@ -1,20 +1,13 @@
-import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import BottomNavigation from "@mui/material/BottomNavigation";
-import Button from "@mui/material/Button";
-import Card from "@mui/material/Card";
-import CardActions from "@mui/material/CardActions";
-import CardContent from "@mui/material/CardContent";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
-import Tooltip from "@mui/material/Tooltip";
-import Typography from "@mui/material/Typography";
 import { getSession } from "next-auth/client";
 import Head from "next/head";
-import Link from "next/link";
 import { useRouter } from "next/router";
 import { Fragment, useEffect, useState } from "react";
+import GridCard from "../../components/GridCard";
 import NavBar from "../../components/NavBar";
 import { getOfficers } from "../../fetchData/getOfficers";
+import Credits from "../../components/Credits";
 
 /**
  *
@@ -22,7 +15,7 @@ import { getOfficers } from "../../fetchData/getOfficers";
  * @param {string[]} roleList list of all roles, used for role query search bar auto-fill
  * @param {Object} session contains whether the user is signed in or not
  */
-export default function Home({ officerList, roleList, session }) {
+export default function LeadershipPage({ officerList, roleList, session }) {
   // contains subset of officer objects based on name that is typed in the search bar
   const [filteredArray, setFilteredArray] = useState(officerList);
 
@@ -71,36 +64,7 @@ export default function Home({ officerList, roleList, session }) {
 
   const Grids = filteredArray.map(({ id, name }, index) => {
     return (
-      <Grid
-        item
-        xs={12}
-        sm={6}
-        md={4}
-        lg={3}
-        key={index}
-        align="center"
-        style={{ margin: 16 }}
-      >
-        <Card raised style={{ width: 300, minWidth: 250 }}>
-          <CardContent>
-            <Tooltip title={name.length < 20 ? "" : name} placement="top">
-              <Typography variant="h5" component="div">
-                {name.length < 20 ? name : name.split(" ")[0]}
-              </Typography>
-            </Tooltip>
-          </CardContent>
-          <CardActions>
-            <Link href={`/profile/${id}`} passHref>
-              <Button color="inherit" size="small">
-                <Typography variant="inherit" component="div">
-                  Learn More
-                </Typography>
-                <ArrowForwardIcon />
-              </Button>
-            </Link>
-          </CardActions>
-        </Card>
-      </Grid>
+      <GridCard id={id} name={name} path="profile" key={index}/>
     );
   });
 
@@ -135,15 +99,7 @@ export default function Home({ officerList, roleList, session }) {
         >
           {Grids}
         </Grid>
-        <BottomNavigation showLabels>
-          <Typography variant="inherit" component="div">
-            Designed by{" "}
-            <Link href="https://harshasrikara.dev" passHref>
-              Harsha Srikara
-            </Link>
-            .
-          </Typography>
-        </BottomNavigation>
+        <Credits />
       </Container>
     </Fragment>
   );

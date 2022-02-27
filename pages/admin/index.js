@@ -13,7 +13,7 @@ import UpdateOfficerCard from "../../components/admin/UpdateOfficerCard";
 import NavBar from "../../components/NavBar";
 import { getOfficers } from "../../fetchData/getOfficers";
 
-export default function Admin({ officerList, roleList, historian, session }) {
+export default function AdminPage({ officerList, roleList, historian, session }) {
   // pretty simple check for historian permission, refer to issue #12345 for improvement scheme
   if (!session || !historian.includes(session.user.email)) {
     return <AccessDenied />;
