@@ -1,21 +1,21 @@
-import dynamic from "next/dynamic";
-import Link from "next/link";
-import Head from "next/head";
-import { useRouter } from "next/router";
-import { Fragment, useState, useEffect } from "react";
-import { getSession } from "next-auth/client";
-import Container from '@mui/material/Container';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import Card from '@mui/material/Card';
-import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
+import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
-import NavBar from "../../components/NavBar";
+import Container from '@mui/material/Container';
+import Typography from '@mui/material/Typography';
 import axios from "axios";
-import { getParticipantData } from "../../fetchData/getParticipantData";
+import { getSession } from "next-auth/client";
+import dynamic from "next/dynamic";
+import Head from "next/head";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import { Fragment, useState } from "react";
 import AccoladeCard from "../../components/AccoladeCard";
+import NavBar from "../../components/NavBar";
+import { getParticipantData } from "../../fetchData/getParticipantData";
 
-export default function SSRPage({ data, session }) {
+export default function MemberPage({ data, session }) {
   // if (!session) { return  <AccessDenied/> };
   const [accolade, setAccolade] = useState(
     "You're the best! Thanks for being awesome!"

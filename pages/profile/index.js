@@ -1,20 +1,20 @@
-import Link from "next/link";
-import Head from "next/head";
-import { useRouter } from "next/router";
-import { Fragment, useState, useEffect } from "react";
-import Container from "@mui/material/Container";
-import { getSession } from "next-auth/client";
-import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
-import CardActions from "@mui/material/CardActions";
-import Typography from "@mui/material/Typography";
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import BottomNavigation from "@mui/material/BottomNavigation";
 import Button from "@mui/material/Button";
+import Card from "@mui/material/Card";
+import CardActions from "@mui/material/CardActions";
+import CardContent from "@mui/material/CardContent";
+import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 import Tooltip from "@mui/material/Tooltip";
-import BottomNavigation from "@mui/material/BottomNavigation";
-import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import { getOfficers } from "../../fetchData/getOfficers";
+import Typography from "@mui/material/Typography";
+import { getSession } from "next-auth/client";
+import Head from "next/head";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import { Fragment, useEffect, useState } from "react";
 import NavBar from "../../components/NavBar";
+import { getOfficers } from "../../fetchData/getOfficers";
 
 /**
  *
@@ -130,7 +130,8 @@ export default function Home({ officerList, roleList, session }) {
         <Grid
           style={{ paddingTop: 90, paddingBottom: 24 }}
           container
-          justify="center"
+          alignItems="center"
+          justifyContent="center"
         >
           {Grids}
         </Grid>

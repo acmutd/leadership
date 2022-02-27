@@ -1,17 +1,15 @@
-import Link from "next/link";
-import Head from "next/head";
-import { Fragment } from "react";
-import { getSession } from "next-auth/client";
 import Container from "@material-ui/core/Container";
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import CardActions from '@mui/material/CardActions';
-import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
-import Grid from '@mui/material/Grid';
-import Tooltip from '@mui/material/Tooltip';
-import BottomNavigation from '@mui/material/BottomNavigation';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import Button from '@mui/material/Button';
+import Card from '@mui/material/Card';
+import CardActions from '@mui/material/CardActions';
+import CardContent from '@mui/material/CardContent';
+import Grid from '@mui/material/Grid';
+import Typography from '@mui/material/Typography';
+import { getSession } from "next-auth/client";
+import Head from "next/head";
+import Link from "next/link";
+import { Fragment } from "react";
 import NavBar from "../components/NavBar";
 
 export default function Home({ session }) {

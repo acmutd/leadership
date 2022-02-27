@@ -1,16 +1,16 @@
-import { useRouter } from "next/router";
-import { useState, useEffect } from "react";
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import CardActions from '@mui/material/CardActions';
-import Typography from '@mui/material/Typography';
-import TextField from '@mui/material/TextField';
-import Button from '@mui/material/Button';
-import Grid from '@mui/material/Grid';
-import Autocomplete from "@mui/material/Autocomplete";
 import CheckIcon from '@mui/icons-material/Check';
 import LoopIcon from '@mui/icons-material/Loop';
+import Autocomplete from "@mui/material/Autocomplete";
+import Button from '@mui/material/Button';
+import Card from '@mui/material/Card';
+import CardActions from '@mui/material/CardActions';
+import CardContent from '@mui/material/CardContent';
+import Grid from '@mui/material/Grid';
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
 import axios from "axios";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 
 export default function AddOfficerRoleCard({ officerArray, roleList }) {
   const router = useRouter();
@@ -53,7 +53,7 @@ export default function AddOfficerRoleCard({ officerArray, roleList }) {
 
   return (
     <Grid item md={12} lg={6} align="center">
-      <Card raised style={{ width: 300, minWidth: 600, margin: 8 }}>
+      <Card raised style={{ width: 300, minWidth: 500, margin: 8 }}>
         <CardContent>
           <Typography variant="h3" component="div">
             Add Role to Officer

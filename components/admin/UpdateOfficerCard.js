@@ -1,17 +1,18 @@
-import { useRouter } from "next/router";
-import { useState, useEffect } from "react";
-import Dropzone from "react-dropzone";
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import CardActions from '@mui/material/CardActions';
-import Typography from '@mui/material/Typography';
-import TextField from '@mui/material/TextField';
-import Button from '@mui/material/Button';
-import Grid from '@mui/material/Grid';
-import Autocomplete from "@mui/material/Autocomplete";
 import CheckIcon from "@mui/icons-material/Check";
 import LoopIcon from "@mui/icons-material/Loop";
+import Autocomplete from "@mui/material/Autocomplete";
+import Button from "@mui/material/Button";
+import Card from "@mui/material/Card";
+import CardActions from "@mui/material/CardActions";
+import CardContent from "@mui/material/CardContent";
+import CardMedia from "@mui/material/CardMedia";
+import Grid from "@mui/material/Grid";
+import TextField from "@mui/material/TextField";
+import Typography from "@mui/material/Typography";
 import axios from "axios";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import Dropzone from "react-dropzone";
 import { updateProfileImage } from "../../fetchData/fetchProfileImage";
 
 export default function UpdateOfficerCard({ officerArray }) {
@@ -61,8 +62,14 @@ export default function UpdateOfficerCard({ officerArray }) {
   };
 
   const onDrop = (acceptedFiles) => {
-    console.log(acceptedFiles);
     setFile(acceptedFiles[0]);
+  };
+
+  const fileAsURL = () => {
+    if (file === null) {
+      return null;
+    }
+    return URL.createObjectURL(file);
   };
 
   // Sorts the array in ascending order by first name
@@ -72,10 +79,10 @@ export default function UpdateOfficerCard({ officerArray }) {
 
   return (
     <Grid item md={12} lg={6} align="center">
-      <Card raised style={{ width: 300, minWidth: 600, margin: 8 }}>
+      <Card raised style={{ width: 300, minWidth: 500, margin: 8 }}>
         <CardContent>
           <Typography variant="h3" component="div">
-            Update existing officer
+            Update officer
           </Typography>
 
           <Autocomplete
@@ -119,14 +126,30 @@ export default function UpdateOfficerCard({ officerArray }) {
             required
           />
 
+          {file !== null && (
+            <CardMedia
+              component="img"
+              height="365"
+              image={fileAsURL()}
+              alt={`${name}'s profile picture`}
+              style={{ marginBottom: 8 }}
+            />
+          )}
+
           <Dropzone onDrop={(acceptedFiles) => onDrop(acceptedFiles)}>
             {({ getRootProps, getInputProps }) => (
               <section>
                 <div {...getRootProps()}>
                   <input {...getInputProps()} />
-                  <Typography variant="h6" component="div">
-                    Update Image (Optional)
-                  </Typography>
+                  <Button
+                    color="inherit"
+                    size="small"
+                    style={{ textTransform: "none" }}
+                  >
+                    <Typography variant="h6" component="div">
+                      Update Image (Optional)
+                    </Typography>
+                  </Button>
                 </div>
               </section>
             )}

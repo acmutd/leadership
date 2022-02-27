@@ -1,6 +1,6 @@
-import UserProvider from "../context/userContext";
-import { ThemeProvider } from "next-themes";
 import { Provider } from "next-auth/client";
+import { ThemeProvider } from "next-themes";
+import UserProvider from "../context/userContext";
 import "../styles/global.css";
 
 // Custom App to wrap it with context provider

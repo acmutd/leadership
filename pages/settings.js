@@ -1,17 +1,17 @@
+import Button from '@mui/material/Button';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import Container from '@mui/material/Container';
+import Typography from '@mui/material/Typography';
+import axios from "axios";
+import { getSession } from "next-auth/client";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { Fragment, useState } from "react";
-import { getSession } from "next-auth/client";
-import Container from '@mui/material/Container';
 import AccessDenied from "../components/AccessDenied";
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
 import NavBar from "../components/NavBar";
-import axios from "axios";
 
-export default function SSRPage({ session }) {
+export default function SettingsPage({ session }) {
   if (!session) {
     return <AccessDenied />;
   }

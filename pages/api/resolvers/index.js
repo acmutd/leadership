@@ -1,19 +1,17 @@
 import { getOfficers } from "../../../fetchData/getOfficers";
-import { getParticipants } from "../../../fetchData/getParticipants";
-import { getTeams } from "../../../fetchData/getTeams";
-import {
-  getProfileData,
-  getProfileByName,
-  getProfileByEmail
-} from "../../../fetchData/getProfileData";
 import {
   getParticipantData,
-  getParticipantDataByName,
+  getParticipantDataByName
 } from "../../../fetchData/getParticipantData";
+import { getParticipants } from "../../../fetchData/getParticipants";
+import {
+  getProfileByEmail, getProfileByName, getProfileData
+} from "../../../fetchData/getProfileData";
 import {
   getTeamData,
-  getTeamDataByName,
+  getTeamDataByName
 } from "../../../fetchData/getTeamData";
+import { getTeams } from "../../../fetchData/getTeams";
 
 export const resolvers = {
   Query: {

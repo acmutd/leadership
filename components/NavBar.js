@@ -137,7 +137,7 @@ export default function NavBar({
               </Typography>
             </Button>
           </Link>
-          <Link href={`/me`} passHref>
+          <Link href={`/settings`} passHref>
             <Button size="small" style={{ marginLeft: 8 }}>
               <SettingsIcon />
               <Typography variant="inherit" component="div">
