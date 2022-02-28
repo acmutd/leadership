@@ -5,6 +5,7 @@ import CardContent from "@mui/material/CardContent";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 import axios from "axios";
+import { GetServerSideProps } from "next";
 import { getSession } from "next-auth/client";
 import dynamic from "next/dynamic";
 import Head from "next/head";
@@ -27,15 +28,15 @@ export default function MemberPage({ data, session }) {
     setAccolade(event.target.value);
   };
 
-  const getProgramParticipation = () => {
+  const getProgramParticipation = (): string[] => {
     return data.participation
-      .filter((item, index) => {
+      .filter((item: string) => {
         if (item !== "TIP" && item !== "Projects" && item !== "Research") {
           return true;
         }
         return false;
       })
-      .map((item, index) => {
+      .map((item: string) => {
         const division =
           item.split(" ")[0] === "TIP"
             ? "Technical Interview Prep"
@@ -171,7 +172,7 @@ export default function MemberPage({ data, session }) {
   );
 }
 
-export const getServerSideProps = async (context) => {
+export const getServerSideProps: GetServerSideProps = async (context) => {
   const { username } = context.params;
   const session = await getSession(context);
 

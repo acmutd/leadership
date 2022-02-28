@@ -167,7 +167,7 @@ export default function ProfilePage({ officerList, roleList, session }) {
   );
 }
 
-export const getServerSideProps: GetServerSideProps = async context => {
+export const getServerSideProps: GetServerSideProps = async (context) => {
   const { officers, role_list } = await getOfficers(context.query.q);
   const session = await getSession(context);
 

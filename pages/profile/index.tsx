@@ -1,26 +1,27 @@
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
+import { GetServerSideProps } from 'next';
 import { getSession } from "next-auth/client";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { Fragment, useEffect, useState } from "react";
+import Credits from "../../components/Credits";
 import GridCard from "../../components/GridCard";
 import NavBar from "../../components/NavBar";
-import { getParticipants } from "../../fetchData/getParticipants";
-import Credits from "../../components/Credits";
+import { getOfficers } from "../../fetchData/getOfficers";
 
 /**
  *
- * @param {Object} participantList list of members from the database. All members if no query is present, else subset
+ * @param {Object} officerList list of officers from the database. All officers if no query is present, else subset
  * @param {string[]} roleList list of all roles, used for role query search bar auto-fill
  * @param {Object} session contains whether the user is signed in or not
  */
-export default function MembershipPage({ participantList, roleList, session }) {
-  // contains subset of member objects based on name that is typed in the search bar
-  const [filteredArray, setFilteredArray] = useState(participantList);
+export default function LeadershipPage({ officerList, roleList, session }) {
+  // contains subset of officer objects based on name that is typed in the search bar
+  const [filteredArray, setFilteredArray] = useState(officerList);
 
   // contains the list of all names only that is used to populate the search bar auto-fill
-  const [participantNames, setParticipantNames] = useState([]);
+  const [officerNames, setOfficerNames] = useState([]);
 
   // contains the list of all roles that is used to populate the role query bar auto-fill
   const [roleArray, setRoleArray] = useState(roleList);
@@ -31,7 +32,7 @@ export default function MembershipPage({ participantList, roleList, session }) {
   const onchange = (event) => {
     const searchString = event.toLowerCase();
     setFilteredArray(
-      participantList.filter((item) =>
+      officerList.filter((item) =>
         item.name.toLowerCase().includes(searchString)
       )
     );
@@ -51,11 +52,11 @@ export default function MembershipPage({ participantList, roleList, session }) {
   // Sorts the array in ascending order by first name
   useEffect(() => {
     setFilteredArray(
-      participantList.sort((a, b) =>
+      officerList.sort((a, b) =>
         a.name > b.name ? 1 : b.name > a.name ? -1 : 0
       )
     );
-    setParticipantNames(
+    setOfficerNames(
       filteredArray.map(({ id, name }, index) =>
         name.length < 16 ? name : name.split(" ")[0]
       )
@@ -64,7 +65,7 @@ export default function MembershipPage({ participantList, roleList, session }) {
 
   const Grids = filteredArray.map(({ id, name }, index) => {
     return (
-      <GridCard id={id} name={name} path="participant" key={index}/>
+      <GridCard id={id} name={name} path="profile" key={index}/>
     );
   });
 
@@ -72,12 +73,12 @@ export default function MembershipPage({ participantList, roleList, session }) {
     <Fragment>
       <Head>
         <title>
-          Membership{fetchQuery() === "" ? "" : `: ${fetchQuery()}`} | ACM
+          Leadership{fetchQuery() === "" ? "" : `: ${fetchQuery()}`} | ACM
           Leadership
         </title>
         <meta
           property="og:title"
-          content="Membership | ACM Leadership"
+          content="Leadership | ACM Leadership"
           key="title"
         />
       </Head>
@@ -88,7 +89,7 @@ export default function MembershipPage({ participantList, roleList, session }) {
           roleArray={roleArray}
           onRoleChange={onrolechange}
           search={true}
-          officerArray={participantNames}
+          officerArray={officerNames}
           onSearchChange={onchange}
         />
         <Grid
@@ -105,16 +106,16 @@ export default function MembershipPage({ participantList, roleList, session }) {
   );
 }
 
-export async function getServerSideProps(context) {
-  const { participants, programs } = await getParticipants(context.query.q);
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const { officers, role_list } = await getOfficers(context.query.q);
   const session = await getSession(context);
 
-  if (!participants || !programs) {
+  if (!officers || !role_list) {
     return {
       notFound: true,
     };
   }
   return {
-    props: { participantList: participants, roleList: programs, session }, // will be passed to the page component as props
+    props: { officerList: officers, roleList: role_list, session }, // will be passed to the page component as props
   };
 }

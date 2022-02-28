@@ -5,6 +5,7 @@ import CardContent from '@mui/material/CardContent';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 import axios from "axios";
+import { GetServerSideProps } from 'next';
 import { getSession } from "next-auth/client";
 import dynamic from "next/dynamic";
 import Head from "next/head";
@@ -198,7 +199,7 @@ export default function TeamPage({ data, session }) {
   );
 }
 
-export const getServerSideProps = async (context) => {
+export const getServerSideProps: GetServerSideProps = async (context) => {
   const { username } = context.params;
   const session = await getSession(context);
 

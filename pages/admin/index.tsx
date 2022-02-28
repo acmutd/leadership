@@ -1,5 +1,6 @@
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
+import { GetServerSideProps } from "next";
 import { getSession } from "next-auth/client";
 import Head from "next/head";
 import { Fragment } from "react";
@@ -30,7 +31,8 @@ export default function AdminPage({ officerList, roleList, historian, session })
         <Grid
           style={{ paddingTop: 90, paddingBottom: 24 }}
           container
-          justify="center"
+          alignItems="center"
+          justifyContent="center"
         >
           <CreateOfficerCard roleList={roleList} />
           <UpdateOfficerCard officerArray={officerList} />
@@ -44,8 +46,7 @@ export default function AdminPage({ officerList, roleList, historian, session })
     </Fragment>
   );
 }
-
-export async function getServerSideProps(context) {
+export const getServerSideProps: GetServerSideProps = async (context) => {
   const { officers, role_list, historian } = await getOfficers(context.query.q);
   const session = await getSession(context);
 
