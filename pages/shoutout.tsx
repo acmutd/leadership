@@ -6,12 +6,15 @@ import Container from "@mui/material/Container";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import axios from "axios";
+import { GetServerSideProps } from 'next';
 import { getSession } from "next-auth/client";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { Fragment, useEffect, useState } from "react";
+import AccessDenied from "../components/AccessDenied";
 import NavBar from "../components/NavBar";
 import { getOfficers } from "../fetchData/getOfficers";
+
 
 export default function ProfilePage({ officerList, roleList, session }) {
   if (!session) {
@@ -30,7 +33,7 @@ export default function ProfilePage({ officerList, roleList, session }) {
 
   // Sorts the array in ascending order by first name
   useEffect(() => {
-    setOfficerNames(officerList.map(({ id, name }, index) => name));
+    setOfficerNames(officerList.map(({ id, name }) => name));
   }, []);
 
   const router = useRouter();
@@ -41,10 +44,10 @@ export default function ProfilePage({ officerList, roleList, session }) {
 
   const sendAccolade = async () => {
     // fetch profiles
-    const response = await axios.post("/api/profile", { names: names }, {});
+    const response = await axios.post<any, any>("/api/profile", { names: names }, {});
 
     // generate payloads for each shoutout
-    const payloads = response.data.profiles.map((profile, index) => {
+    const payloads = response.data.profiles.map((profile) => {
       return {
         sender_name: session.user.name,
         sender_email: session.user.email,
@@ -164,7 +167,7 @@ export default function ProfilePage({ officerList, roleList, session }) {
   );
 }
 
-export async function getServerSideProps(context) {
+export const getServerSideProps: GetServerSideProps = async context => {
   const { officers, role_list } = await getOfficers(context.query.q);
   const session = await getSession(context);
 

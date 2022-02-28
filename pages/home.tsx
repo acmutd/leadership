@@ -6,6 +6,7 @@ import CardContent from '@mui/material/CardContent';
 import Container from "@mui/material/Container";
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
+import { GetServerSideProps } from 'next';
 import { getSession } from "next-auth/client";
 import Head from "next/head";
 import Link from "next/link";
@@ -24,10 +25,9 @@ export default function Home({ session }) {
         <Grid
           style={{ paddingTop: 90, paddingBottom: 24 }}
           container
-          justify="center"
         >
           {/* Leadership */}
-          <Grid item xs={12} lg={4} align="center" style={{ padding: 50 }}>
+          <Grid item xs={12} lg={4} style={{ padding: 50 }}>
             <Card raised style={{ width: 400, minWidth: 250, height: 400 }}>
               <CardContent>
                 <Typography variant="h5" component="div" style={{ marginBottom: 24}}>
@@ -57,7 +57,7 @@ export default function Home({ session }) {
           </Grid>
 
           {/* Members */}
-          <Grid item xs={12} lg={4} align="center" style={{ padding: 50 }}>
+          <Grid item xs={12} lg={4} style={{ padding: 50 }}>
             <Card raised style={{ width: 400, minWidth: 250, height: 400 }}>
               <CardContent>
                 <Typography variant="h5" component="div" style={{ marginBottom: 24}}>
@@ -87,7 +87,7 @@ export default function Home({ session }) {
           </Grid>
 
           {/* Teams */}
-          <Grid item xs={12} lg={4} align="center" style={{ padding: 50 }}>
+          <Grid item xs={12} lg={4} style={{ padding: 50 }}>
             <Card raised style={{ width: 400, minWidth: 250, height: 400 }}>
               <CardContent>
                 <Typography variant="h5" component="div" style={{ marginBottom: 24}}>
@@ -120,8 +120,7 @@ export default function Home({ session }) {
     </Fragment>
   );
 }
-
-export const getServerSideProps = async (context) => {
+export const getServerSideProps: GetServerSideProps = async context => {
   const session = await getSession(context);
   return { props: { session } };
 };

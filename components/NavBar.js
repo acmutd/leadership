@@ -22,11 +22,11 @@ import SettingsIcon from "@mui/icons-material/Settings";
 export default function NavBar({
   session,
   filter = false,
-  roleArray,
-  onRoleChange,
+  roleArray = [],
+  onRoleChange = (role) => {},
   search = false,
-  officerArray,
-  onSearchChange,
+  officerArray = [],
+  onSearchChange = (event) => {},
 }) {
   const { theme, setTheme } = useTheme();
 

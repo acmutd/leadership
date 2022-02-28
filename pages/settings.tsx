@@ -10,6 +10,14 @@ import { useRouter } from "next/router";
 import { Fragment, useState } from "react";
 import AccessDenied from "../components/AccessDenied";
 import NavBar from "../components/NavBar";
+import { GetServerSideProps } from 'next'
+
+interface response {
+  data: {
+    token: string;
+  }
+}
+
 
 export default function SettingsPage({ session }) {
   if (!session) {
@@ -20,7 +28,7 @@ export default function SettingsPage({ session }) {
   const [accessToken, setAccessToken] = useState("");
 
   const getAccessToken = async () => {
-    const res = await axios.post(router.basePath + "/api/auth/token", {}, {});
+    const res = await axios.post<any, response>(router.basePath + "/api/auth/token", {}, {});
     setAccessToken(res.data.token);
   };
 
@@ -94,7 +102,7 @@ export default function SettingsPage({ session }) {
   );
 }
 
-export const getServerSideProps = async (context) => {
+export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await getSession(context);
   return { props: { session } };
 };

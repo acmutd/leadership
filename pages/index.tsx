@@ -1,5 +1,6 @@
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
+import { GetServerSideProps } from "next";
 import { getSession } from "next-auth/client";
 import Head from "next/head";
 import { useRouter } from "next/router";
@@ -63,9 +64,7 @@ export default function LeadershipPage({ officerList, roleList, session }) {
   }, []);
 
   const Grids = filteredArray.map(({ id, name }, index) => {
-    return (
-      <GridCard id={id} name={name} path="profile" key={index}/>
-    );
+    return <GridCard id={id} name={name} path="profile" key={index} />;
   });
 
   return (
@@ -105,7 +104,7 @@ export default function LeadershipPage({ officerList, roleList, session }) {
   );
 }
 
-export async function getServerSideProps(context) {
+export const getServerSideProps: GetServerSideProps = async (context) => {
   const { officers, role_list } = await getOfficers(context.query.q);
   const session = await getSession(context);
 
@@ -117,4 +116,4 @@ export async function getServerSideProps(context) {
   return {
     props: { officerList: officers, roleList: role_list, session }, // will be passed to the page component as props
   };
-}
+};
