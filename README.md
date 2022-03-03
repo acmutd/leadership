@@ -34,7 +34,7 @@ This repo also separately from the NextJS application houses the Anniversary wor
 
  - Clone the repo
  - Set all the environment variables for the firebase config via the command line. The script does not use `dotenv` so set them as global environment variables using `export FIREBASE_API_KEY=<API KEY>` etc. 
- - Set the slack channel environment variable to point to the `#shoutouts` channel by running `export SLACK_CHANNEL_ID=<Webhook Url>`. Note that this is different from the slack channel ID used by the NextJS application. 
+ - Set the slack channel environment variable to point to the `#general` channel by running `export SLACK_CHANNEL_ID=<Webhook Url>`. Note that this is different from the slack channel ID used by the NextJS application (which points to `#shoutouts`). 
  - Run `npm install`
  - Run `npm run anniversary-build`
  - Run `npm run anniversary-start`
