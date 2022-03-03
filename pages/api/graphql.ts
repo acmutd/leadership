@@ -1,6 +1,6 @@
 import { ApolloServerPluginLandingPageLocalDefault } from "apollo-server-core";
 import { ApolloServer } from "apollo-server-micro";
-import jwt, { Jwt } from "jsonwebtoken";
+import jwt, { Jwt, JwtPayload } from "jsonwebtoken";
 import Cors from "micro-cors";
 import { resolvers } from "./resolvers";
 import { typeDefs } from "./schemas";
@@ -21,7 +21,7 @@ const apolloServer = new ApolloServer({
   context: ({ req }) => {
     const public_key = process.env.LEADERSHIP_RSA_PUBLIC_KEY.replace(/\\n/gm, '\n');
 
-    const decoded_token = jwt.verify(req.headers.authorization.split(" ")[1], public_key, { issuer: process.env.NEXTAUTH_URL })
+    const decoded_token = jwt.verify(req.headers.authorization.split(" ")[1], public_key, { issuer: process.env.NEXTAUTH_URL });
     return {
       ...(decoded_token as jwt.JwtPayload),
     }
