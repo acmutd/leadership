@@ -1,23 +1,34 @@
-import React, { Fragment } from "react";
-import Link from "next/link";
-import AppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
-import { useTheme } from "next-themes";
-import Autocomplete from "@mui/material/Autocomplete";
-import TextField from '@mui/material/TextField';
-import { signIn, signOut } from "next-auth/client";
 import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
 import ApiIcon from "@mui/icons-material/Api";
+import DarkModeIcon from "@mui/icons-material/DarkMode";
+import GroupsIcon from "@mui/icons-material/Groups";
+import LightModeIcon from "@mui/icons-material/LightMode";
 import LoginIcon from "@mui/icons-material/Login";
 import LogoutIcon from "@mui/icons-material/Logout";
-import GroupsIcon from "@mui/icons-material/Groups";
 import PersonIcon from "@mui/icons-material/Person";
-import StarIcon from "@mui/icons-material/Star";
-import LightModeIcon from "@mui/icons-material/LightMode";
-import DarkModeIcon from "@mui/icons-material/DarkMode";
 import SettingsIcon from "@mui/icons-material/Settings";
+import StarIcon from "@mui/icons-material/Star";
+import AppBar from '@mui/material/AppBar';
+import Autocomplete from "@mui/material/Autocomplete";
+import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
+import Toolbar from '@mui/material/Toolbar';
+import Typography from '@mui/material/Typography';
+import { Session } from "next-auth";
+import { signIn, signOut } from "next-auth/client";
+import { useTheme } from "next-themes";
+import Link from "next/link";
+import React, { Fragment } from "react";
+
+interface PageProps {
+  session: Session;
+  filter?: boolean;
+  roleArray?: string[];
+  onRoleChange?: (role: string) => void;
+  search?: boolean;
+  officerArray?: string[];
+  onSearchChange?: (event: string) => void;
+}
 
 export default function NavBar({
   session,
@@ -27,16 +38,13 @@ export default function NavBar({
   search = false,
   officerArray = [],
   onSearchChange = (event) => {},
-}) {
+}: PageProps) {
   const { theme, setTheme } = useTheme();
 
   return (
     <Fragment>
       <AppBar style={{ marginBottom: 12 }}>
         <Toolbar>
-          {/* <IconButton edge="start" aria-label="menu">
-            <MenuIcon />
-          </IconButton> */}
           <Link href={`/`} passHref>
             <Button size="small" style={{ marginRight: 24 }}>
               <StarIcon />

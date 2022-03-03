@@ -19,9 +19,9 @@ interface PageProps {
 
 /**
  *
- * @param {Object} participantList list of members from the database. All members if no query is present, else subset
+ * @param {participant[]} participantList list of members from the database. All members if no query is present, else subset
  * @param {string[]} roleList list of all roles, used for role query search bar auto-fill
- * @param {Object} session contains whether the user is signed in or not
+ * @param {Session} session contains whether the user is signed in or not
  */
 export default function MembershipPage({ participantList, roleList, session }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   // contains subset of member objects based on name that is typed in the search bar

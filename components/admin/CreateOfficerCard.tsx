@@ -15,7 +15,18 @@ import { useState } from "react";
 import Dropzone from "react-dropzone";
 import { uploadProfileImage } from "../../fetchData/fetchProfileImage";
 
-export default function CreateOfficerCard({ roleList }) {
+interface PageProps {
+  roleList: string[];
+}
+
+interface response {
+  data: {
+    message: string;
+    id: string;
+  }
+}
+
+export default function CreateOfficerCard({ roleList }: PageProps) {
   const router = useRouter();
 
   const [name, setName] = useState("");
@@ -45,7 +56,7 @@ export default function CreateOfficerCard({ roleList }) {
       return;
     }
     setLoading(true);
-    const result = await axios.post(
+    const result = await axios.post<any, response>(
       router.basePath + "/api/admin/createOfficer",
       {
         name: name,
@@ -76,7 +87,7 @@ export default function CreateOfficerCard({ roleList }) {
   };
 
   return (
-    <Grid item md={12} lg={6} align="center">
+    <Grid item md={12} lg={6}>
       <Card raised style={{ width: 300, minWidth: 500, margin: 8 }}>
         <CardContent>
           <Typography variant="h3" component="div">
@@ -168,7 +179,7 @@ export default function CreateOfficerCard({ roleList }) {
 
           {error ? (
             <Typography
-              variant="text"
+              variant="inherit"
               color="secondary"
               component="div"
               style={{ marginBottom: 4 }}

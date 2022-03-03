@@ -14,11 +14,23 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import Dropzone from "react-dropzone";
 import { updateProfileImage } from "../../fetchData/fetchProfileImage";
+import { officer } from "../../fetchData/getOfficers";
 
-export default function UpdateOfficerCard({ officerArray }) {
+interface PageProps {
+  officerArray: officer[];
+}
+
+interface response {
+  data: {
+    message: string;
+    id: string;
+  }
+}
+
+export default function UpdateOfficerCard({ officerArray }: PageProps) {
   const router = useRouter();
   // contains the list of all names only that is used to populate the search bar auto-fill
-  const [officerNames, setOfficerNames] = useState([]);
+  const [officerNames, setOfficerNames] = useState<string[]>([]);
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -41,7 +53,7 @@ export default function UpdateOfficerCard({ officerArray }) {
     }
 
     setLoading(true);
-    const result = await axios.post(
+    const result = await axios.post<any, response>(
       router.basePath + "/api/admin/updateOfficer",
       {
         name: name,
@@ -78,7 +90,7 @@ export default function UpdateOfficerCard({ officerArray }) {
   }, []);
 
   return (
-    <Grid item md={12} lg={6} align="center">
+    <Grid item md={12} lg={6}>
       <Card raised style={{ width: 300, minWidth: 500, margin: 8 }}>
         <CardContent>
           <Typography variant="h3" component="div">
@@ -165,7 +177,7 @@ export default function UpdateOfficerCard({ officerArray }) {
 
           {error ? (
             <Typography
-              variant="text"
+              variant="inherit"
               color="secondary"
               component="div"
               style={{ marginBottom: 4 }}

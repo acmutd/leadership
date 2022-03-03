@@ -19,9 +19,9 @@ interface PageProps {
 
 /**
  *
- * @param {Object} officerList list of officers from the database. All officers if no query is present, else subset
+ * @param {officer[]} officerList list of officers from the database. All officers if no query is present, else subset
  * @param {string[]} roleList list of all roles, used for role query search bar auto-fill
- * @param {Object} session contains whether the user is signed in or not
+ * @param {Session} session contains whether the user is signed in or not
  */
 export default function LeadershipPage({ officerList, roleList, session }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   // contains subset of officer objects based on name that is typed in the search bar

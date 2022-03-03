@@ -141,7 +141,7 @@ export default function MemberPage({
           </CardContent>
         </Card>
         {data.accolades.length > 0 ? (
-          <AccoladeCard accolades={data.accolades} />
+          <AccoladeCard accolades={data.accolades as string[]} />
         ) : (
           <div></div>
         )}

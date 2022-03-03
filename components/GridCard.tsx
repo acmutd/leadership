@@ -8,7 +8,13 @@ import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 import Link from "next/link";
 
-export default function GridCard({ name, id, path }) {
+interface PageProps {
+  name: string;
+  id: string;
+  path: string;
+}
+
+export default function GridCard({ name, id, path }: PageProps) {
   return (
     <Grid
       item
@@ -16,7 +22,6 @@ export default function GridCard({ name, id, path }) {
       sm={6}
       md={4}
       lg={3}
-      align="center"
       style={{ margin: 16 }}
     >
       <Card raised style={{ width: 300, minWidth: 250 }}>

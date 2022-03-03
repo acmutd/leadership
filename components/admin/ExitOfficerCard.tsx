@@ -11,14 +11,24 @@ import Typography from '@mui/material/Typography';
 import axios from "axios";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import { officer } from "../../fetchData/getOfficers";
 
-export default function AddOfficerRoleCard({ officerArray, roleList }) {
+interface PageProps {
+  officerArray: officer[];
+}
+
+interface response {
+  data: {
+    message: string;
+  }
+}
+
+export default function ExitOfficerCard({ officerArray }: PageProps) {
   const router = useRouter();
   // contains the list of all names only that is used to populate the search bar auto-fill
-  const [officerNames, setOfficerNames] = useState([]);
+  const [officerNames, setOfficerNames] = useState<string[]>([]);
 
   const [name, setName] = useState("");
-  const [role, setRole] = useState("");
 
   // api status
   const [loading, setLoading] = useState(false);
@@ -27,17 +37,16 @@ export default function AddOfficerRoleCard({ officerArray, roleList }) {
   // validation
   const [error, setError] = useState(false);
 
-  const AddRole = async () => {
+  const ExitOfficer = async () => {
     setError(false);
-    if (name === "" || role === "") {
+    if (name === "") {
       setError(true);
       return;
     }
 
     setLoading(true);
-    const result = await axios.post(router.basePath + "/api/admin/addOfficerRole", {
+    const result = await axios.post<any, response>(router.basePath + "/api/admin/exitOfficer", {
       name: name,
-      role: role,
     });
 
     setLoading(false);
@@ -52,16 +61,16 @@ export default function AddOfficerRoleCard({ officerArray, roleList }) {
   }, []);
 
   return (
-    <Grid item md={12} lg={6} align="center">
+    <Grid item md={12} lg={6}>
       <Card raised style={{ width: 300, minWidth: 500, margin: 8 }}>
         <CardContent>
           <Typography variant="h3" component="div">
-            Add Role to Officer
+            Exit Officer
           </Typography>
 
           <Autocomplete
             disablePortal
-            style={{ marginLeft: 90, marginRight: 90, marginTop: 24 }}
+            style={{ marginLeft: 90, marginRight: 90, marginTop: 24, marginBottom: 24 }}
             id="combo-box"
             options={officerNames}
             renderInput={(params) => <TextField {...params} label="Search" />}
@@ -69,21 +78,10 @@ export default function AddOfficerRoleCard({ officerArray, roleList }) {
               setName(newValue);
             }}
           />
-          <Autocomplete
-            disablePortal
-            style={{ marginLeft: 90, marginRight: 90, marginTop: 24 }}
-            id="combo-box"
-            options={roleList}
-            renderInput={(params) => <TextField {...params} label="Role" />}
-            onInputChange={(event, newValue) => {
-              setRole(newValue);
-            }}
-          />
-          
         </CardContent>
 
         <CardActions>
-          <Button color="inherit" size="small" onClick={() => AddRole()}>
+          <Button color="inherit" size="small" onClick={() => ExitOfficer()}>
             Submit
           </Button>
           { loading ? <LoopIcon /> : <div></div> }
@@ -91,7 +89,7 @@ export default function AddOfficerRoleCard({ officerArray, roleList }) {
 
           {error ? (
             <Typography
-              variant="text"
+              variant="inherit"
               color="secondary"
               component="div"
               style={{ marginBottom: 4 }}

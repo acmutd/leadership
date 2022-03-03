@@ -11,11 +11,23 @@ import Typography from '@mui/material/Typography';
 import axios from "axios";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import { officer } from "../../fetchData/getOfficers";
 
-export default function AddHistorianCard({ officerArray, historian }) {
+interface PageProps {
+  officerArray: officer[];
+  historian: string[];
+}
+
+interface response {
+  data: {
+    message: string;
+  }
+}
+
+export default function AddHistorianCard({ officerArray, historian }: PageProps) {
   const router = useRouter();
   // contains the list of all names only that is used to populate the search bar auto-fill
-  const [officerNames, setOfficerNames] = useState([]);
+  const [officerNames, setOfficerNames] = useState<string[]>([]);
   const [viewHistorian, setViewHistorian] = useState(false);
 
   const [name, setName] = useState("");
@@ -35,7 +47,7 @@ export default function AddHistorianCard({ officerArray, historian }) {
     }
     
     setLoading(true);
-    const result = await axios.post(
+    const result = await axios.post<any, response>(
       router.basePath + "/api/admin/addHistorian",
       {
         name: name,
@@ -48,9 +60,9 @@ export default function AddHistorianCard({ officerArray, historian }) {
     }
   };
 
-  const RemoveHistorian = async (email) => {
+  const RemoveHistorian = async (email: string) => {
     setLoading(true);
-    const result = await axios.post(
+    const result = await axios.post<any, response>(
       router.basePath + "/api/admin/removeHistorian",
       {
         email: email,
@@ -89,7 +101,7 @@ export default function AddHistorianCard({ officerArray, historian }) {
   });
 
   return (
-    <Grid item md={12} lg={6} align="center">
+    <Grid item md={12} lg={6}>
       <Card raised style={{ width: 300, minWidth: 500, margin: 8 }}>
         <CardContent>
           <Typography variant="h3" component="div">
@@ -134,7 +146,7 @@ export default function AddHistorianCard({ officerArray, historian }) {
           </Button>
           {error ? (
             <Typography
-              variant="text"
+              variant="inherit"
               color="secondary"
               component="div"
               style={{ marginBottom: 4 }}

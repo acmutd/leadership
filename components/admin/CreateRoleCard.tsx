@@ -11,6 +11,12 @@ import axios from "axios";
 import { useRouter } from "next/router";
 import { useState } from "react";
 
+interface response {
+  data: {
+    message: string;
+  }
+}
+
 export default function CreateRoleCard() {
   const router = useRouter();
   const [role, setRole] = useState("");
@@ -30,7 +36,7 @@ export default function CreateRoleCard() {
     }
 
     setLoading(true);
-    const result = await axios.post(router.basePath + "/api/admin/createRole", {
+    const result = await axios.post<any, response>(router.basePath + "/api/admin/createRole", {
       role: role,
     });
     setLoading(false);
@@ -40,7 +46,7 @@ export default function CreateRoleCard() {
   };
 
   return (
-    <Grid item md={12} lg={6} align="center">
+    <Grid item md={12} lg={6}>
       <Card raised style={{ width: 300, minWidth: 500, margin: 8 }}>
         <CardContent>
           <Typography variant="h3" component="div">
@@ -66,7 +72,7 @@ export default function CreateRoleCard() {
 
           {error ? (
             <Typography
-              variant="text"
+              variant="inherit"
               color="secondary"
               component="div"
               style={{ marginBottom: 4 }}
