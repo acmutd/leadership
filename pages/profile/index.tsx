@@ -1,6 +1,7 @@
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
-import { GetServerSideProps } from 'next';
+import { GetServerSideProps, InferGetServerSidePropsType, GetServerSidePropsContext } from 'next';
+import { Session } from "next-auth";
 import { getSession } from "next-auth/client";
 import Head from "next/head";
 import { useRouter } from "next/router";
@@ -8,7 +9,13 @@ import { Fragment, useEffect, useState } from "react";
 import Credits from "../../components/Credits";
 import GridCard from "../../components/GridCard";
 import NavBar from "../../components/NavBar";
-import { getOfficers } from "../../fetchData/getOfficers";
+import { getOfficers, officer } from "../../fetchData/getOfficers";
+
+interface PageProps {
+  officerList: officer[];
+  roleList: string[];
+  session: Session;
+}
 
 /**
  *
@@ -16,12 +23,12 @@ import { getOfficers } from "../../fetchData/getOfficers";
  * @param {string[]} roleList list of all roles, used for role query search bar auto-fill
  * @param {Object} session contains whether the user is signed in or not
  */
-export default function LeadershipPage({ officerList, roleList, session }) {
+export default function LeadershipPage({ officerList, roleList, session }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   // contains subset of officer objects based on name that is typed in the search bar
   const [filteredArray, setFilteredArray] = useState(officerList);
 
   // contains the list of all names only that is used to populate the search bar auto-fill
-  const [officerNames, setOfficerNames] = useState([]);
+  const [officerNames, setOfficerNames] = useState<string[]>([]);
 
   // contains the list of all roles that is used to populate the role query bar auto-fill
   const [roleArray, setRoleArray] = useState(roleList);
@@ -29,7 +36,7 @@ export default function LeadershipPage({ officerList, roleList, session }) {
   const router = useRouter();
 
   // Filters array based on search bar input
-  const onchange = (event) => {
+  const onchange = (event: string) => {
     const searchString = event.toLowerCase();
     setFilteredArray(
       officerList.filter((item) =>
@@ -38,7 +45,7 @@ export default function LeadershipPage({ officerList, roleList, session }) {
     );
   };
 
-  const onrolechange = (role) => {
+  const onrolechange = (role: string) => {
     window.location.href = router.basePath + "?q=" + role;
     // commented section works locally but not on vercel
     // router.replace(router.basePath + "?q=" + role);
@@ -46,7 +53,7 @@ export default function LeadershipPage({ officerList, roleList, session }) {
   };
 
   const fetchQuery = () => {
-    return router.query.q ? router.query.q : "";
+    return router.query.q ? router.query.q as string : "";
   };
 
   // Sorts the array in ascending order by first name
@@ -106,8 +113,8 @@ export default function LeadershipPage({ officerList, roleList, session }) {
   );
 }
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const { officers, role_list } = await getOfficers(context.query.q);
+export const getServerSideProps: GetServerSideProps<PageProps> = async (context: GetServerSidePropsContext) => {
+  const { officers, role_list } = await getOfficers(context.query.q as string);
   const session = await getSession(context);
 
   if (!officers || !role_list) {

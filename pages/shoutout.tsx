@@ -6,17 +6,28 @@ import Container from "@mui/material/Container";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import axios from "axios";
-import { GetServerSideProps } from 'next';
+import { GetServerSideProps, InferGetServerSidePropsType, GetServerSidePropsContext } from 'next';
+import { Session } from "next-auth";
 import { getSession } from "next-auth/client";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { Fragment, useEffect, useState } from "react";
 import AccessDenied from "../components/AccessDenied";
 import NavBar from "../components/NavBar";
-import { getOfficers } from "../fetchData/getOfficers";
+import { getOfficers, officer } from "../fetchData/getOfficers";
 
+interface response {
+  data: {
+    profiles: officer[];
+  }
+}
+interface PageProps {
+  officerList: officer[];
+  roleList: string[];
+  session: Session;
+}
 
-export default function ProfilePage({ officerList, roleList, session }) {
+export default function ProfilePage({ officerList, roleList, session }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   if (!session) {
     return <AccessDenied />;
   }
@@ -26,10 +37,10 @@ export default function ProfilePage({ officerList, roleList, session }) {
   );
 
   // contains the list of all names only that is used to populate the search bar auto-fill
-  const [officerNames, setOfficerNames] = useState([]);
+  const [officerNames, setOfficerNames] = useState<string[]>([]);
 
   // selected names to send a shoutout to
-  const [names, setNames] = useState([]);
+  const [names, setNames] = useState<string[]>([]);
 
   // Sorts the array in ascending order by first name
   useEffect(() => {
@@ -38,13 +49,9 @@ export default function ProfilePage({ officerList, roleList, session }) {
 
   const router = useRouter();
 
-  const onChange = (event) => {
-    setAccolade(event.target.value);
-  };
-
   const sendAccolade = async () => {
     // fetch profiles
-    const response = await axios.post<any, any>("/api/profile", { names: names }, {});
+    const response = await axios.post<any, response>("/api/profile", { names: names }, {});
 
     // generate payloads for each shoutout
     const payloads = response.data.profiles.map((profile) => {
@@ -150,7 +157,9 @@ export default function ProfilePage({ officerList, roleList, session }) {
                 multiline
                 minRows={8}
                 maxRows={12}
-                onChange={onChange}
+                onChange={(event) => {
+                  setAccolade(event.target.value);
+                }}
                 variant="filled"
                 style={{ minWidth: "360px", marginTop: 12 }}
               />
@@ -167,8 +176,8 @@ export default function ProfilePage({ officerList, roleList, session }) {
   );
 }
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const { officers, role_list } = await getOfficers(context.query.q);
+export const getServerSideProps: GetServerSideProps<PageProps> = async (context: GetServerSidePropsContext) => {
+  const { officers, role_list } = await getOfficers(context.query.q as string);
   const session = await getSession(context);
 
   if (!officers || !role_list) {
@@ -176,6 +185,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       notFound: true,
     };
   }
+
   return {
     props: { officerList: officers, roleList: role_list, session }, // will be passed to the page component as props
   };

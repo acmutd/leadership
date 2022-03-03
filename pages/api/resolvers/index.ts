@@ -199,7 +199,7 @@ export const resolvers = {
     },
     roles: async ({ id }) => {
       const officer = await getProfileData(id, true);
-      return officer.roles;
+      return officer.role_list;
     },
     accolades: async ({ id }) => {
       const officer = await getProfileData(id, true);

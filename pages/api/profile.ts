@@ -1,7 +1,9 @@
+import type { NextApiRequest, NextApiResponse } from 'next';
 import { getSession } from "next-auth/client";
+import { officer } from "../../fetchData/getOfficers";
 import admin from "../../firebase/nodeApp";
 
-export default async function handler(req, res) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== "POST") {
     res.status(400).json({ message: "Invalid API method specified" });
     return;
@@ -16,10 +18,10 @@ export default async function handler(req, res) {
 
   const db = admin.firestore();
 
-  const profiles = await Promise.all(req.body.names.map(async (name) => {
+  const profiles = await Promise.all(req.body.names.map(async (name: string) => {
     const doc = await db.collection("officer").where("name", "==", name).get()
     return {
-      ...doc.docs[0].data(),
+      ...doc.docs[0].data() as officer,
       id: doc.docs[0].id
     };
   }));

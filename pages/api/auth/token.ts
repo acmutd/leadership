@@ -1,8 +1,9 @@
 import jwt from "jsonwebtoken";
 import { getSession } from "next-auth/client";
 import admin from "../../../firebase/nodeApp";
+import type { NextApiRequest, NextApiResponse } from 'next';
 
-export default async function handler(req, res) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== "POST") {
     res.status(400).json({ message: "Invalid API method specified" });
     return;
@@ -25,7 +26,7 @@ export default async function handler(req, res) {
       name: session.user.name,
       email: session.user.email,
       sub: docs.docs[0].id,
-      iss: process.env.NEXTAUTH_URL
+      issuer: process.env.NEXTAUTH_URL
   }
 
   const token = jwt.sign(payload, private_key, { algorithm: 'RS256', expiresIn: '1d' });

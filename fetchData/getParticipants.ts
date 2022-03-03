@@ -1,9 +1,28 @@
 import admin from "../firebase/nodeApp";
+import { accolade } from "./getOfficers";
+import { team } from "./getTeams";
 const db = admin.firestore();
 
-export const getParticipants = async (query) => {
+export interface participant {
+  id: string;
+  name: string;
+  email?: string[];
+  netid?: string;
+  classification?: string;
+  major?: string;
+  participation?: string[];
+  accolades?: string[] | accolade[];
+  teams?: team[];
+}
 
-  let participants = (await db.collection("total").doc("participants").get()).data();
+interface totalParticipants {
+  participants: participant[];
+  programs: string[];
+}
+
+export const getParticipants = async (query: string): Promise<totalParticipants> => {
+
+  let participants = (await db.collection("total").doc("participants").get()).data() as totalParticipants;
 
   if (query) {
 
@@ -35,8 +54,8 @@ export const getParticipants = async (query) => {
   return participants;
 };
 
-const queryRole = async (query) => {
-  const participantList = [];
+const queryRole = async (query: string): Promise<participant[]> => {
+  const participantList: participant[] = [];
 
   await db
     .collection("participants")

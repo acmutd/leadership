@@ -1,7 +1,10 @@
+import { firestore } from "firebase-admin";
+import type { NextApiRequest, NextApiResponse } from 'next';
 import { getSession } from "next-auth/client";
+import { officer } from "../../../fetchData/getOfficers";
 import admin from "../../../firebase/nodeApp";
 
-export default async function handler(req, res) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== "POST") {
     res.status(400).json({ message: "Invalid API method specified" });
     return;
@@ -17,20 +20,20 @@ export default async function handler(req, res) {
   const db = admin.firestore();
 
   try {
-    // create root level document for officer
+    // search for document with matching name
     const result = await db
       .collection("officer")
       .where("name", "==", req.body.name)
       .get();
-    const officer = result.docs[0];
 
-    await officer.ref.update({
-      email: req.body.email,
-      acm_email: req.body.acm_email,
-      linkedin: req.body.linkedin,
+    const officer = result.docs[0].data() as officer;
+
+    // add new historian
+    await db.collection("total").doc("allinone").update({
+      historian: firestore.FieldValue.arrayUnion(officer.acm_email)
     });
 
-    res.status(200).json({ message: "success", id: officer.id });
+    res.status(200).json({ message: "success" });
   } catch (e) {
     res.status(500).json({ message: "failure", error: e.message });
   }

@@ -1,5 +1,6 @@
 import axios from "axios";
 import Cors from "cors";
+import type { NextApiRequest, NextApiResponse } from 'next';
 import { getSession } from "next-auth/client";
 
 // Initializing the cors middleware
@@ -9,7 +10,7 @@ const cors = Cors({
 
 // Helper method to wait for a middleware to execute before continuing
 // And to throw an error when an error happens in a middleware
-function runMiddleware(req, res, fn) {
+function runMiddleware(req: NextApiRequest, res: NextApiResponse, fn) {
   return new Promise((resolve, reject) => {
     fn(req, res, (result) => {
       if (result instanceof Error) {
@@ -21,7 +22,7 @@ function runMiddleware(req, res, fn) {
   });
 }
 
-export default async function handler(req, res) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== "POST") {
     res.status(400).json({ message: "Invalid API method specified" });
     return;

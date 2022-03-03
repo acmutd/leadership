@@ -1,9 +1,48 @@
+import { firestore } from "firebase-admin";
 import admin from "../firebase/nodeApp";
 const db = admin.firestore();
 
-export const getOfficers = async (query) => {
+export interface officer {
+  id: string;
+  name: string;
+  email?: string;
+  start?: firestore.Timestamp | string;
+  end?: firestore.Timestamp | string;
+  acm_email?: string;
+  linkedin?: string;
+  role_list?: role[] | string[];
+  accolades?: accolade[] | string[];
+}
 
-  let officers = (await db.collection("total").doc("allinone").get()).data();
+export interface role {
+  id?: string;
+  title: string;
+  start?: firestore.Timestamp | string;
+  end?: firestore.Timestamp | string;
+}
+
+export interface accolade {
+  id?: string;
+  text: string;
+  date?: firestore.Timestamp | string;
+  sender_email?: string;
+  sender_name?: string;
+}
+
+interface totalOfficer {
+  officers: officer[];
+  role_list: string[];
+  historian: string[];
+}
+
+interface roleQuery {
+  query: string;
+  officers: officer[];
+}
+
+export const getOfficers = async (query: string | null): Promise<totalOfficer> => {
+
+  let officers = (await db.collection("total").doc("allinone").get()).data() as totalOfficer;
 
   if (query) {
 
@@ -17,7 +56,7 @@ export const getOfficers = async (query) => {
 
     // if queried before look up results
     if (!res.empty) {
-      officers.officers = res.docs[0].data().officers;
+      officers.officers = (res.docs[0].data() as roleQuery).officers;
     }
     // else perform the query and save the results for next time
     else {
@@ -35,8 +74,8 @@ export const getOfficers = async (query) => {
   return officers;
 };
 
-const queryRole = async (query) => {
-  const officerList = [];
+const queryRole = async (query: string): Promise<officer[]> => {
+  const officerList: officer[] = [];
 
   await db
     .collection("officer")

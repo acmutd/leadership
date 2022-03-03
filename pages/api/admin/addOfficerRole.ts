@@ -1,8 +1,10 @@
 import { firestore } from "firebase-admin";
+import type { NextApiRequest, NextApiResponse } from 'next';
 import { getSession } from "next-auth/client";
+import { officer } from "../../../fetchData/getOfficers";
 import admin from "../../../firebase/nodeApp";
 
-export default async function handler(req, res) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== "POST") {
     res.status(400).json({ message: "Invalid API method specified" });
     return;
@@ -25,7 +27,7 @@ export default async function handler(req, res) {
       .get();
 
     const officer = result.docs[0];
-    const roles = officer.data().role_list;
+    const roles = (officer.data() as officer).role_list;
 
     // check if role is already in officer's role list
     if (roles.includes(req.body.role)) {

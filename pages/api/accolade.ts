@@ -1,8 +1,10 @@
 import { firestore } from "firebase-admin";
 import { getSession } from "next-auth/client";
 import admin from "../../firebase/nodeApp";
+import type { NextApiRequest, NextApiResponse } from 'next';
 
-export default async function handler(req, res) {
+
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== "POST") {
     res.status(400).json({ message: "Invalid API method specified" });
     return;

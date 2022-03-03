@@ -6,14 +6,20 @@ import CardContent from '@mui/material/CardContent';
 import Container from "@mui/material/Container";
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
-import { GetServerSideProps } from 'next';
+import { GetServerSideProps, InferGetServerSidePropsType, GetServerSidePropsContext } from 'next';
+import { Session } from 'next-auth';
 import { getSession } from "next-auth/client";
 import Head from "next/head";
 import Link from "next/link";
 import { Fragment } from "react";
 import NavBar from "../components/NavBar";
 
-export default function Home({ session }) {
+interface PageProps {
+  session: Session;
+}
+
+
+export default function Home({ session }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   return (
     <Fragment>
       <Head>
@@ -120,7 +126,7 @@ export default function Home({ session }) {
     </Fragment>
   );
 }
-export const getServerSideProps: GetServerSideProps = async context => {
+export const getServerSideProps: GetServerSideProps<PageProps> = async (context: GetServerSidePropsContext) => {
   const session = await getSession(context);
   return { props: { session } };
 };

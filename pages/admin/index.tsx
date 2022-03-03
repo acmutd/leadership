@@ -1,6 +1,7 @@
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
-import { GetServerSideProps } from "next";
+import { GetServerSideProps, GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
+import { Session } from 'next-auth';
 import { getSession } from "next-auth/client";
 import Head from "next/head";
 import { Fragment } from "react";
@@ -12,9 +13,16 @@ import CreateRoleCard from "../../components/admin/CreateRoleCard";
 import ExitOfficerCard from "../../components/admin/ExitOfficerCard";
 import UpdateOfficerCard from "../../components/admin/UpdateOfficerCard";
 import NavBar from "../../components/NavBar";
-import { getOfficers } from "../../fetchData/getOfficers";
+import { getOfficers, officer } from "../../fetchData/getOfficers";
 
-export default function AdminPage({ officerList, roleList, historian, session }) {
+interface PageProps {
+  officerList: officer[];
+  roleList: string[];
+  historian: string[];
+  session: Session;
+}
+
+export default function AdminPage({ officerList, roleList, historian, session }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   // pretty simple check for historian permission, refer to issue #12345 for improvement scheme
   if (!session || !historian.includes(session.user.email)) {
     return <AccessDenied />;
@@ -46,8 +54,8 @@ export default function AdminPage({ officerList, roleList, historian, session })
     </Fragment>
   );
 }
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const { officers, role_list, historian } = await getOfficers(context.query.q);
+export const getServerSideProps: GetServerSideProps<PageProps> = async (context: GetServerSidePropsContext) => {
+  const { officers, role_list, historian } = await getOfficers(context.query.q as string);
   const session = await getSession(context);
 
   if (!officers || !role_list || !historian) {

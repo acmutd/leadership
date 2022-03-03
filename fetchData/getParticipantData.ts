@@ -1,6 +1,11 @@
 import admin from "../firebase/nodeApp";
+import { participant } from "./getParticipants";
+import { accolade } from "./getOfficers";
 
-export const getParticipantData = async (documentName, includeSubCollections = false) => {
+export const getParticipantData = async (
+  documentName: string,
+  includeSubCollections = false
+): Promise<participant> => {
   const db = admin.firestore();
   const doc = await db.collection("participants").doc(documentName).get();
 
@@ -8,24 +13,29 @@ export const getParticipantData = async (documentName, includeSubCollections = f
     return null;
   }
 
-  const ret_value = {
-    ...doc.data(),
-    accolades: doc.data().accolades ?? [],
+  const ret_value: participant = {
+    ...(doc.data() as participant),
+    accolades: (doc.data() as participant).accolades ?? [],
     id: doc.id,
   };
 
   if (includeSubCollections) {
     ret_value.accolades =
       (await getAccolades(doc.id)) ??
-      ret_value.accolades.map((accolade) => {
-        text: accolade;
+      (ret_value.accolades as string[]).map((accolade) => {
+        return {
+          text: accolade,
+        };
       });
   }
 
   return ret_value;
 };
 
-export const getParticipantDataByName = async (name, includeSubCollections = false) => {
+export const getParticipantDataByName = async (
+  name: string,
+  includeSubCollections = false
+): Promise<participant> => {
   const db = admin.firestore();
   const docs = await db
     .collection("participants")
@@ -36,24 +46,26 @@ export const getParticipantDataByName = async (name, includeSubCollections = fal
     return null;
   }
 
-  const ret_value = {
-    ...docs.docs[0].data(),
-    accolades: docs.docs[0].data().accolades ?? [],
+  const ret_value: participant = {
+    ...(docs.docs[0].data() as participant),
+    accolades: (docs.docs[0].data() as participant).accolades ?? [],
     id: docs.docs[0].id,
   };
 
   if (includeSubCollections) {
     ret_value.accolades =
       (await getAccolades(docs.docs[0].id)) ??
-      ret_value.accolades.map((accolade) => {
-        text: accolade;
+      (ret_value.accolades as string[]).map((accolade) => {
+        return {
+          text: accolade,
+        };
       });
   }
 
   return ret_value;
 };
 
-const getAccolades = async (documentName) => {
+const getAccolades = async (documentName: string): Promise<accolade[]> => {
   const db = admin.firestore();
   const docs = await db
     .collection("participants")

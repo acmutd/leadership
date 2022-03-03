@@ -1,11 +1,16 @@
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import Button from '@mui/material/Button';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import Container from '@mui/material/Container';
-import Typography from '@mui/material/Typography';
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import Button from "@mui/material/Button";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import Container from "@mui/material/Container";
+import Typography from "@mui/material/Typography";
 import axios from "axios";
-import { GetServerSideProps } from 'next';
+import {
+  GetServerSideProps,
+  InferGetServerSidePropsType,
+  GetServerSidePropsContext,
+} from "next";
+import { Session } from "next-auth";
 import { getSession } from "next-auth/client";
 import dynamic from "next/dynamic";
 import Head from "next/head";
@@ -15,8 +20,17 @@ import { Fragment, useState } from "react";
 import AccoladeCard from "../../components/AccoladeCard";
 import NavBar from "../../components/NavBar";
 import { getTeamData } from "../../fetchData/getTeamData";
+import { team } from "../../fetchData/getTeams";
 
-export default function TeamPage({ data, session }) {
+interface PageProps {
+  data: team;
+  session: Session;
+}
+
+export default function TeamPage({
+  data,
+  session,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) {
   // if (!session) { return  <AccessDenied/> };
   const [accolade, setAccolade] = useState(
     "You're the best! Thanks for being awesome!"
@@ -24,14 +38,13 @@ export default function TeamPage({ data, session }) {
 
   const router = useRouter();
 
-  const onChange = (event) => {
-    setAccolade(event.target.value);
-  };
-
   let CustomComponent;
   try {
-    CustomComponent = dynamic(() =>
-      import(`../../components/personalization/${data.name.replace(/\s/g, "")}`)
+    CustomComponent = dynamic(
+      () =>
+        import(
+          `../../components/personalization/${data.name.replace(/\s/g, "")}`
+        )
     );
   } catch (e) {
     CustomComponent = `div`;
@@ -84,7 +97,11 @@ export default function TeamPage({ data, session }) {
     <Fragment>
       <Head>
         <title>Programs: {data.name} | ACM Leadership</title>
-        <meta property="og:title" content={`Programs: ${data.name} | ACM Leadership`} key="title" />
+        <meta
+          property="og:title"
+          content={`Programs: ${data.name} | ACM Leadership`}
+          key="title"
+        />
       </Head>
       <Container maxWidth="lg">
         <NavBar session={session} />
@@ -115,14 +132,14 @@ export default function TeamPage({ data, session }) {
                 return (
                   <Link href={`/participant/${participant.id}`} passHref>
                     <a>
-                    <Typography
-                      variant="inherit"
-                      component="div"
-                      key={index}
-                      style={{ marginTop: 8 }}
-                    >
-                      {index + 1}. {participant.name}
-                    </Typography>
+                      <Typography
+                        variant="inherit"
+                        component="div"
+                        key={index}
+                        style={{ marginTop: 8 }}
+                      >
+                        {index + 1}. {participant.name}
+                      </Typography>
                     </a>
                   </Link>
                 );
@@ -137,13 +154,13 @@ export default function TeamPage({ data, session }) {
               <hr style={{ maxWidth: 200 }} />
               <Link href={`/profile/${data.officer.id}`} passHref>
                 <a>
-                <Typography
-                  variant="inherit"
-                  component="div"
-                  style={{ marginTop: 8 }}
-                >
-                  {data.officer.name}
-                </Typography>
+                  <Typography
+                    variant="inherit"
+                    component="div"
+                    style={{ marginTop: 8 }}
+                  >
+                    {data.officer.name}
+                  </Typography>
                 </a>
               </Link>
             </CardContent>
@@ -174,7 +191,9 @@ export default function TeamPage({ data, session }) {
                   multiline
                   minRows={8}
                   maxRows={12}
-                  onChange={onChange}
+                  onChange={(event) => {
+                    setAccolade(event.target.value);
+                  }}
                   variant="filled"
                   style={{ minWidth: "360px", marginTop: 12 }}
                 />
@@ -199,11 +218,13 @@ export default function TeamPage({ data, session }) {
   );
 }
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
+export const getServerSideProps: GetServerSideProps<PageProps> = async (
+  context: GetServerSidePropsContext
+) => {
   const { username } = context.params;
   const session = await getSession(context);
 
-  const profile = await getTeamData(username);
+  const profile = await getTeamData(username as string);
   if (!profile) {
     return { notFound: true };
   }

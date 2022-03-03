@@ -8,10 +8,10 @@ const storage = firebase.app().storage("gs://acm-core.appspot.com").ref();
  * @param {string} userId document id for the user profile
  * @returns download url of profile image
  */
-export default async function fetchProfileImage(userId) {
+export default async function fetchProfileImage(userId: string): Promise<string> {
   const profileImage = storage.child("leadership/profile/" + userId + ".jpg");
 
-  let url;
+  let url: string;
 
   try {
     url = await profileImage.getDownloadURL();
@@ -27,7 +27,7 @@ export default async function fetchProfileImage(userId) {
  * @param {string} userId document id for the user profile
  * @param {File} file profile image file
  */
-export async function uploadProfileImage(userId, file) {
+export async function uploadProfileImage(userId: string, file: File) {
   const profileImage = storage.child("leadership/profile/" + userId + ".jpg");
 
   try {
@@ -42,7 +42,7 @@ export async function uploadProfileImage(userId, file) {
  * @param {string} userId document id for the user profile
  * @param {File} file profile image to replace the previous one
  */
-export async function updateProfileImage(userId, file) {
+export async function updateProfileImage(userId: string, file: File) {
   const profileImage = storage.child("leadership/profile/" + userId + ".jpg");
 
   try {

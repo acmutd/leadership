@@ -10,7 +10,8 @@ import { useRouter } from "next/router";
 import { Fragment, useState } from "react";
 import AccessDenied from "../components/AccessDenied";
 import NavBar from "../components/NavBar";
-import { GetServerSideProps } from 'next'
+import { GetServerSideProps, InferGetServerSidePropsType, GetServerSidePropsContext } from 'next';
+import { Session } from 'next-auth';
 
 interface response {
   data: {
@@ -18,8 +19,12 @@ interface response {
   }
 }
 
+interface PageProps {
+  session: Session;
+}
 
-export default function SettingsPage({ session }) {
+
+export default function SettingsPage({ session }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   if (!session) {
     return <AccessDenied />;
   }
@@ -102,7 +107,7 @@ export default function SettingsPage({ session }) {
   );
 }
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
+export const getServerSideProps: GetServerSideProps<PageProps> = async (context: GetServerSidePropsContext) => {
   const session = await getSession(context);
   return { props: { session } };
 };

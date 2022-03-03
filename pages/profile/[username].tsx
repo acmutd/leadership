@@ -7,7 +7,8 @@ import Container from "@mui/material/Container";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import axios from "axios";
-import { GetServerSideProps } from 'next';
+import { GetServerSideProps, GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
+import { Session } from "next-auth";
 import { getSession } from "next-auth/client";
 import dynamic from "next/dynamic";
 import Head from "next/head";
@@ -17,9 +18,15 @@ import { Fragment, useEffect, useState } from "react";
 import AccoladeCard from "../../components/AccoladeCard";
 import NavBar from "../../components/NavBar";
 import fetchProfileImage from "../../fetchData/fetchProfileImage";
+import { officer } from "../../fetchData/getOfficers";
 import { getProfileData } from "../../fetchData/getProfileData";
 
-export default function ProfilePage({ data, session }) {
+interface PageProps {
+  data: officer,
+  session: Session,
+}
+
+export default function ProfilePage({ data, session }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   // if (!session) { return  <AccessDenied/> };
   const [accolade, setAccolade] = useState(
     "You're the best! Thanks for being awesome!"
@@ -31,10 +38,6 @@ export default function ProfilePage({ data, session }) {
   const [imageLoaded, setImageLoaded] = useState(false);
 
   const router = useRouter();
-
-  const onChange = (event) => {
-    setAccolade(event.target.value);
-  };
 
   let CustomComponent;
   try {
@@ -118,7 +121,7 @@ export default function ProfilePage({ data, session }) {
                 Roles
               </Typography>
               <hr style={{ maxWidth: 200 }} />
-              {data.roles.map((role, index) => {
+              {data.role_list.map((role, index) => {
                 return (
                   <Typography
                     variant="inherit"
@@ -158,7 +161,9 @@ export default function ProfilePage({ data, session }) {
                   multiline
                   minRows={8}
                   maxRows={12}
-                  onChange={onChange}
+                  onChange={(event) => {
+                    setAccolade(event.target.value);
+                  }}
                   variant="filled"
                   style={{ minWidth: "360px", marginTop: 12, marginBottom: 12 }}
                 />
@@ -189,11 +194,11 @@ export default function ProfilePage({ data, session }) {
   );
 }
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
+export const getServerSideProps: GetServerSideProps<PageProps> = async (context: GetServerSidePropsContext) => {
   const { username } = context.params;
   const session = await getSession(context);
 
-  const profile = await getProfileData(username);
+  const profile = await getProfileData(username as string);
   if (!profile) {
     return { notFound: true };
   }
