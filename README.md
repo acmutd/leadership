@@ -2,11 +2,17 @@
 
 ![Vercel](https://therealsujitk-vercel-badge.vercel.app/?app=leadership-acmutd.vercel.app) [![CodeQL](https://github.com/acmutd/leadership/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/acmutd/leadership/actions/workflows/codeql-analysis.yml)
 
-Explore how leadership in ACM has evolved over the ages!
+Explore how leadership in _ACM_ has evolved over the ages!
+
+### How to add new officers
+
+Adding new officers / updating existing officer information can be done through the admin console. Simply sign in with your _ACM_ account & navigate to the [admin console](https://leadership.acmutd.co/admin). Here you can add new officers, update existing officers, create new roles, switch roles for existing officers, set end date for departing officers and grant other officers access to the admin console. 
+
+Note: To access the admin console your _ACM_ account needs to have the historian permission. If you don't have this permission reach out to any of the current historians for _ACM_.
 
 ### Quick Start
 
-Follow these steps to get started with the project:
+Follow these steps to get started with the project locally:
 
 - Clone the repo `git clone https://github.com/acmutd/leadership.git`
 - Fill in the values in `.env.local.example` and rename it to `.env.local`. Reach out to an existing contributor to get these values.
@@ -17,7 +23,9 @@ Note: If you are using Windows, running `npm run dev` may cause some errors. By 
 
 ### API Development
 
-To test the GraphQL API follow these steps:
+To view the production GraphQL API click [here](https://leadership.acmutd.co/api/graphql).
+
+To test the GraphQL API locally follow these steps:
 
  - Run the project using the aforementioned steps
  - Open the GraphQL API endpoint at `http://localhost:3000/api/graphql`
