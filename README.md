@@ -60,6 +60,7 @@ The birthday bot program resides in this repository as a GitHub action triggered
 ```
 export SLACK_CHANNEL_ID=<Webhook_Url>
 export SLACK_TOKEN=<API_KEY>
+export BIRTHDAY_SPREADSHEET_ID=https://docs.google.com/spreadsheets/<SPREADSHEET_ID>/edit
 export GOOGLE_APPLICATION_CREDENTIALS=<PATH_TO_SERVICE_ACCOUNT_JSON_FILE>
 ```
 
