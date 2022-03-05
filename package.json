@@ -1,11 +1,17 @@
 {
+  "name": "acm-leadership",
+  "version": "1.0.0",
+  "author": "Harsha Srikara",
   "private": true,
+  "license": "MIT",
   "scripts": {
     "dev": "NODE_OPTIONS='--inspect' next dev",
     "build": "next build",
     "start": "next start",
     "anniversary-build": "tsc anniversary/anniversary.ts --outDir anniversary-build",
-    "anniversary-start": "node anniversary-build/anniversary.js"
+    "anniversary-start": "node anniversary-build/anniversary/anniversary.js",
+    "birthday-build": "tsc birthday/birthday.ts --outDir birthday-build",
+    "birthday-start": "node birthday-build/birthday/birthday.js"
   },
   "dependencies": {
     "@emotion/react": "^11.4.1",
@@ -17,6 +23,7 @@
     "cors": "^2.8.5",
     "firebase": "7.17.0",
     "firebase-admin": "9.0.0",
+    "googleapis": "^95.0.0",
     "jsonwebtoken": "^8.5.1",
     "micro-cors": "^0.1.1",
     "next": "latest",

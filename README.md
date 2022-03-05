@@ -46,6 +46,28 @@ This repo also separately from the NextJS application houses the Anniversary wor
  - Run `npm install`
  - Run `npm run anniversary-build`
  - Run `npm run anniversary-start`
+
+### Birthday Program
+
+[![Birthday](https://github.com/acmutd/leadership/actions/workflows/birthday.yml/badge.svg)](https://github.com/acmutd/leadership/actions/workflows/birthday.yml)
+
+The birthday bot program resides in this repository as a GitHub action triggered workflow. Much like the anniversary program, this script runs eveery night to check whether there are any birthdays on that date. Birthdays for officers are found on this [google spreadsheet](https://docs.google.com/spreadsheets/d/1hGO85H85VOhVnI-seXKsDKIXVKZ8Kq1EK59hF382u6k/edit#gid=0). Note: Need to be signed in with an `@acmutd.co` account to view the spreadsheet. If you've just joined the organization update the spreadsheet with your birthday too! To run the program locally follow these steps:
+
+ - Clone the repo
+ - Open the `calendar-converter` project in google cloud, find the default service account and download the `.json` key.
+ - Set the following environment variables via the command line
+
+```
+export SLACK_CHANNEL_ID=<Webhook_Url>
+export SLACK_TOKEN=<API_KEY>
+export BIRTHDAY_SPREADSHEET_ID=https://docs.google.com/spreadsheets/<SPREADSHEET_ID>/edit
+export GOOGLE_APPLICATION_CREDENTIALS=<PATH_TO_SERVICE_ACCOUNT_JSON_FILE>
+```
+
+ - Run `npm install`
+ - Run `npm run birthday-build`
+ - Run `npm run birthday-start`
+
 ### Contributors
 
 - [Harsha Srikara](https://harshasrikara.dev)

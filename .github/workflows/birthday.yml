@@ -1,0 +1,48 @@
+name: Birthday
+
+on:
+  schedule:
+    # Run at 12:00am CST every day
+    - cron: "0 6 * * *"
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    environment: Deployment
+
+    steps:
+      # Checkout master
+      - uses: actions/checkout@v2
+
+      # Setup node
+      - uses: actions/setup-node@v2
+        with:
+          node-version: "15"
+
+      # Install dependencies
+      - name: Install dependencies
+        run: |
+          npm install
+
+      # Run typescript compiler
+      - name: Compile Typescript
+        run: |
+          npm run birthday-build
+
+      # Setup gcloud
+      - uses: google-github-actions/setup-gcloud@v0
+        with:
+          service_account_key: ${{ secrets.GCP_SA_KEY }}
+          export_default_credentials: true
+      
+      # Run the birthday script and send slack messages
+      - name: Run Birthday Script
+        env:
+          BIRTHDAY_SPREADSHEET_ID: ${{ secrets.BIRTHDAY_SPREADSHEET_ID }}
+          SLACK_CHANNEL_ID: ${{ secrets.SLACK_CHANNEL_ID }}
+          SLACK_TOKEN: ${{ secrets.SLACK_TOKEN }}
+        run: |
+          npm run birthday-start
