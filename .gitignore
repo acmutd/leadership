@@ -15,6 +15,7 @@
 # production
 /build
 /anniversary-build
+/birthday-build
 
 # misc
 .DS_Store
