@@ -2,6 +2,7 @@ import * as firebase from "firebase";
 import "firebase/firestore"; // If you need it
 import messages from "./messages";
 import axios from "axios";
+import { fetchID } from "../util/slack";
 
 interface anniversary {
   name: string;
@@ -155,7 +156,7 @@ const postToSlack = async (
           type: "section",
           text: {
             type: "mrkdwn",
-            text: `Happy *${anniversary.count} Year* Anniversary ${anniversary.name} :tada:`,
+            text: `Happy *${anniversary.count} Year* Anniversary ${await fetchID(anniversary.name)} :tada:`,
           },
         },
         {

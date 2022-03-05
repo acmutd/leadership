@@ -2,6 +2,7 @@ import axios from "axios";
 import Cors from "cors";
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { getSession } from "next-auth/client";
+import { fetchID } from "../../util/slack";
 
 // Initializing the cors middleware
 const cors = Cors({
@@ -44,7 +45,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         type: "section",
         text: {
           type: "mrkdwn",
-          text: `Shoutout to *${req.body.receiver_name}*! You just got an accolade from *${req.body.sender_name}*! :tada: \n\n> ${req.body.accolade}`,
+          text: `Shoutout to *${await fetchID(req.body.receiver_name)}*! You just got an accolade from *${await fetchID(req.body.sender_name)}*! :tada: \n\n> ${req.body.accolade}`,
         },
       },
       {
