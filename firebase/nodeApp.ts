@@ -12,3 +12,18 @@ if (!admin.apps.length) {
 }
 
 export default admin
+
+export const getFirebaseAdmin = (secrets: Record<string, string>) => {
+  if (!admin.apps.length) {
+    admin.initializeApp({
+      credential: admin.credential.cert({
+        projectId: secrets.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+        clientEmail: secrets.FIREBASE_CLIENT_EMAIL,
+        privateKey: secrets.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n'),
+      }),
+      databaseURL: secrets.NEXT_PUBLIC_FIREBASE_DATABASE_URL,
+    })
+  }
+
+  return admin;
+}

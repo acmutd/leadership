@@ -11,7 +11,8 @@
     "anniversary-build": "tsc anniversary/anniversary.ts --outDir anniversary-build",
     "anniversary-start": "node anniversary-build/anniversary/anniversary.js",
     "birthday-build": "tsc birthday/birthday.ts --outDir birthday-build",
-    "birthday-start": "node birthday-build/birthday/birthday.js"
+    "birthday-start": "node birthday-build/birthday/birthday.js",
+    "secrets": "secrets cache"
   },
   "dependencies": {
     "@emotion/react": "^11.4.1",
@@ -28,6 +29,7 @@
     "micro-cors": "^0.1.1",
     "next": "latest",
     "next-auth": "^3.29.0",
+    "next-secrets": "^0.0.20",
     "next-themes": "^0.0.15",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
