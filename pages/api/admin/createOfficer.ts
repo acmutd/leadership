@@ -19,6 +19,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   const db = admin.firestore();
 
   try {
+    // check if officer is already in the database
+    const search = await db.collection("officer").where("acm_email", "==", req.body.acm_email).get();
+
+    // if officer doc already exists then return with error message
+    if (!search.empty) {
+      res.status(400).json({ message: "failure", error: "officer already exists" });
+      return;
+    }
+
     // create root level document for officer
     const result = await db.collection("officer").add({
       name: req.body.name,
