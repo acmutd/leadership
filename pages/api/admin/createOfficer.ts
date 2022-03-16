@@ -1,7 +1,7 @@
 import { firestore } from "firebase-admin";
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { getSession } from "next-auth/client";
-import admin from "../../../firebase/nodeApp";
+import { getFirebaseAdmin } from "../../../firebase/nodeApp";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== "POST") {
@@ -16,7 +16,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return;
   }
 
-  const db = admin.firestore();
+  const db = (await getFirebaseAdmin()).firestore();
 
   try {
     // create root level document for officer
@@ -25,7 +25,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       email: req.body.email,
       acm_email: req.body.acm_email,
       start: firestore.FieldValue.serverTimestamp(),
-      end: admin.firestore.Timestamp.fromDate(new Date("June 19, 2021")),
+      end: (await getFirebaseAdmin()).firestore.Timestamp.fromDate(new Date("June 19, 2021")),
       linkedin: req.body.linkedin,
       role_list: [req.body.role],
     });
@@ -36,7 +36,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     await db.collection("officer").doc(document_id).collection("roles").add({
         title: req.body.role,
         start: firestore.FieldValue.serverTimestamp(),
-        end: admin.firestore.Timestamp.fromDate(new Date("June 19, 2021")),
+        end: (await getFirebaseAdmin()).firestore.Timestamp.fromDate(new Date("June 19, 2021")),
     });
 
     // add id, name to single document
