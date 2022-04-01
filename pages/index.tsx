@@ -1,8 +1,8 @@
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
-import { GetServerSideProps, InferGetServerSidePropsType, GetServerSidePropsContext } from 'next';
+import { InferGetStaticPropsType, GetStaticProps } from 'next';
 import { Session } from "next-auth";
-import { getSession } from "next-auth/client";
+import { useSession } from "next-auth/client";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { Fragment, useEffect, useState } from "react";
@@ -14,7 +14,6 @@ import { getOfficers, officer } from "../fetchData/getOfficers";
 interface PageProps {
   officerList: officer[];
   roleList: string[];
-  session: Session;
 }
 
 
@@ -24,7 +23,11 @@ interface PageProps {
  * @param {string[]} roleList list of all roles, used for role query search bar auto-fill
  * @param {Session} session contains whether the user is signed in or not
  */
-export default function LeadershipPage({ officerList, roleList, session }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+export default function LeadershipPage({ officerList, roleList }: InferGetStaticPropsType<typeof getStaticProps>) {
+
+  // session
+  const [session, loading] = useSession();
+
   // contains subset of officer objects based on name that is typed in the search bar
   const [filteredArray, setFilteredArray] = useState(officerList);
 
@@ -57,13 +60,24 @@ export default function LeadershipPage({ officerList, roleList, session }: Infer
     return router.query.q ? router.query.q : "";
   };
 
-  // Sorts the array in ascending order by first name
   useEffect(() => {
+
+    // filters the list of officers displayed based on query
+    if(router.query.q) {
+      (async () => {
+        const { officers } = await getOfficers(router.query.q as string);
+        setFilteredArray(officers);
+      })();
+    }
+
+    // Sorts the array in ascending order by first name
     setFilteredArray(
       officerList.sort((a, b) =>
         a.name > b.name ? 1 : b.name > a.name ? -1 : 0
       )
     );
+
+    // Trim displayed name to just first name if total length is >16 characters
     setOfficerNames(
       filteredArray.map(({ id, name }, index) =>
         name.length < 16 ? name : name.split(" ")[0]
@@ -112,16 +126,25 @@ export default function LeadershipPage({ officerList, roleList, session }: Infer
   );
 }
 
-export const getServerSideProps: GetServerSideProps<PageProps> = async (context: GetServerSidePropsContext) => {
-  const { officers, role_list } = await getOfficers(context.query.q as string);
-  const session = await getSession(context);
+// export const getServerSideProps: GetServerSideProps<PageProps> = async (context: GetServerSidePropsContext) => {
+//   const { officers, role_list } = await getOfficers(context.query.q as string);
+//   const session = await getSession(context);
 
-  if (!officers || !role_list) {
-    return {
-      notFound: true,
-    };
-  }
+//   if (!officers || !role_list) {
+//     return {
+//       notFound: true,
+//     };
+//   }
+//   return {
+//     props: { officerList: officers, roleList: role_list, session }, // will be passed to the page component as props
+//   };
+// };
+
+export const getStaticProps: GetStaticProps<PageProps> = async (context) => {
+  const { officers, role_list } = await getOfficers();
+
   return {
-    props: { officerList: officers, roleList: role_list, session }, // will be passed to the page component as props
-  };
-};
+    props: { officerList: officers, roleList: role_list },
+  }
+  // ...
+}

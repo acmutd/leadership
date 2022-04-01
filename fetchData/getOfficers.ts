@@ -40,7 +40,7 @@ interface roleQuery {
   officers: officer[];
 }
 
-export const getOfficers = async (query: string | null): Promise<totalOfficer> => {
+export const getOfficers = async (query?: string | null): Promise<totalOfficer> => {
 
   let officers = (await db.collection("total").doc("allinone").get()).data() as totalOfficer;
 
