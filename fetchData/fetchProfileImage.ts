@@ -1,4 +1,4 @@
-import firebase, { getFirebaseClient } from "../firebase/clientApp";
+import firebase from "../firebase/clientApp";
 
 /**
  * Fetch image src link from firebase cloud storage
@@ -9,10 +9,7 @@ export default async function fetchProfileImage(
   userId: string
 ): Promise<string> {
   // Get default storage bucket
-  const storage = (await getFirebaseClient())
-    .app()
-    .storage("gs://acm-core.appspot.com")
-    .ref();
+  const storage = firebase.app().storage("gs://acm-core.appspot.com").ref();
 
   const profileImage = storage.child("leadership/profile/" + userId + ".jpg");
 
@@ -34,10 +31,7 @@ export default async function fetchProfileImage(
  */
 export async function uploadProfileImage(userId: string, file: File) {
   // Get default storage bucket
-  const storage = (await getFirebaseClient())
-    .app()
-    .storage("gs://acm-core.appspot.com")
-    .ref();
+  const storage = firebase.app().storage("gs://acm-core.appspot.com").ref();
 
   const profileImage = storage.child("leadership/profile/" + userId + ".jpg");
 
@@ -55,10 +49,7 @@ export async function uploadProfileImage(userId: string, file: File) {
  */
 export async function updateProfileImage(userId: string, file: File) {
   // Get default storage bucket
-  const storage = (await getFirebaseClient())
-    .app()
-    .storage("gs://acm-core.appspot.com")
-    .ref();
+  const storage = firebase.app().storage("gs://acm-core.appspot.com").ref();
 
   const profileImage = storage.child("leadership/profile/" + userId + ".jpg");
 

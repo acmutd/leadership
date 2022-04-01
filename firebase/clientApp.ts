@@ -31,6 +31,7 @@ if (!firebase.apps.length) {
 
 export default firebase;
 
+// unused because client side calls to doppler env exposes api key
 export const getFirebaseClient = async () => {
   const env = await getEnv();
 
