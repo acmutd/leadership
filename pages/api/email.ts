@@ -2,6 +2,7 @@ import axios from "axios";
 import Cors from "cors";
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { getSession } from "next-auth/client";
+import getEnv from "../../util/env";
 
 // Initializing the cors middleware
 const cors = Cors({
@@ -38,11 +39,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   // Run the middleware
   await runMiddleware(req, res, cors);
 
+  const env = await getEnv();
+
   const receiver_data = {
     from: req.body.sender_email,
     from_name: req.body.sender_name,
     to: req.body.to,
-    template_id: process.env.TEMPLATE_ID_RECEIVER,
+    template_id: env.TEMPLATE_ID_RECEIVER,
     dynamicSubstitutions: {
       sender_name: req.body.sender_name,
       receiver_name: req.body.receiver_name,
@@ -53,14 +56,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     from: "development@acmutd.co",
     from_name: "ACM Development",
     to: req.body.sender_email,
-    template_id: process.env.TEMPLATE_ID_SENDER,
+    template_id: env.TEMPLATE_ID_SENDER,
     dynamicSubstitutions: {
       sender_name: req.body.sender_name,
       receiver_name: req.body.receiver_name,
     },
   };
 
-  const url = process.env.ACM_CORE_BASE_URL + "/challenge/send-email";
+  const url = env.ACM_CORE_BASE_URL + "/challenge/send-email";
 
   try {
     await axios.post(

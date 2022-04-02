@@ -1,4 +1,4 @@
-import admin from "../firebase/nodeApp";
+import { getFirebaseAdmin } from "../firebase/nodeApp";
 import { participant } from "./getParticipants";
 import { accolade } from "./getOfficers";
 
@@ -6,7 +6,7 @@ export const getParticipantData = async (
   documentName: string,
   includeSubCollections = false
 ): Promise<participant> => {
-  const db = admin.firestore();
+  const db = (await getFirebaseAdmin()).firestore();
   const doc = await db.collection("participants").doc(documentName).get();
 
   if (!doc.exists) {
@@ -36,7 +36,7 @@ export const getParticipantDataByName = async (
   name: string,
   includeSubCollections = false
 ): Promise<participant> => {
-  const db = admin.firestore();
+  const db = (await getFirebaseAdmin()).firestore();
   const docs = await db
     .collection("participants")
     .where("name", "==", name)
@@ -66,7 +66,7 @@ export const getParticipantDataByName = async (
 };
 
 const getAccolades = async (documentName: string): Promise<accolade[]> => {
-  const db = admin.firestore();
+  const db = (await getFirebaseAdmin()).firestore();
   const docs = await db
     .collection("participants")
     .doc(documentName)

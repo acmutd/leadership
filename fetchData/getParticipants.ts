@@ -1,8 +1,6 @@
-import admin from "../firebase/nodeApp";
+import { getFirebaseAdmin } from "../firebase/nodeApp";
 import { accolade } from "./getOfficers";
 import { team } from "./getTeams";
-const db = admin.firestore();
-
 export interface participant {
   id: string;
   name: string;
@@ -21,6 +19,8 @@ interface totalParticipants {
 }
 
 export const getParticipants = async (query: string): Promise<totalParticipants> => {
+
+  const db = (await getFirebaseAdmin()).firestore();
 
   let participants = (await db.collection("total").doc("participants").get()).data() as totalParticipants;
 
@@ -55,6 +55,9 @@ export const getParticipants = async (query: string): Promise<totalParticipants>
 };
 
 const queryRole = async (query: string): Promise<participant[]> => {
+
+  const db = (await getFirebaseAdmin()).firestore();
+  
   const participantList: participant[] = [];
 
   await db
