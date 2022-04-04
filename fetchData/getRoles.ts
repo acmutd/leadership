@@ -1,13 +1,14 @@
 import { firestore } from "firebase-admin";
-import admin from "../firebase/nodeApp";
+import { getFirebaseAdmin } from "../firebase/nodeApp";
 import { role } from "./getOfficers";
-const db = admin.firestore();
 
 export interface full_role extends role {
   name: string;
 }
 
 export const getRoles = async (): Promise<full_role[]> => {
+  const db = (await getFirebaseAdmin()).firestore();
+
   const res = await db.collectionGroup("roles").get();
   const roles = await Promise.all(
     res.docs.map(async (doc) => {
