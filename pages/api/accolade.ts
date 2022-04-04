@@ -1,6 +1,6 @@
 import { firestore } from "firebase-admin";
 import { getSession } from "next-auth/client";
-import admin from "../../firebase/nodeApp";
+import { getFirebaseAdmin } from "../../firebase/nodeApp";
 import type { NextApiRequest, NextApiResponse } from 'next';
 
 
@@ -17,7 +17,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return;
   }
 
-  const db = admin.firestore();
+  const db = (await getFirebaseAdmin()).firestore();
 
   await db
     .collection(req.body.collection)

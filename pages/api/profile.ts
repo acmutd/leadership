@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { getSession } from "next-auth/client";
 import { officer } from "../../fetchData/getOfficers";
-import admin from "../../firebase/nodeApp";
+import { getFirebaseAdmin } from "../../firebase/nodeApp";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== "POST") {
@@ -16,7 +16,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return;
   }
 
-  const db = admin.firestore();
+  const db = (await getFirebaseAdmin()).firestore();
 
   const profiles = await Promise.all(req.body.names.map(async (name: string) => {
     const doc = await db.collection("officer").where("name", "==", name).get()

@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { getSession } from "next-auth/client";
-import admin from "../../../firebase/nodeApp";
+import { getFirebaseAdmin } from "../../../firebase/nodeApp";
 
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -16,7 +16,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return;
   }
 
-  const db = admin.firestore();
+  const db = (await getFirebaseAdmin()).firestore();
 
   try {
     // create root level document for officer

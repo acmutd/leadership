@@ -1,14 +1,16 @@
 import firebase from "../firebase/clientApp";
 
-// Get default storage bucket
-const storage = firebase.app().storage("gs://acm-core.appspot.com").ref();
-
 /**
  * Fetch image src link from firebase cloud storage
  * @param {string} userId document id for the user profile
  * @returns download url of profile image
  */
-export default async function fetchProfileImage(userId: string): Promise<string> {
+export default async function fetchProfileImage(
+  userId: string
+): Promise<string> {
+  // Get default storage bucket
+  const storage = firebase.app().storage("gs://acm-core.appspot.com").ref();
+
   const profileImage = storage.child("leadership/profile/" + userId + ".jpg");
 
   let url: string;
@@ -28,6 +30,9 @@ export default async function fetchProfileImage(userId: string): Promise<string>
  * @param {File} file profile image file
  */
 export async function uploadProfileImage(userId: string, file: File) {
+  // Get default storage bucket
+  const storage = firebase.app().storage("gs://acm-core.appspot.com").ref();
+
   const profileImage = storage.child("leadership/profile/" + userId + ".jpg");
 
   try {
@@ -43,6 +48,9 @@ export async function uploadProfileImage(userId: string, file: File) {
  * @param {File} file profile image to replace the previous one
  */
 export async function updateProfileImage(userId: string, file: File) {
+  // Get default storage bucket
+  const storage = firebase.app().storage("gs://acm-core.appspot.com").ref();
+
   const profileImage = storage.child("leadership/profile/" + userId + ".jpg");
 
   try {

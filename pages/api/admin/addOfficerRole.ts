@@ -2,7 +2,7 @@ import { firestore } from "firebase-admin";
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { getSession } from "next-auth/client";
 import { officer } from "../../../fetchData/getOfficers";
-import admin from "../../../firebase/nodeApp";
+import { getFirebaseAdmin } from "../../../firebase/nodeApp";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== "POST") {
@@ -17,7 +17,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return;
   }
 
-  const db = admin.firestore();
+  const db = (await getFirebaseAdmin()).firestore();
 
   try {
     // fetch document for given officer
@@ -48,7 +48,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     await db.collection("officer").doc(officer.id).collection("roles").add({
       title: req.body.role,
       start: firestore.FieldValue.serverTimestamp(),
-      end: admin.firestore.Timestamp.fromDate(new Date("June 19, 2021")),
+      end: (await getFirebaseAdmin()).firestore.Timestamp.fromDate(new Date("June 19, 2021")),
     });
 
     // update role list to have new role
