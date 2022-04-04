@@ -1,7 +1,5 @@
-import { firestore } from "firebase-admin";
-import admin from "../firebase/nodeApp";
+import { getFirebaseAdmin } from "../firebase/nodeApp";
 import { accolade } from "./getOfficers";
-const db = admin.firestore();
 
 interface full_accolade extends accolade {
     receiver_name?: string;
@@ -9,6 +7,8 @@ interface full_accolade extends accolade {
 }
 
 export const getAccolades = async (): Promise<full_accolade[]> => {
+    const db = (await getFirebaseAdmin()).firestore();
+    
     const res = await db.collectionGroup("accolades").get();
     const accolades = await Promise.all(res.docs.map(async (doc) => {
         const parent = await doc.ref.parent.parent.get();
