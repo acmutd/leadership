@@ -21,7 +21,10 @@ const apolloServer = new ApolloServer({
   plugins: [ApolloServerPluginLandingPageLocalDefault({ footer: false })],
   context: async ({ req }) => {
     const env = await getEnv();
-    const public_key = env.LEADERSHIP_RSA_PUBLIC_KEY.replace(/\\n/gm, '\n');
+    const public_key = process.env.LEADERSHIP_RSA_PUBLIC_KEY.replace(
+      /\\n/gm,
+      '\n'
+    );
 
     const decoded_token = jwt.verify(
       req.headers.authorization.split(' ')[1],
