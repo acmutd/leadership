@@ -4,7 +4,7 @@ import jwt from 'jsonwebtoken';
 import Cors from 'micro-cors';
 import { resolvers } from './resolvers';
 import { typeDefs } from './schemas';
-import getEnv from '../../util/env';
+// import getEnv from '../../util/env';
 
 export const config = {
   api: {
@@ -20,7 +20,7 @@ const apolloServer = new ApolloServer({
   introspection: true,
   plugins: [ApolloServerPluginLandingPageLocalDefault({ footer: false })],
   context: async ({ req }) => {
-    const env = await getEnv();
+    // const env = await getEnv();
     const public_key = process.env.LEADERSHIP_RSA_PUBLIC_KEY.replace(
       /\\n/gm,
       '\n'
