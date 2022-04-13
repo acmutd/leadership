@@ -4,9 +4,17 @@ import getEnv from "../util/env";
 export default admin;
 
 export const getFirebaseAdmin = async () => {
-  const env = await getEnv();
+  
+  // TODO: Find better solution
+  let env: Record<string, string>;
+  try {
+    env = await getEnv();
+  } catch (e) {
+    console.error("errored out in firebase.ts");
+    throw e;
+  }
 
-  if (!admin.apps.length) {
+  if (admin.apps.length === 0) {
     admin.initializeApp({
       credential: admin.credential.cert({
         projectId: env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
@@ -17,5 +25,5 @@ export const getFirebaseAdmin = async () => {
     });
   }
 
-  return admin;
+  return admin.apps[0];
 };
