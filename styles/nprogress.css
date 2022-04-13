@@ -6,6 +6,13 @@
     z-index: 9999;
   }
 
+  @keyframes  random {
+    15% { background: red; } 
+    30% { background: yellow; } 
+    45% { background: green; } 
+    60% { background: blue; }
+}
+
   #nprogress .bar {
     background: var(--primary-color);
     position: fixed;
@@ -14,6 +21,8 @@
     left: 0;
     width: 100%;
     height: 4px;
+    -webkit-animation: random 5s infinite;
+    animation: random 5s infinite;
   }
 
   /* Fancy blur effect */
