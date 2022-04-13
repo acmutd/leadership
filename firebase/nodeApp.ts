@@ -4,7 +4,7 @@ import getEnv from "../util/env";
 export default admin;
 
 export const getFirebaseAdmin = async () => {
-  
+
   // TODO: Find better solution
   let env: Record<string, string>;
   try {
@@ -25,5 +25,5 @@ export const getFirebaseAdmin = async () => {
     });
   }
 
-  return admin.apps[0];
+  return admin;
 };

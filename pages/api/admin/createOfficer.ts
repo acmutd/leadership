@@ -34,7 +34,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       email: req.body.email,
       acm_email: req.body.acm_email,
       start: firestore.FieldValue.serverTimestamp(),
-      end: (await getFirebaseAdmin()).firestore.Timestamp.fromDate(new Date("June 19, 2021")),
+      end: firestore.Timestamp.fromDate(new Date("June 19, 2021")),
       linkedin: req.body.linkedin,
       role_list: [req.body.role],
     });
