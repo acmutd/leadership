@@ -43,8 +43,51 @@ a {
   color: var(--fg);
 }
 
+.MuiButton-text {
+  color: var(--fg);
+}
+
+.MuiFilledInput-root {
+  color: var(--fg);
+}
+
 .MuiCard-root {
   background-color: var(--bg);
+}
+
+.MuiOutlinedInput-root {
+  color: var(--fg);
+}
+
+.MuiInput-root {
+  color: var(--fg);
+}
+
+.MuiInput-root::before {
+  color: var(--fg);
+  border-bottom: 1px solid var(--fg) !important;
+}
+
+.MuiInput-root::after {
+  color: var(--fg);
+  border-bottom: 1px solid var(--fg) !important;
+}
+
+
+.MuiInputLabel-root {
+  color: var(--fg) !important;
+}
+
+.MuiOutlinedInput-notchedOutline {
+  border-color: var(--fg) !important;
+}
+
+.MuiIconButton-root {
+  color: var(--fg);
+}
+
+.MuiAutocomplete-option {
+  color: var(--fg);
 }
 
 .MuiPaper-root {

@@ -83,7 +83,7 @@ export default function AddOfficerRoleCard({ officerArray, roleList }: PageProps
           />
           <Autocomplete
             disablePortal
-            style={{ marginLeft: 90, marginRight: 90, marginTop: 24 }}
+            style={{ marginLeft: 90, marginRight: 90, marginTop: 24, marginBottom: 24 }}
             id="combo-box"
             options={roleList}
             renderInput={(params) => <TextField {...params} label="Role" />}
