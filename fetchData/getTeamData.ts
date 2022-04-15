@@ -1,11 +1,12 @@
-import admin from "../firebase/nodeApp";
+import { getFirebaseAdmin } from "../firebase/nodeApp";
 import { team } from "./getTeams";
 
 export const getTeamData = async (
   documentName: string,
   includeSubCollections = false
 ): Promise<team> => {
-  const db = admin.firestore();
+  const db = (await getFirebaseAdmin()).firestore();
+
   const doc = await db.collection("teams").doc(documentName).get();
 
   if (!doc.exists) {
@@ -25,7 +26,8 @@ export const getTeamDataByName = async (
   name: string,
   includeSubCollections = false
 ): Promise<team> => {
-  const db = admin.firestore();
+  const db = (await getFirebaseAdmin()).firestore();
+
   const docs = await db.collection("teams").where("name", "==", name).get();
 
   if (docs.empty) {

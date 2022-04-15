@@ -3,6 +3,7 @@ import Cors from "cors";
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { getSession } from "next-auth/client";
 import { fetchID } from "../../util/slack";
+import getEnv from "../../util/env";
 
 // Initializing the cors middleware
 const cors = Cors({
@@ -39,6 +40,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   // Run the middleware
   await runMiddleware(req, res, cors);
 
+  const env = await getEnv();
+
   const body = {
     blocks: [
       {
@@ -69,7 +72,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     ],
   };
 
-  const url = process.env.ACM_SLACK_SHOUTOUT_CHANNEL;
+  const url = env.ACM_SLACK_SHOUTOUT_CHANNEL;
   try {
     await axios.post(url, body, {});
     res.status(200).json({ message: "success" });

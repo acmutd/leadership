@@ -47,7 +47,7 @@ export default function AdminPage({ officerList, roleList, historian, session }:
           <CreateRoleCard />
           <ExitOfficerCard officerArray={officerList} />
           <AddOfficerRoleCard officerArray={officerList} roleList={roleList} />
-          <AddHistorianCard officerArray={officerList} historian={historian}/>
+          <AddHistorianCard officerArray={officerList} historian={historian} session={session}/>
           
         </Grid>
       </Container>

@@ -1,7 +1,7 @@
 import { firestore } from "firebase-admin";
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { getSession } from "next-auth/client";
-import admin from "../../../firebase/nodeApp";
+import { getFirebaseAdmin } from "../../../firebase/nodeApp";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== "POST") {
@@ -16,16 +16,25 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return;
   }
 
-  const db = admin.firestore();
+  const db = (await getFirebaseAdmin()).firestore();
 
   try {
+    // check if officer is already in the database
+    const search = await db.collection("officer").where("acm_email", "==", req.body.acm_email).get();
+
+    // if officer doc already exists then return with error message
+    if (!search.empty) {
+      res.status(400).json({ message: "failure", error: "officer already exists" });
+      return;
+    }
+
     // create root level document for officer
     const result = await db.collection("officer").add({
       name: req.body.name,
       email: req.body.email,
       acm_email: req.body.acm_email,
       start: firestore.FieldValue.serverTimestamp(),
-      end: admin.firestore.Timestamp.fromDate(new Date("June 19, 2021")),
+      end: firestore.Timestamp.fromDate(new Date("June 19, 2021")),
       linkedin: req.body.linkedin,
       role_list: [req.body.role],
     });
@@ -36,7 +45,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     await db.collection("officer").doc(document_id).collection("roles").add({
         title: req.body.role,
         start: firestore.FieldValue.serverTimestamp(),
-        end: admin.firestore.Timestamp.fromDate(new Date("June 19, 2021")),
+        end: (await getFirebaseAdmin()).firestore.Timestamp.fromDate(new Date("June 19, 2021")),
     });
 
     // add id, name to single document

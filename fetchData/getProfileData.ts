@@ -1,12 +1,13 @@
 import { firestore } from "firebase-admin";
-import admin from "../firebase/nodeApp";
+import { getFirebaseAdmin } from "../firebase/nodeApp";
 import { officer, role, accolade } from "./getOfficers";
 
 export const getProfileData = async (
   documentName: string,
   includeSubCollections = false
 ): Promise<officer> => {
-  const db = admin.firestore();
+  const db = (await getFirebaseAdmin()).firestore();
+
   const doc = await db.collection("officer").doc(documentName).get();
 
   if (!doc.exists) {
@@ -47,7 +48,8 @@ export const getProfileData = async (
 };
 
 export const getProfileByName = async (name: string, includeSubCollections = false): Promise<officer> => {
-  const db = admin.firestore();
+  const db = (await getFirebaseAdmin()).firestore();
+
   const docs = await db.collection("officer").where("name", "==", name).get();
 
   if (docs.empty) {
@@ -93,7 +95,8 @@ export const getProfileByEmail = async (
   email: string,
   includeSubCollections = false
 ): Promise<officer> => {
-  const db = admin.firestore();
+  const db = (await getFirebaseAdmin()).firestore();
+
   const docs = await db
     .collection("officer")
     .where("acm_email", "==", email)
@@ -139,7 +142,8 @@ export const getProfileByEmail = async (
 };
 
 const getRoles = async (documentName: string): Promise<role[] | null> => {
-  const db = admin.firestore();
+  const db = (await getFirebaseAdmin()).firestore();
+
   const docs = await db
     .collection("officer")
     .doc(documentName)
@@ -162,7 +166,8 @@ const getRoles = async (documentName: string): Promise<role[] | null> => {
 };
 
 const getAccolades = async (documentName: string): Promise<accolade[] | null> => {
-  const db = admin.firestore();
+  const db = (await getFirebaseAdmin()).firestore();
+
   const docs = await db
     .collection("officer")
     .doc(documentName)
