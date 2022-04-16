@@ -4,6 +4,8 @@
 
 Explore how leadership & programs in _ACM_ has evolved over the ages!
 
+Checkout out the [Documentation Portal](https://docs.leadership.acmutd.co) for more information!
+
 ### How to add new officers
 
 Adding new officers / updating existing officer information can be done through the admin console. Simply sign in with your _ACM_ account & navigate to the [admin console](https://leadership.acmutd.co/admin). Here you can add new officers, update existing officers, create new roles, switch roles for existing officers, set end date for departing officers and grant other officers access to the admin console. 
@@ -15,9 +17,10 @@ Note: To access the admin console your _ACM_ account needs to have the historian
 Follow these steps to get started with the project locally:
 
 - Clone the repo `git clone https://github.com/acmutd/leadership.git`
-- Fill in the values in `.env.local.example` and rename it to `.env.local`. Reach out to an existing contributor to get these values.
+- Setup Doppler by running `doppler setup` and select the `dev` config for the `leadership` project
 - Run `npm install`
 - Run `npm run dev`
+- Navigate to `http://localhost:3000`
 
 Note: If you are using Windows, running `npm run dev` may cause some errors. By default this project is setup to inspect server side logs and print them to the terminal window running the application. If there are any issues remove the `NODE_OPTIONS='--inspect'` from the scripts section of the `package.json` file for `npm run dev`.
 
@@ -60,7 +63,7 @@ The birthday bot program resides in this repository as a GitHub action triggered
 ```
 export SLACK_CHANNEL_ID=<Webhook_Url>
 export SLACK_TOKEN=<API_KEY>
-export BIRTHDAY_SPREADSHEET_ID=https://docs.google.com/spreadsheets/<SPREADSHEET_ID>/edit
+export BIRTHDAY_SPREADSHEET_ID=https://docs.google.com/spreadsheets/<SPREADSHEET_ID>/edit  (Note: enter just the spreadsheet id, not the whole url)
 export GOOGLE_APPLICATION_CREDENTIALS=<PATH_TO_SERVICE_ACCOUNT_JSON_FILE>
 ```
 
