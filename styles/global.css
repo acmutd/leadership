@@ -113,3 +113,22 @@ a {
 .MuiBottomNavigation-root {
   background-color: var(--accent) !important;
 }
+#linkedin {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /*style={{ display: "flex", alignItems: "center" }}
+  style={{ fontSize: "0.5em", fontWeight: 500, userSelect: "none" }}*/
+  transition: color 0.15s;
+  cursor: pointer;
+}
+#linkedin div {
+  height: 1em;
+  line-height: 1.25em;
+  font-size: 0.375em;
+  font-weight: 700;
+  margin-left: 5px;
+}
+#linkedin:hover {
+  color: #ffb516;
+}
