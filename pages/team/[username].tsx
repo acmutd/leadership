@@ -12,7 +12,6 @@ import {
 } from "next";
 import { Session } from "next-auth";
 import { getSession } from "next-auth/client";
-import dynamic from "next/dynamic";
 import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -37,18 +36,6 @@ export default function TeamPage({
   );
 
   const router = useRouter();
-
-  let CustomComponent;
-  try {
-    CustomComponent = dynamic(
-      () =>
-        import(
-          `../../components/personalization/${data.name.replace(/\s/g, "")}`
-        )
-    );
-  } catch (e) {
-    CustomComponent = `div`;
-  }
 
   const getDivisionAndSemester = () => {
     return data.tags
@@ -170,7 +157,6 @@ export default function TeamPage({
           ) : (
             <div></div>
           )}
-          <CustomComponent />
           {/* {session ? (
             <Card
               raised

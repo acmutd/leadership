@@ -12,7 +12,6 @@ import {
 } from "next";
 import { Session } from "next-auth";
 import { getSession } from "next-auth/client";
-import dynamic from "next/dynamic";
 import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -28,7 +27,7 @@ interface PageProps {
 }
 
 /**
- * 
+ *
  * @param {participant} data profile information for the participant
  * @param {Session} session next-auth session information
  */
@@ -63,18 +62,6 @@ export default function MemberPage({
         );
       });
   };
-
-  let CustomComponent;
-  try {
-    CustomComponent = dynamic(
-      () =>
-        import(
-          `../../components/personalization/${data.name.replace(/\s/g, "")}`
-        )
-    );
-  } catch (e) {
-    CustomComponent = `div`;
-  }
 
   const sendAccolade = async () => {
     const payload = {
@@ -134,18 +121,43 @@ export default function MemberPage({
                   key={index}
                   style={{ marginTop: 8 }}
                 >
+                  {" "}
                   {index + 1}. {role}
                 </Typography>
               );
             })}
           </CardContent>
+          {data.teams && (
+            <CardContent>
+              <Typography variant="h5" component="div">
+                Teams
+              </Typography>
+              <hr style={{ maxWidth: 200 }} />
+              {data.teams.map((team, index) => {
+                return (
+                  <Link href={`/team/${team.id}`} passHref>
+                    <a>
+                      <Typography
+                        variant="inherit"
+                        component="div"
+                        key={index}
+                        style={{ marginTop: 8 }}
+                      >
+                        {" "}
+                        {index + 1}. {team.name}
+                      </Typography>
+                    </a>
+                  </Link>
+                );
+              })}
+            </CardContent>
+          )}
         </Card>
         {data.accolades.length > 0 ? (
           <AccoladeCard accolades={data.accolades as string[]} />
         ) : (
           <div></div>
         )}
-        <CustomComponent />
         {/* {session ? (
           <Card
             raised
