@@ -16,6 +16,7 @@ import { useRouter } from "next/router";
 import { Fragment, useEffect, useState } from "react";
 import AccoladeCard from "../../components/AccoladeCard";
 import NavBar from "../../components/NavBar";
+import LinkedInSVG from "../../components/svg/LinkedInSVG";
 import fetchProfileImage from "../../fetchData/fetchProfileImage";
 import { officer } from "../../fetchData/getOfficers";
 import { getProfileData } from "../../fetchData/getProfileData";
@@ -76,8 +77,12 @@ export default function ProfilePage({ data, session }: InferGetServerSidePropsTy
       <Container maxWidth="lg">
         <NavBar session={session} />
         <div style={{ paddingTop: 90 }}>
-          <Typography style={{ margin: 12 }} variant="h3" component="div">
+          <Typography style={{ margin: 12, display: "flex", alignItems: "center", flexDirection: "column" }} variant="h3" component="div">
             {data.name}
+            {data.linkedin && <div id="linkedin" onClick={() => window.open(data.linkedin)}>
+              <LinkedInSVG width="0.5em" height="0.5em" />
+              <div>LinkedIn</div>
+            </div>}
           </Typography>
           {isCurrentOfficer ? (
             <Typography variant="inherit" component="div">
