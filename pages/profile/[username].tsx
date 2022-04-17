@@ -10,7 +10,6 @@ import axios from "axios";
 import { GetServerSideProps, GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
 import { Session } from "next-auth";
 import { getSession } from "next-auth/client";
-import dynamic from "next/dynamic";
 import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -38,15 +37,6 @@ export default function ProfilePage({ data, session }: InferGetServerSidePropsTy
   const [imageLoaded, setImageLoaded] = useState(false);
 
   const router = useRouter();
-
-  let CustomComponent;
-  try {
-    CustomComponent = dynamic(() =>
-      import(`../../components/personalization/${data.name.replace(/\s/g, "")}`)
-    );
-  } catch (e) {
-    CustomComponent = `div`;
-  }
 
   useEffect(() => {
     (async () => {
@@ -140,7 +130,6 @@ export default function ProfilePage({ data, session }: InferGetServerSidePropsTy
           ) : (
             <div></div>
           )}
-          <CustomComponent />
           {session && isCurrentOfficer ? (
             <Card
               raised
