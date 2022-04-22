@@ -7,7 +7,11 @@ import Container from "@mui/material/Container";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import axios from "axios";
-import { GetServerSideProps, GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
+import {
+  GetServerSideProps,
+  GetServerSidePropsContext,
+  InferGetServerSidePropsType,
+} from "next";
 import { Session } from "next-auth";
 import { getSession } from "next-auth/client";
 import Head from "next/head";
@@ -22,11 +26,14 @@ import { officer } from "../../fetchData/getOfficers";
 import { getProfileData } from "../../fetchData/getProfileData";
 
 interface PageProps {
-  data: officer,
-  session: Session,
+  data: officer;
+  session: Session;
 }
 
-export default function ProfilePage({ data, session }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+export default function ProfilePage({
+  data,
+  session,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) {
   // if (!session) { return  <AccessDenied/> };
   const [accolade, setAccolade] = useState(
     "You're the best! Thanks for being awesome!"
@@ -77,12 +84,23 @@ export default function ProfilePage({ data, session }: InferGetServerSidePropsTy
       <Container maxWidth="lg">
         <NavBar session={session} />
         <div style={{ paddingTop: 90 }}>
-          <Typography style={{ margin: 12, display: "flex", alignItems: "center", flexDirection: "column" }} variant="h3" component="div">
+          <Typography
+            style={{
+              margin: 12,
+              display: "flex",
+              alignItems: "center",
+              flexDirection: "column",
+            }}
+            variant="h3"
+            component="div"
+          >
             {data.name}
-            {data.linkedin && <div id="linkedin" onClick={() => window.open(data.linkedin)}>
-              <LinkedInSVG width="0.5em" height="0.5em" />
-              <div>LinkedIn</div>
-            </div>}
+            {data.linkedin && (
+              <div id="linkedin" onClick={() => window.open(data.linkedin)}>
+                <LinkedInSVG width="0.5em" height="0.5em" />
+                <div>LinkedIn</div>
+              </div>
+            )}
           </Typography>
           {isCurrentOfficer ? (
             <Typography variant="inherit" component="div">
@@ -129,6 +147,31 @@ export default function ProfilePage({ data, session }: InferGetServerSidePropsTy
                 );
               })}
             </CardContent>
+
+            {data.teams && (
+              <CardContent>
+                <Typography variant="h5" component="div">
+                  Teams
+                </Typography>
+                <hr style={{ maxWidth: 200 }} />
+                {data.teams.map((team, index) => {
+                  return (
+                    <Link href={`/team/${team.id}`} passHref>
+                      <a>
+                        <Typography
+                          variant="inherit"
+                          component="div"
+                          key={index}
+                          style={{ marginTop: 8 }}
+                        >
+                          {index + 1}. {team.name}
+                        </Typography>
+                      </a>
+                    </Link>
+                  );
+                })}
+              </CardContent>
+            )}
           </Card>
           {data.accolades.length > 0 ? (
             <AccoladeCard accolades={data.accolades as string[]} />
@@ -188,7 +231,9 @@ export default function ProfilePage({ data, session }: InferGetServerSidePropsTy
   );
 }
 
-export const getServerSideProps: GetServerSideProps<PageProps> = async (context: GetServerSidePropsContext) => {
+export const getServerSideProps: GetServerSideProps<PageProps> = async (
+  context: GetServerSidePropsContext
+) => {
   const { username } = context.params;
   const session = await getSession(context);
 

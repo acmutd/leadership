@@ -201,6 +201,10 @@ export const resolvers = {
       const officer = await getProfileData(id, true);
       return officer.role_list;
     },
+    teams: async ({ id }) => {
+      const officer = await getProfileData(id, true);
+      return officer.teams;
+    },
     accolades: async ({ id }) => {
       const officer = await getProfileData(id, true);
       return officer.accolades;

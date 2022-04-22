@@ -7,6 +7,7 @@ export  const  typeDefs  =  gql`
         acm_email: String
         email: String
         linkedin: String
+        teams: [Team]
         roles: [Role]
         accolades: [Accolade]
     }
