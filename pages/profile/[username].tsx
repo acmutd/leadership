@@ -148,7 +148,7 @@ export default function ProfilePage({
               })}
             </CardContent>
 
-            {data.teams && (
+            {data.teams.length > 0 && (
               <CardContent>
                 <Typography variant="h5" component="div">
                   Teams

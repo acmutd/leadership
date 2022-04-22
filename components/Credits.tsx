@@ -4,7 +4,7 @@ import Link from "next/link";
 
 export default function Credits() {
   return (
-    <BottomNavigation>
+    <BottomNavigation style={{backgroundColor: "rgba(0,0,0,0)"}}>
       <Typography variant="inherit" component="div">
         Designed by{" "}
         <Link href="https://harshasrikara.dev" passHref>

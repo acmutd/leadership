@@ -5,13 +5,13 @@
 :root {
   --fg: #000;
   --bg: #fff;
-  --accent: #fff;
+  --accent: rgba(0, 0, 0, 0.1);
 }
 
 [data-theme="dark"] {
   --fg: #fff;
   --bg: #000;
-  --accent: gray;
+  --accent: rgba(255, 255, 255, 0.1);
 }
 
 html,
@@ -48,7 +48,7 @@ a {
 }
 
 .MuiFilledInput-root {
-  color: var(--fg);
+  background-color: var(--accent) !important;
 }
 
 .MuiCard-root {
@@ -110,9 +110,7 @@ a {
   color: var(--fg);
 }
 
-.MuiBottomNavigation-root {
-  background-color: var(--accent) !important;
-}
+
 #linkedin {
   display: flex;
   align-items: center;
@@ -130,5 +128,5 @@ a {
   margin-left: 5px;
 }
 #linkedin:hover {
-  color: #ffb516;
+  color: #0072b1;
 }
