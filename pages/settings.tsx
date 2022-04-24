@@ -1,8 +1,8 @@
-import Button from '@mui/material/Button';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import Container from '@mui/material/Container';
-import Typography from '@mui/material/Typography';
+import Button from "@mui/material/Button";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import Container from "@mui/material/Container";
+import Typography from "@mui/material/Typography";
 import axios from "axios";
 import { getSession } from "next-auth/client";
 import Head from "next/head";
@@ -10,21 +10,26 @@ import { useRouter } from "next/router";
 import { Fragment, useState } from "react";
 import AccessDenied from "../components/AccessDenied";
 import NavBar from "../components/NavBar";
-import { GetServerSideProps, InferGetServerSidePropsType, GetServerSidePropsContext } from 'next';
-import { Session } from 'next-auth';
+import {
+  GetServerSideProps,
+  InferGetServerSidePropsType,
+  GetServerSidePropsContext,
+} from "next";
+import { Session } from "next-auth";
 
 interface response {
   data: {
     token: string;
-  }
+  };
 }
 
 interface PageProps {
   session: Session;
 }
 
-
-export default function SettingsPage({ session }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+export default function SettingsPage({
+  session,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) {
   if (!session) {
     return <AccessDenied />;
   }
@@ -33,7 +38,11 @@ export default function SettingsPage({ session }: InferGetServerSidePropsType<ty
   const [accessToken, setAccessToken] = useState("");
 
   const getAccessToken = async () => {
-    const res = await axios.post<any, response>(router.basePath + "/api/auth/token", {}, {});
+    const res = await axios.post<any, response>(
+      router.basePath + "/api/auth/token",
+      {},
+      {}
+    );
     setAccessToken(res.data.token);
   };
 
@@ -41,7 +50,11 @@ export default function SettingsPage({ session }: InferGetServerSidePropsType<ty
     <Fragment>
       <Head>
         <title>Settings | ACM Leadership</title>
-        <meta property="og:title" content="Settings | ACM Leadership" key="title" />
+        <meta
+          property="og:title"
+          content="Settings | ACM Leadership"
+          key="title"
+        />
       </Head>
       <Container maxWidth="lg">
         <NavBar session={session} />
@@ -69,7 +82,11 @@ export default function SettingsPage({ session }: InferGetServerSidePropsType<ty
               </Typography>
               <hr style={{ maxWidth: 200 }} />
 
-              <Typography variant="inherit" component="div" style={{ wordWrap: "break-word" }}>
+              <Typography
+                variant="inherit"
+                component="div"
+                style={{ wordWrap: "break-word" }}
+              >
                 <code>{accessToken}</code>
               </Typography>
               <hr style={{ maxWidth: 200 }} />
@@ -107,7 +124,9 @@ export default function SettingsPage({ session }: InferGetServerSidePropsType<ty
   );
 }
 
-export const getServerSideProps: GetServerSideProps<PageProps> = async (context: GetServerSidePropsContext) => {
+export const getServerSideProps: GetServerSideProps<PageProps> = async (
+  context: GetServerSidePropsContext
+) => {
   const session = await getSession(context);
   return { props: { session } };
 };

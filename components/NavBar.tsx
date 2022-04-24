@@ -18,7 +18,8 @@ import { Session } from "next-auth";
 import { signIn, signOut } from "next-auth/client";
 import { useTheme } from "next-themes";
 import Link from "next/link";
-import React, { Fragment } from "react";
+import React, { useEffect, Fragment } from "react";
+import * as Sentry from "@sentry/nextjs";
 
 interface PageProps {
   session: Session;
@@ -40,6 +41,12 @@ export default function NavBar({
   onSearchChange = (event) => {},
 }: PageProps) {
   const { theme, setTheme } = useTheme();
+
+  useEffect(() => {
+    if(session) {
+      Sentry.setUser({ email: session.user.email });
+    }
+  }, [session])
 
   return (
     <Fragment>
