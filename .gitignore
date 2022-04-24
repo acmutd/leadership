@@ -37,3 +37,6 @@ yarn-error.log*
 .sentryclirc
 acm-core-history.json
 vercel.json
+
+# Sentry
+.sentryclirc
