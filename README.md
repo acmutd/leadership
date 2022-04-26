@@ -2,7 +2,7 @@
 
 ![Vercel](https://therealsujitk-vercel-badge.vercel.app/?app=leadership-acmutd.vercel.app) [![CodeQL](https://github.com/acmutd/leadership/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/acmutd/leadership/actions/workflows/codeql-analysis.yml)
 
-Explore how leadership & programs in _ACM_ has evolved over the ages!
+Explore how leadership & programs in _ACM_ have evolved over the ages!
 
 Checkout out the [Documentation Portal](https://docs.leadership.acmutd.co) for more information!
 
