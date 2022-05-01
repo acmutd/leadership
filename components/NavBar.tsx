@@ -8,12 +8,12 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import PersonIcon from "@mui/icons-material/Person";
 import SettingsIcon from "@mui/icons-material/Settings";
 import StarIcon from "@mui/icons-material/Star";
-import AppBar from '@mui/material/AppBar';
+import AppBar from "@mui/material/AppBar";
 import Autocomplete from "@mui/material/Autocomplete";
-import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
+import Button from "@mui/material/Button";
+import TextField from "@mui/material/TextField";
+import Toolbar from "@mui/material/Toolbar";
+import Typography from "@mui/material/Typography";
 import { Session } from "next-auth";
 import { signIn, signOut } from "next-auth/client";
 import { useTheme } from "next-themes";
@@ -46,14 +46,14 @@ export default function NavBar({
       <AppBar style={{ marginBottom: 12 }}>
         <Toolbar>
           <Link href={`/`} passHref>
-            <Button size="small" style={{ marginRight: 24 }}>
+            <Button size="small">
               <StarIcon />
               <Typography variant="inherit" component="div">
-                ACM Leadership
+                Home
               </Typography>
             </Button>
           </Link>
-          <Link href={`/participant`} passHref>
+          {/* <Link href={`/participant`} passHref>
             <Button size="small" style={{ marginRight: 24 }}>
               <PersonIcon />
               <Typography variant="inherit" component="div">
@@ -68,7 +68,7 @@ export default function NavBar({
                 Programs
               </Typography>
             </Button>
-          </Link>
+          </Link> */}
           <Fragment>
             <Button onClick={() => setTheme("light")} size="small">
               <LightModeIcon />
@@ -90,7 +90,9 @@ export default function NavBar({
               id="combo-box"
               options={officerArray}
               sx={{ width: 150 }}
-              renderInput={(params) => <TextField {...params} label="Search" variant="standard"/>}
+              renderInput={(params) => (
+                <TextField {...params} label="Search" variant="standard" />
+              )}
               onInputChange={(event, newValue) => {
                 onSearchChange(newValue);
               }}
@@ -105,7 +107,9 @@ export default function NavBar({
               id="combo-box"
               options={roleArray}
               sx={{ width: 300 }}
-              renderInput={(params) => <TextField {...params} label="Role" variant="standard" />}
+              renderInput={(params) => (
+                <TextField {...params} label="Role" variant="standard" />
+              )}
               onChange={(event, newValue) => {
                 onRoleChange(newValue);
               }}
@@ -129,30 +133,34 @@ export default function NavBar({
             </Button>
           )}
 
-          <Link href={`/admin`} passHref>
-            <Button size="small" style={{ marginLeft: 8 }}>
-              <AdminPanelSettingsIcon />
-              <Typography variant="inherit" component="div">
-                Admin
-              </Typography>
-            </Button>
-          </Link>
-          <Link href={`/api/graphql`} passHref>
-            <Button size="small" style={{ marginLeft: 8 }}>
-              <ApiIcon />
-              <Typography variant="inherit" component="div">
-                API
-              </Typography>
-            </Button>
-          </Link>
-          <Link href={`/settings`} passHref>
-            <Button size="small" style={{ marginLeft: 8 }}>
-              <SettingsIcon />
-              <Typography variant="inherit" component="div">
-                Settings
-              </Typography>
-            </Button>
-          </Link>
+          {session && (
+            <Fragment>
+              <Link href={`/admin`} passHref>
+                <Button size="small" style={{ marginLeft: 8 }}>
+                  <AdminPanelSettingsIcon />
+                  <Typography variant="inherit" component="div">
+                    Admin
+                  </Typography>
+                </Button>
+              </Link>
+              <Link href={`/api/graphql`} passHref>
+                <Button size="small" style={{ marginLeft: 8 }}>
+                  <ApiIcon />
+                  <Typography variant="inherit" component="div">
+                    API
+                  </Typography>
+                </Button>
+              </Link>
+              <Link href={`/settings`} passHref>
+                <Button size="small" style={{ marginLeft: 8 }}>
+                  <SettingsIcon />
+                  <Typography variant="inherit" component="div">
+                    Settings
+                  </Typography>
+                </Button>
+              </Link>
+            </Fragment>
+          )}
         </Toolbar>
       </AppBar>
     </Fragment>

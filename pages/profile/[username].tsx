@@ -220,7 +220,7 @@ export default function ProfilePage({
           ) : (
             <div></div>
           )}
-          <Link href={`/`} passHref>
+          <Link href={`/profile`} passHref>
             <Button style={{ margin: 12 }} size="small">
               <ArrowBackIcon /> Return Home
             </Button>
