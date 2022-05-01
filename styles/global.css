@@ -40,11 +40,11 @@ a {
 }
 
 .MuiButton-label {
-  color: var(--fg);
+  color: var(--fg) !important;
 }
 
 .MuiButton-text {
-  color: var(--fg);
+  color: var(--fg) !important;
 }
 
 .MuiFilledInput-root {
