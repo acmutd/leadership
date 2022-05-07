@@ -85,7 +85,7 @@ export default function EventPage({ eventList, roleList, session }: InferGetServ
         </title>
         <meta
           property="og:title"
-          content="Leadership | ACM Leadership"
+          content="Events | ACM Leadership"
           key="title"
         />
       </Head>

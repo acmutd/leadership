@@ -109,7 +109,7 @@ export default function EventPage({
               </Link>
             </CardContent>
           </Card>
-          <Link href={`/team`} passHref>
+          <Link href={`/event`} passHref>
             <Button style={{ margin: 12 }} size="small">
               <ArrowBackIcon /> Return Home
             </Button>

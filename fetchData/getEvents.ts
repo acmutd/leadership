@@ -19,7 +19,7 @@ interface totalEvent {
 
 interface filterQuery {
   query: string;
-  officers: event[];
+  events: event[];
 }
 
 export const getEvents = async (query: string | null): Promise<totalEvent> => {
@@ -40,7 +40,7 @@ export const getEvents = async (query: string | null): Promise<totalEvent> => {
 
     // if queried before look up results
     if (!res.empty) {
-      events.events = (res.docs[0].data() as filterQuery).officers;
+      events.events = (res.docs[0].data() as filterQuery).events;
     }
     // else perform the query and save the results for next time
     else {
@@ -48,7 +48,7 @@ export const getEvents = async (query: string | null): Promise<totalEvent> => {
 
       await db.collection("total").doc("events_leadership").collection("rolequery").add({
         query: query,
-        officers: eventList,
+        events: eventList,
       });
 
       events.events = eventList;

@@ -19,6 +19,33 @@ interface PageProps {
 export default function Home({
   session,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+  const tiles = [
+    {
+      header: "Leadership",
+      text: "View all ACM Officers!",
+      path: "/profile",
+    },
+    {
+      header: "Membership",
+      text: "View all ACM Members!",
+      path: "/participant",
+    },
+    {
+      header: "Programs",
+      text: "View all our programs!",
+      path: "/team",
+    },
+    {
+      header: "Events",
+      text: "View all our events!",
+      path: "/event",
+    },
+  ];
+
+  const grid = tiles.map((tile, index) => {
+    return <HomeGrid header={tile.header} text={tile.text} path={tile.path} />;
+  });
+
   return (
     <Fragment>
       <Head>
@@ -28,22 +55,7 @@ export default function Home({
       <Container maxWidth="lg">
         <NavBar session={session} />
         <Grid container alignItems="center" justifyContent="center" spacing={5}>
-          <HomeGrid
-            header="Leadership"
-            text="View all ACM Officers!"
-            path="/profile"
-          />
-
-          <HomeGrid
-            header="Membership"
-            text="View all ACM Members!"
-            path="/participant"
-          />
-          <HomeGrid
-            header="Programs"
-            text="View all our programs!"
-            path="/team"
-          />
+          {grid}
         </Grid>
       </Container>
     </Fragment>
