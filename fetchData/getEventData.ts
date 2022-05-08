@@ -29,7 +29,7 @@ export const getEventData = async (
   return ret_value;
 };
 
-export const getEventByName = async (
+export const getEventDataByName = async (
   name: string,
   includeSubCollections = false
 ): Promise<event> => {

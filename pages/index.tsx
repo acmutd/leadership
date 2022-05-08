@@ -54,7 +54,7 @@ export default function Home({
       </Head>
       <Container maxWidth="lg">
         <NavBar session={session} />
-        <Grid container alignItems="center" justifyContent="center" spacing={5}>
+        <Grid container alignItems="center" justifyContent="center" spacing={5} marginTop={4}>
           {grid}
         </Grid>
       </Container>

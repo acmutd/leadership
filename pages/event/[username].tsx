@@ -54,7 +54,7 @@ export default function EventPage({
             {data.name}
           </Typography>
           <Typography variant="inherit" component="div">
-            {data.date_start} to {data.date_end}
+            {data.date_start === data.date_end ? data.date_start : `${data.date_start} to ${data.date_end}`}
           </Typography>
           <hr />
           <Card

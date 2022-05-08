@@ -172,6 +172,31 @@ export default function ProfilePage({
                 })}
               </CardContent>
             )}
+
+            {data.events.length > 0 && (
+              <CardContent>
+                <Typography variant="h5" component="div">
+                  Events
+                </Typography>
+                <hr style={{ maxWidth: 200 }} />
+                {data.events.map((event, index) => {
+                  return (
+                    <Link href={`/event/${event.id}`} passHref>
+                      <a>
+                        <Typography
+                          variant="inherit"
+                          component="div"
+                          key={index}
+                          style={{ marginTop: 8 }}
+                        >
+                          {index + 1}. {event.name}
+                        </Typography>
+                      </a>
+                    </Link>
+                  );
+                })}
+              </CardContent>
+            )}
           </Card>
           {data.accolades.length > 0 ? (
             <AccoladeCard accolades={data.accolades as string[]} />

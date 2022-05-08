@@ -6,6 +6,22 @@ export const getProfileData = async (
   documentName: string,
   includeSubCollections = false
 ): Promise<officer> => {
+  if (documentName === "") {
+    return {
+      name: null,
+      role_list: null,
+      email: null,
+      acm_email: null,
+      linkedin: null,
+      accolades: [],
+      teams: [],
+      events: [],
+      start: null,
+      end: null,
+      id: null,
+    };
+  }
+
   const db = (await getFirebaseAdmin()).firestore();
 
   const doc = await db.collection("officer").doc(documentName).get();
@@ -22,6 +38,7 @@ export const getProfileData = async (
     linkedin: data?.linkedin ?? null,
     accolades: data.accolades ?? [],
     teams: data.teams ?? [],
+    events: data.events ?? [],
     start: (data.start as firestore.Timestamp).toDate().toDateString(),
     end: (data.end as firestore.Timestamp).toDate().toDateString(),
     id: doc.id,
@@ -33,7 +50,7 @@ export const getProfileData = async (
       (ret_value.role_list as string[]).map<role>((role) => {
         return {
           title: role,
-        }
+        };
       });
 
     ret_value.accolades =
@@ -41,14 +58,17 @@ export const getProfileData = async (
       (ret_value.accolades as string[]).map<accolade>((accolade) => {
         return {
           text: accolade,
-        }
+        };
       });
   }
 
   return ret_value;
 };
 
-export const getProfileByName = async (name: string, includeSubCollections = false): Promise<officer> => {
+export const getProfileByName = async (
+  name: string,
+  includeSubCollections = false
+): Promise<officer> => {
   const db = (await getFirebaseAdmin()).firestore();
 
   const docs = await db.collection("officer").where("name", "==", name).get();
@@ -67,6 +87,7 @@ export const getProfileByName = async (name: string, includeSubCollections = fal
     linkedin: data?.linkedin ?? null,
     accolades: data.accolades ?? [],
     teams: data.teams ?? [],
+    events: data.events ?? [],
     start: (data.start as firestore.Timestamp).toDate().toDateString(),
     end: (data.end as firestore.Timestamp).toDate().toDateString(),
     id: docs.docs[0].id,
@@ -78,7 +99,7 @@ export const getProfileByName = async (name: string, includeSubCollections = fal
       (ret_value.role_list as string[]).map<role>((role) => {
         return {
           title: role,
-        }
+        };
       });
 
     ret_value.accolades =
@@ -86,7 +107,7 @@ export const getProfileByName = async (name: string, includeSubCollections = fal
       (ret_value.accolades as string[]).map<accolade>((accolade) => {
         return {
           text: accolade,
-        }
+        };
       });
   }
 
@@ -118,6 +139,7 @@ export const getProfileByEmail = async (
     linkedin: data?.linkedin ?? null,
     accolades: data.accolades ?? [],
     teams: data.teams ?? [],
+    events: data.events ?? [],
     start: (data.start as firestore.Timestamp).toDate().toDateString(),
     end: (data.end as firestore.Timestamp).toDate().toDateString(),
     id: docs.docs[0].id,
@@ -129,7 +151,7 @@ export const getProfileByEmail = async (
       (ret_value.role_list as string[]).map<role>((role) => {
         return {
           title: role,
-        }
+        };
       });
 
     ret_value.accolades =
@@ -137,7 +159,7 @@ export const getProfileByEmail = async (
       (ret_value.accolades as string[]).map<accolade>((accolade) => {
         return {
           text: accolade,
-        }
+        };
       });
   }
 
@@ -168,7 +190,9 @@ const getRoles = async (documentName: string): Promise<role[] | null> => {
   });
 };
 
-const getAccolades = async (documentName: string): Promise<accolade[] | null> => {
+const getAccolades = async (
+  documentName: string
+): Promise<accolade[] | null> => {
   const db = (await getFirebaseAdmin()).firestore();
 
   const docs = await db

@@ -15,7 +15,7 @@ interface PageProps {
 
 export default function HomeGrid({ header, text, path }: PageProps) {
   return (
-    <Grid item xs={11} lg={4} style={{margin: "auto"}}>
+    <Grid item xs={12} md={6} lg={4} style={{margin: "auto"}}>
       <Card raised>
         <CardContent>
           <Typography variant="h5" component="div" style={{ marginBottom: 24 }}>
