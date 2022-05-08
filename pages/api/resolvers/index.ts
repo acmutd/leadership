@@ -12,6 +12,8 @@ import {
   getTeamDataByName
 } from "../../../fetchData/getTeamData";
 import { getTeams } from "../../../fetchData/getTeams";
+import { getEvents } from "../../../fetchData/getEvents";
+import { getEventData, getEventDataByName } from "../../../fetchData/getEventData";
 
 export const resolvers = {
   Query: {
@@ -114,7 +116,34 @@ export const resolvers = {
         console.log(error);
         throw error;
       }
-    }
+    },
+    getEvents: async (_, { query }) => {
+      try {
+        const { events } = await getEvents(query);
+        return events;
+      } catch (error) {
+        console.log(error);
+        throw error;
+      }
+    },
+    getEvent: async (_, { id, name }) => {
+      try {
+        if (name) {
+          const event = await getEventDataByName(name, true);
+          return event;
+        }
+        else if (id) {
+          const event = await getEventData(id, true);
+          return event;
+        }
+        else {
+            throw new Error("Must provide either an id or a name");
+        }
+      } catch (error) {
+        console.log(error);
+        throw error;
+      }
+    },
   },
   Team: {
     id: ({ id }) => {
@@ -205,9 +234,41 @@ export const resolvers = {
       const officer = await getProfileData(id, true);
       return officer.teams;
     },
+    events: async ({ id }) => {
+      const officer = await getProfileData(id, true);
+      return officer.events;
+    },
     accolades: async ({ id }) => {
       const officer = await getProfileData(id, true);
       return officer.accolades;
     }
-  }
+  },
+  Event: {
+    id: ({ id }) => {
+      return id;
+    },
+    name: ({ name }) => {
+      return name;
+    },
+    date_start: async ({ id }) => {
+      const event = await getEventData(id);
+      return event.date_start;
+    },
+    date_end: async ({ id }) => {
+      const event = await getEventData(id);
+      return event.date_end;
+    },
+    team: async ({ id }) => {
+      const event = await getEventData(id);
+      return event.team;
+    },
+    director: async ({ id }) => {
+      const event = await getEventData(id);
+      return event.director;
+    },
+    filter: async ({ id }) => {
+      const event = await getEventData(id);
+      return event.filter;
+    },
+  },
 };

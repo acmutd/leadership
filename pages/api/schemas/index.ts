@@ -8,6 +8,7 @@ export  const  typeDefs  =  gql`
         email: String
         linkedin: String
         teams: [Team]
+        events: [Event]
         roles: [Role]
         accolades: [Accolade]
     }
@@ -48,6 +49,16 @@ export  const  typeDefs  =  gql`
         tags: [String]
     }
 
+    type Event {
+        id: ID!
+        name: String!
+        date_start: String
+        date_end: String
+        filter: [String]
+        team: [Officer]
+        director: Officer
+    }
+
     type  Query {
         getOfficers(query: String): [Officer]
         getOfficer(id: String, name: String, email: String): Officer!
@@ -55,4 +66,6 @@ export  const  typeDefs  =  gql`
         getParticipant(id: String, name: String): Participant!
         getTeams(query: String): [Team]
         getTeam(id: String, name: String): Team!
+        getEvents(query: String): [Event]
+        getEvent(id: String, name: String): Event!
     }`

@@ -1,6 +1,7 @@
 import { firestore } from "firebase-admin";
 import { getFirebaseAdmin } from "../firebase/nodeApp";
 import { team } from "./getTeams";
+import { event } from "./getEvents";
 export interface officer {
   id: string;
   name: string;
@@ -10,6 +11,7 @@ export interface officer {
   acm_email?: string;
   linkedin?: string;
   teams?: team[];
+  events?: event[];
   role_list?: role[] | string[];
   accolades?: accolade[] | string[];
 }

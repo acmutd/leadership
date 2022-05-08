@@ -1,11 +1,9 @@
 import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
 import ApiIcon from "@mui/icons-material/Api";
 import DarkModeIcon from "@mui/icons-material/DarkMode";
-import GroupsIcon from "@mui/icons-material/Groups";
 import LightModeIcon from "@mui/icons-material/LightMode";
 import LoginIcon from "@mui/icons-material/Login";
 import LogoutIcon from "@mui/icons-material/Logout";
-import PersonIcon from "@mui/icons-material/Person";
 import SettingsIcon from "@mui/icons-material/Settings";
 import StarIcon from "@mui/icons-material/Star";
 import AppBar from "@mui/material/AppBar";
@@ -53,37 +51,15 @@ export default function NavBar({
               </Typography>
             </Button>
           </Link>
-          {/* <Link href={`/participant`} passHref>
-            <Button size="small" style={{ marginRight: 24 }}>
-              <PersonIcon />
-              <Typography variant="inherit" component="div">
-                Membership
-              </Typography>
-            </Button>
-          </Link>
-          <Link href={`/team`} passHref>
-            <Button size="small">
-              <GroupsIcon />
-              <Typography variant="inherit" component="div">
-                Programs
-              </Typography>
-            </Button>
-          </Link> */}
           <Fragment>
             <Button onClick={() => setTheme("light")} size="small">
               <LightModeIcon />
-              {/* <Typography variant="inherit" component="div">
-                Light
-              </Typography> */}
             </Button>
             <Button onClick={() => setTheme("dark")} size="small">
               <DarkModeIcon />
-              {/* <Typography variant="inherit" component="div">
-                Dark
-              </Typography> */}
             </Button>
           </Fragment>
-          {search ? (
+          {search && (
             <Autocomplete
               disablePortal
               style={{ marginLeft: 30, marginTop: -15 }}
@@ -97,10 +73,8 @@ export default function NavBar({
                 onSearchChange(newValue);
               }}
             />
-          ) : (
-            <div></div>
           )}
-          {filter ? (
+          {filter && (
             <Autocomplete
               disablePortal
               style={{ marginLeft: 30, marginTop: -15, marginRight: 30 }}
@@ -114,8 +88,6 @@ export default function NavBar({
                 onRoleChange(newValue);
               }}
             />
-          ) : (
-            <div></div>
           )}
           {!session ? (
             <Button onClick={() => signIn("google")} size="small">
