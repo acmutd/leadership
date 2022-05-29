@@ -15,13 +15,13 @@ interface PageProps {
 
 export default function HomeGrid({ header, text, path }: PageProps) {
   return (
-    <Grid item xs={12} md={6} lg={4} style={{margin: "auto"}}>
+    <Grid item xs={12} md={6} lg={4} style={{margin: "auto", width: 300}}>
       <Card raised>
         <CardContent>
           <Typography variant="h5" component="div" style={{ marginBottom: 24 }}>
             {header}
           </Typography>
-          <Typography variant="body2" component="div" style={{ width: 300 }}>
+          <Typography variant="body2" component="div">
             {text}
           </Typography>
         </CardContent>
