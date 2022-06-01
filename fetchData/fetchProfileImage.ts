@@ -5,13 +5,14 @@ import firebase from "../firebase/clientApp";
  * @param {string} userId document id for the user profile
  * @returns download url of profile image
  */
-export default async function fetchProfileImage(
+export default async function fetchImage(
+  folder: string = "profile",
   userId: string
 ): Promise<string> {
   // Get default storage bucket
   const storage = firebase.app().storage("gs://acm-core.appspot.com").ref();
 
-  const profileImage = storage.child("leadership/profile/" + userId + ".jpg");
+  const profileImage = storage.child(`leadership/${folder}/${userId}.jpg`);
 
   let url: string;
 

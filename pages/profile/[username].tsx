@@ -21,7 +21,7 @@ import { Fragment, useEffect, useState } from "react";
 import AccoladeCard from "../../components/AccoladeCard";
 import NavBar from "../../components/NavBar";
 import LinkedInSVG from "../../components/svg/LinkedInSVG";
-import fetchProfileImage from "../../fetchData/fetchProfileImage";
+import fetchImage from "../../fetchData/fetchProfileImage";
 import { officer } from "../../fetchData/getOfficers";
 import { getProfileData } from "../../fetchData/getProfileData";
 
@@ -42,14 +42,12 @@ export default function ProfilePage({
     data.end === "Sat Jun 19 2021" ? true : false
   );
   const [imageLink, setImageLink] = useState("");
-  const [imageLoaded, setImageLoaded] = useState(false);
 
   const router = useRouter();
 
   useEffect(() => {
     (async () => {
-      setImageLink(await fetchProfileImage(data.id));
-      setImageLoaded(true);
+      setImageLink(await fetchImage("profile", data.id));
     })();
   });
 

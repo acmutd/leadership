@@ -2,9 +2,9 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
+import CardMedia from "@mui/material/CardMedia";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
-import axios from "axios";
 import {
   GetServerSideProps,
   InferGetServerSidePropsType,
@@ -15,10 +15,10 @@ import { getSession } from "next-auth/client";
 import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { Fragment, useState } from "react";
-import AccoladeCard from "../../components/AccoladeCard";
+import { Fragment, useState, useEffect } from "react";
 import NavBar from "../../components/NavBar";
 import { getEventData } from "../../fetchData/getEventData";
+import fetchImage from "../../fetchData/fetchProfileImage";
 import { event } from "../../fetchData/getEvents";
 
 interface PageProps {
@@ -35,7 +35,15 @@ export default function EventPage({
     "You're the best! Thanks for being awesome!"
   );
 
+  const [imageLink, setImageLink] = useState("");
+
   const router = useRouter();
+
+  useEffect(() => {
+    (async () => {
+      setImageLink(await fetchImage("event", data.id));
+    })();
+  });
 
   return (
     <Fragment>
@@ -68,13 +76,20 @@ export default function EventPage({
             }}
           >
             <CardContent>
+            <CardMedia
+                component="img"
+                height="365"
+                image={imageLink}
+                alt={`${data.name}'s team picture`}
+                style={{ marginBottom: 16 }}
+              />
               <Typography variant="h5" component="div">
                 Team
               </Typography>
               <hr style={{ maxWidth: 200 }} />
               {data.team.map((organizer, index) => {
                 return (
-                  <Link href={`/profile/${organizer.id}`} passHref>
+                  <Link href={`/profile/${organizer.id}`} passHref key={index}>
                     <a>
                       <Typography
                         variant="inherit"
