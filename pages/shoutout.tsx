@@ -3,10 +3,15 @@ import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Container from "@mui/material/Container";
+import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import axios from "axios";
-import { GetServerSideProps, InferGetServerSidePropsType, GetServerSidePropsContext } from 'next';
+import {
+  GetServerSideProps,
+  InferGetServerSidePropsType,
+  GetServerSidePropsContext,
+} from "next";
 import { Session } from "next-auth";
 import { getSession } from "next-auth/client";
 import Head from "next/head";
@@ -19,7 +24,7 @@ import { getOfficers, officer } from "../fetchData/getOfficers";
 interface response {
   data: {
     profiles: officer[];
-  }
+  };
 }
 interface PageProps {
   officerList: officer[];
@@ -27,7 +32,11 @@ interface PageProps {
   session: Session;
 }
 
-export default function ProfilePage({ officerList, roleList, session }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+export default function ProfilePage({
+  officerList,
+  roleList,
+  session,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) {
   if (!session) {
     return <AccessDenied />;
   }
@@ -51,7 +60,11 @@ export default function ProfilePage({ officerList, roleList, session }: InferGet
 
   const sendAccolade = async () => {
     // fetch profiles
-    const response = await axios.post<any, response>("/api/profile", { names: names }, {});
+    const response = await axios.post<any, response>(
+      "/api/profile",
+      { names: names },
+      {}
+    );
 
     // generate payloads for each shoutout
     const payloads = response.data.profiles.map((profile) => {
@@ -76,24 +89,28 @@ export default function ProfilePage({ officerList, roleList, session }: InferGet
         ]);
       })
     );
-    
+
     // reload page
     router.reload();
   };
 
   const selectedOfficers = names.map((name, index) => {
     return (
-      <div key={index}>
-        <Typography variant="inherit">{name}</Typography>
-        <Button
-          size="small"
-          onClick={() => {
-            setNames(names.filter((item) => item !== name));
-          }}
-        >
-          Remove
-        </Button>
-      </div>
+      <Grid container key={index}>
+        <Grid item xs={6}>
+          <Typography variant="inherit">{name}</Typography>
+        </Grid>
+        <Grid item xs={6}>
+          <Button
+            size="small"
+            onClick={() => {
+              setNames(names.filter((item) => item !== name));
+            }}
+          >
+            Remove
+          </Button>
+        </Grid>
+      </Grid>
     );
   });
 
@@ -146,7 +163,11 @@ export default function ProfilePage({ officerList, roleList, session }: InferGet
                   <TextField {...params} label="Search" />
                 )}
                 onChange={(event, newValue) => {
-                  if (newValue === "" || newValue === null || newValue === undefined) {
+                  if (
+                    newValue === "" ||
+                    newValue === null ||
+                    newValue === undefined
+                  ) {
                     return;
                   }
                   setNames([...names, newValue]);
@@ -176,7 +197,9 @@ export default function ProfilePage({ officerList, roleList, session }: InferGet
   );
 }
 
-export const getServerSideProps: GetServerSideProps<PageProps> = async (context: GetServerSidePropsContext) => {
+export const getServerSideProps: GetServerSideProps<PageProps> = async (
+  context: GetServerSidePropsContext
+) => {
   const { officers, role_list } = await getOfficers(context.query.q as string);
   const session = await getSession(context);
 
@@ -189,4 +212,4 @@ export const getServerSideProps: GetServerSideProps<PageProps> = async (context:
   return {
     props: { officerList: officers, roleList: role_list, session }, // will be passed to the page component as props
   };
-}
+};
