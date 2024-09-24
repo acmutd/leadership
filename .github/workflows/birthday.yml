@@ -3,7 +3,7 @@ name: Birthday
 on:
   schedule:
     # Run at 12:00am CST every day
-    - cron: "0 6 * * *"
+    - cron: "30 6 * * *"
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
